@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GuitarChordView">
+        <attr name="bridgeNutColor" format="color"/>
+        <attr name="fretMarkerColor" format="color"/>
+        <attr name="stringColor" format="color"/>
+        <attr name="fretNumberColor" format="color"/>
+        <attr name="stringMarkerColor" format="color"/>
+        <attr name="noteColor" format="color"/>
+        <attr name="noteNumberColor" format="color"/>
+        <attr name="barLineColor" format="color"/>
+        <attr name="mutedText" format="string"/>
+        <attr name="openStringText" format="string"/>
+        <attr name="stringAmount" format="integer"/>
+        <attr name="editable" format="boolean"/>
+        <attr name="showFingerNumbers" format="boolean"/>
+        <attr name="showFretNumbers" format="boolean"/>
+    </declare-styleable>
+</resources>
