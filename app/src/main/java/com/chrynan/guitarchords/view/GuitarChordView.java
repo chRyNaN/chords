@@ -94,6 +94,8 @@ public class GuitarChordView extends View {
     private boolean editable;
     private int stringCount;
     private List<OnChordSelectedListener> listeners;
+    private List<OnFretNumberSelectedListener> fretNumberListeners;
+    private List<OnStringSelectedListener> stringListeners;
 
     private GestureDetector detector;
     private ChordMarker touchEventMarker;
@@ -179,6 +181,8 @@ public class GuitarChordView extends View {
         editable = false;
         stringCount = 6;
         listeners = new ArrayList<>();
+        fretNumberListeners = new ArrayList<>();
+        stringListeners = new ArrayList<>();
         touchEventMarker = null;
         mutedText = MUTED_TEXT;
         openStringText = OPEN_STRING_TEXT;
@@ -440,9 +444,9 @@ public class GuitarChordView extends View {
                 return true;
             }
         }else if(isInFretNumberBounds(event)){
-            //TODO
+            alertOnFretNumberSelected(event, getSelectedFret(event));
         }else if(isInStringMarkerBounds(event)){
-            //TODO
+            alertOnStringSelectedListener(event, getSelectedString(event));
         }
         return super.onTouchEvent(event);
     }
@@ -494,28 +498,61 @@ public class GuitarChordView extends View {
     }
 
     private boolean isInChartBounds(MotionEvent event){
-        //TODO
+        float x = event.getX();
+        float y = event.getY();
+        if(x >= (drawingBounds.left + fretNumberBounds.width()) && x < drawingBounds.right){
+            if(y >= (drawingBounds.top + stringMarkerBounds.height()) && x < drawingBounds.bottom){
+                return true;
+            }
+        }
         return false;
     }
 
     private boolean isInFretNumberBounds(MotionEvent event){
-        //TODO
+        if(showFretNumbers){
+            float x = event.getX();
+            float y = event.getY();
+            if(x >= drawingBounds.left && x < (drawingBounds.left + fretNumberBounds.width())){
+                if(y >= drawingBounds.top && y < drawingBounds.bottom){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     private boolean isInStringMarkerBounds(MotionEvent event){
-        //TODO
+        float x = event.getX();
+        float y = event.getY();
+        if(x >= drawingBounds.left && x < drawingBounds.right){
+            if(y >= drawingBounds.top && y < (drawingBounds.top + stringMarkerBounds.height())){
+                return true;
+            }
+        }
         return false;
     }
 
     private int getSelectedFret(MotionEvent event){
-        //TODO
-        return -1;
+        int fretStart = chord.getFretStart();
+        float y = event.getY();
+        int i;
+        for(i = 0; i < chord.getFretCount(); i++){
+            if(y < (drawingBounds.top + stringMarkerBounds.height()) + (i * fretSize) + (i * fretMarkerSize)){
+                break;
+            }
+        }
+        return fretStart + i;
     }
 
     private int getSelectedString(MotionEvent event){
-        //TODO
-        return -1;
+        float x = event.getX();
+        int i;
+        for(i = 1; i <= stringCount; i++){
+            if(x < (stringMarkerBounds.left) + (i * stringDistance) + (i * stringSize)){
+                break;
+            }
+        }
+        return i;
     }
 
     protected float getVerticalCenterTextPosition(float originalYPosition, String text, Paint textPaint){
@@ -774,6 +811,56 @@ public class GuitarChordView extends View {
     private void alertOnChordSelected(MotionEvent event, ChordMarker marker, boolean isMarkerInChord){
         for(OnChordSelectedListener l : listeners){
             l.onChordSelected(event, marker, isMarkerInChord);
+        }
+    }
+
+
+    public interface OnFretNumberSelectedListener{
+        void onFretNumberSelected(MotionEvent event, int fret);
+    }
+
+    public void addOnFretNumberSelectedListener(OnFretNumberSelectedListener l){
+        if(fretNumberListeners == null){
+            fretNumberListeners = new ArrayList<>();
+        }
+        fretNumberListeners.add(l);
+    }
+
+    public boolean removeOnFretNumberSelectedListener(OnFretNumberSelectedListener l){
+        if(fretNumberListeners != null){
+            return fretNumberListeners.remove(l);
+        }
+        return false;
+    }
+
+    private void alertOnFretNumberSelected(MotionEvent event, int fret){
+        for(OnFretNumberSelectedListener l : fretNumberListeners){
+            l.onFretNumberSelected(event, fret);
+        }
+    }
+
+
+    public interface OnStringSelectedListener{
+        void onStringSelected(MotionEvent event, int string);
+    }
+
+    public void addOnStringSelectedListener(OnStringSelectedListener l){
+        if(stringListeners == null){
+            stringListeners = new ArrayList<>();
+        }
+        stringListeners.add(l);
+    }
+
+    public boolean removeOnStringSelectedListener(OnStringSelectedListener l){
+        if(stringListeners != null){
+            return stringListeners.remove(l);
+        }
+        return false;
+    }
+
+    private void alertOnStringSelectedListener(MotionEvent event, int string){
+        for(OnStringSelectedListener l : stringListeners){
+            l.onStringSelected(event, string);
         }
     }
 
