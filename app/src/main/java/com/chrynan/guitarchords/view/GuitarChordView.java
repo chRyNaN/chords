@@ -12,9 +12,19 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.Selection;
+import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 
 import com.chrynan.guitarchords.R;
 
@@ -38,7 +48,7 @@ import java.util.List;
  */
 /**
  * Created by chRyNaN on 2/2/2016. A View class to display guitar (or other stringed fretted instruments) chords
- * as a chart.  
+ * as a chart.
  */
 public class GuitarChordView extends View {
     private static final String TAG = GuitarChordView.class.getSimpleName();
@@ -78,48 +88,15 @@ public class GuitarChordView extends View {
     public static final int FRET_MUTE = ChordMarker.FRET_MUTE;
     public static final int MAX_FRET_COUNT = ChordMarker.MAX_FRET_COUNT;
 
-    //It can be more convenient and user friendly to use static classes with static fields for this purpose
-    //since it seems more natural and expected (example, instead of GuitarChordView.FIRST_STRING, use
-    //GuitarChordView.String.FIRST). Will keep both approaches for convenience for the programmer
-    //(shouldn't be too much more memory).
-    public static class Fret{
-        public static final int NONE = Chord.NO_FRET;
-        public static final int MAX = Chord.MAX_FRET;
-        public static final int OPEN = ChordMarker.FRET_OPEN;
-        public static final int MUTE = ChordMarker.FRET_MUTE;
-    }
-
-    public static class GuitarString{
-        public static final int FIRST = ChordMarker.FIRST_STRING;
-        public static final int SECOND = ChordMarker.SECOND_STRING;
-        public static final int THIRD = ChordMarker.THIRD_STRING;
-        public static final int FOURTH = ChordMarker.FOURTH_STRING;
-        public static final int FIFTH = ChordMarker.FIFTH_STRING;
-        public static final int SIXTH = ChordMarker.SIXTH_STRING;
-    }
-
-    public static class Finger{
-        public static final int NONE = ChordMarker.NO_FINGER;
-        public static final int INDEX = ChordMarker.INDEX_FINGER;
-        public static final int MIDDLE = ChordMarker.MIDDLE_FINGER;
-        public static final int RING = ChordMarker.RING_FINGER;
-        public static final int PINKY = ChordMarker.PINKY;
-        public static final int THUMB = ChordMarker.THUMB;
-    }
-
-    public static class Type{
-        public static final String BAR = ChordMarker.TYPE_BAR;
-        public static final String NOTE = ChordMarker.TYPE_NOTE;
-        public static final String MUTE = ChordMarker.TYPE_MUTE;
-        public static final String BAR_MUTE = ChordMarker.TYPE_BAR_MUTE;
-    }
-
     private Chord chord;
     private boolean showFretNumbers;
     private boolean showFingerNumbers;
     private boolean editable;
     private int stringCount;
     private List<OnChordSelectedListener> listeners;
+
+    private GestureDetector detector;
+    private ChordMarker touchEventMarker;
 
     private String mutedText;
     private String openStringText;
@@ -178,12 +155,31 @@ public class GuitarChordView extends View {
     }
 
     private void init(Context context, AttributeSet attrs){
+        detector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onDown(MotionEvent event){
+                boolean isMarkerInChord = false;
+                int fret = NO_FRET, string = -1;
+                fret = getSelectedFret(event);
+                string = getSelectedString(event);
+                touchEventMarker = new ChordMarker(string, fret, NO_FINGER);
+                return true;
+            }
+            @Override
+            public void onLongPress(MotionEvent event){
+                if(editable && touchEventMarker != null && chord != null && chord.contains(touchEventMarker)){
+                    InputMethodManager imm =(InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(GuitarChordView.this,InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        });
         chord = new Chord();
         showFretNumbers = true;
         showFingerNumbers = true;
         editable = false;
         stringCount = 6;
         listeners = new ArrayList<>();
+        touchEventMarker = null;
         mutedText = MUTED_TEXT;
         openStringText = OPEN_STRING_TEXT;
         initPaint();
@@ -419,14 +415,107 @@ public class GuitarChordView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        ChordMarker marker = null;
-        boolean isMarkerInChord = false;
-        //TODO get marker corresponding to the touch event
-        alertOnChordSelected(event, marker, isMarkerInChord);
-        if(editable){
-            return true;
+        if(isInChartBounds(event)){
+            boolean isMarkerInChord = false;
+            int fret = NO_FRET, string = -1;
+            fret = getSelectedFret(event);
+            string = getSelectedString(event);
+            boolean c = detector.onTouchEvent(event);
+            if (c && event.getAction() == MotionEvent.ACTION_UP && touchEventMarker != null) {
+                if (fret == touchEventMarker.getFret()) {
+                    int startString = 1, endString = 1;
+                    startString = (touchEventMarker.getStartString() < string) ? touchEventMarker.getStartString() : string;
+                    endString = (touchEventMarker.getEndString() >= string) ? touchEventMarker.getEndString() : string;
+                    ChordMarker marker = new ChordMarker(startString, endString, fret, touchEventMarker.getFinger());
+                    isMarkerInChord = chord.contains(marker);
+                    alertOnChordSelected(event, marker, isMarkerInChord);
+                    if (editable) {
+                        return true;
+                    }
+                    return super.onTouchEvent(event);
+                }
+            }
+            alertOnChordSelected(event, touchEventMarker, isMarkerInChord);
+            if (c && editable) {
+                return true;
+            }
+        }else if(isInFretNumberBounds(event)){
+            //TODO
+        }else if(isInStringMarkerBounds(event)){
+            //TODO
         }
         return super.onTouchEvent(event);
+    }
+
+    //Needed for handling the text input if this View is editable
+    @Override
+    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        if(editable){
+            final InputConnectionAccomodatingLatinIMETypeNullIssues baseInputConnection =
+                    new InputConnectionAccomodatingLatinIMETypeNullIssues(this, false);
+            outAttrs.actionLabel = null;
+            outAttrs.inputType = InputType.TYPE_NULL;
+            outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;
+            setOnKeyListener(new OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (editable){
+                        if(event.getUnicodeChar() ==
+                                (int) EditableAccomodatingLatinIMETypeNullIssues.ONE_UNPROCESSED_CHARACTER.charAt(0)){
+                            //We are ignoring this character, and we want everyone else to ignore it, too, so
+                            // we return true indicating that we have handled it (by ignoring it).
+                            return true;
+                        }
+                        if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+                            //Trap the Done key and close the keyboard if it is pressed (if that's what you want to do)
+                            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(GuitarChordView.this.getWindowToken(), 0);
+                            if(touchEventMarker != null) {
+                                Integer finger;
+                                try{
+                                    finger = Integer.valueOf(baseInputConnection.getEditable().toString());
+                                }catch(Exception e){
+                                    e.printStackTrace();
+                                    finger = touchEventMarker.getFinger();
+                                }
+                                touchEventMarker = new ChordMarker(touchEventMarker.getStartString(),
+                                        touchEventMarker.getEndString(), touchEventMarker.getFret(), finger);
+                                alertOnChordSelected(null, new ChordMarker(touchEventMarker), chord.contains(touchEventMarker));
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            });
+            return baseInputConnection;
+        }
+        return null;
+    }
+
+    private boolean isInChartBounds(MotionEvent event){
+        //TODO
+        return false;
+    }
+
+    private boolean isInFretNumberBounds(MotionEvent event){
+        //TODO
+        return false;
+    }
+
+    private boolean isInStringMarkerBounds(MotionEvent event){
+        //TODO
+        return false;
+    }
+
+    private int getSelectedFret(MotionEvent event){
+        //TODO
+        return -1;
+    }
+
+    private int getSelectedString(MotionEvent event){
+        //TODO
+        return -1;
     }
 
     protected float getVerticalCenterTextPosition(float originalYPosition, String text, Paint textPaint){
@@ -713,6 +802,14 @@ public class GuitarChordView extends View {
             setTitle(title);
         }
 
+        public Chord(Chord chord){
+            this.bars = chord.getBars();
+            this.notes = chord.getIndividualNotes();
+            this.fretStart = chord.getFretStart();
+            this.fretEnd = chord.getFretEnd();
+            this.title = chord.getTitle();
+        }
+
         public void addMarker(ChordMarker marker){
             if(marker != null){
                 if(marker.getType() != null && (marker.getType().equals(ChordMarker.TYPE_BAR) ||
@@ -788,6 +885,11 @@ public class GuitarChordView extends View {
                 }
             }
             return containsMarker;
+        }
+
+        public boolean contains(ChordMarker marker){
+            //TODO
+            return false;
         }
 
         public int getMarkerAmount(){
@@ -1022,6 +1124,14 @@ public class GuitarChordView extends View {
             }
         }
 
+        public ChordMarker(ChordMarker marker){
+            this.type = marker.getType();
+            this.startString = marker.getStartString();
+            this.endString = marker.getEndString();
+            this.fret = marker.getFret();
+            this.finger = marker.getFinger();
+        }
+
         public String getType(){
             return type;
         }
@@ -1043,6 +1153,286 @@ public class GuitarChordView extends View {
         }
 
     }//End of ChordMarker class
+
+
+    /**
+     * Reference: http://stackoverflow.com/a/19980975/1478764
+     * @author Carl Gunther
+     * There are bugs with the LatinIME keyboard's generation of KEYCODE_DEL events
+     * that this class addresses in various ways.  These bugs appear when the app
+     * specifies TYPE_NULL, which is the only circumstance under which the app
+     * can reasonably expect to receive key events for KEYCODE_DEL.
+     *
+     * This class is intended for use by a view that overrides
+     * onCreateInputConnection() and specifies to the invoking IME that it wishes
+     * to use the TYPE_NULL InputType.  This should cause key events to be returned
+     * to the view.
+     *
+     */
+    public static class InputConnectionAccomodatingLatinIMETypeNullIssues extends BaseInputConnection {
+
+        //This holds the Editable text buffer that the LatinIME mistakenly *thinks*
+        // that it is editing, even though the views that employ this class are
+        // completely driven by key events.
+        Editable myEditable = null;
+
+        //Basic constructor
+        public InputConnectionAccomodatingLatinIMETypeNullIssues(View targetView, boolean fullEditor) {
+            super(targetView, fullEditor);
+        }
+
+        //This method is called by the IME whenever the view that returned an
+        // instance of this class to the IME from its onCreateInputConnection()
+        // gains focus.
+        @Override
+        public Editable getEditable() {
+            //Some versions of the Google Keyboard (LatinIME) were delivered with a
+            // bug that causes KEYCODE_DEL to no longer be generated once the number
+            // of KEYCODE_DEL taps equals the number of other characters that have
+            // been typed.  This bug was reported here as issue 62306.
+            //
+            // As of this writing (1/7/2014), it is fixed in the AOSP code, but that
+            // fix has not yet been released.  Even when it is released, there will
+            // be many devices having versions of the Google Keyboard that include the bug
+            // in the wild for the indefinite future.  Therefore, a workaround is required.
+            //
+            //This is a workaround for that bug which just jams a single garbage character
+            // into the internal buffer that the keyboard THINKS it is editing even
+            // though we have specified TYPE_NULL which *should* cause LatinIME to
+            // generate key events regardless of what is in that buffer.  We have other
+            // code that attempts to ensure as the user edites that there is always
+            // one character remaining.
+            //
+            // The problem arises because when this unseen buffer becomes empty, the IME
+            // thinks that there is nothing left to delete, and therefore stops
+            // generating KEYCODE_DEL events, even though the app may still be very
+            // interested in receiving them.
+            //
+            //So, for example, if the user taps in ABCDE and then positions the
+            // (app-based) cursor to the left of A and taps the backspace key three
+            // times without any evident effect on the letters (because the app's own
+            // UI code knows that there are no letters to the left of the
+            // app-implemented cursor), and then moves the cursor to the right of the
+            // E and hits backspace five times, then, after E and D have been deleted,
+            // no more KEYCODE_DEL events will be generated by the IME because the
+            // unseen buffer will have become empty from five letter key taps followed
+            // by five backspace key taps (as the IME is unaware of the app-based cursor
+            // movements performed by the user).
+            //
+            // In other words, if your app is processing KEYDOWN events itself, and
+            // maintaining its own cursor and so on, and not telling the IME anything
+            // about the user's cursor position, this buggy processing of the hidden
+            // buffer will stop KEYCODE_DEL events when your app actually needs them -
+            // in whatever Android releases incorporate this LatinIME bug.
+            //
+            // By creating this garbage characters in the Editable that is initially
+            // returned to the IME here, we make the IME think that it still has
+            // something to delete, which causes it to keep generating KEYCODE_DEL
+            // events in response to backspace key presses.
+            //
+            // A specific keyboard version that I tested this on which HAS this
+            // problem but does NOT have the "KEYCODE_DEL completely gone" (issue 42904)
+            // problem that is addressed by the deleteSurroundingText() override below
+            // (the two problems are not both present in a single version) is
+            // 2.0.19123.914326a, tested running on a Nexus7 2012 tablet.
+            // There may be other versions that have issue 62306.
+            //
+            // A specific keyboard version that I tested this on which does NOT have
+            // this problem but DOES have the "KEYCODE_DEL completely gone" (issue
+            // 42904) problem that is addressed by the deleteSurroundingText()
+            // override below is 1.0.1800.776638, tested running on the Nexus10
+            // tablet.  There may be other versions that also have issue 42904.
+            //
+            // The bug that this addresses was first introduced as of AOSP commit tag
+            // 4.4_r0.9, and the next RELEASED Android version after that was
+            // android-4.4_r1, which is the first release of Android 4.4.  So, 4.4 will
+            // be the first Android version that would have included, in the original
+            // RELEASED version, a Google Keyboard for which this bug was present.
+            //
+            // Note that this bug was introduced exactly at the point that the OTHER bug
+            // (the one that is addressed in deleteSurroundingText(), below) was first
+            // FIXED.
+            //
+            // Despite the fact that the above are the RELEASES associated with the bug,
+            // the fact is that any 4.x Android release could have been upgraded by the
+            // user to a later version of Google Keyboard than was present when the
+            // release was originally installed to the device.  I have checked the
+            // www.archive.org snapshots of the Google Keyboard listing page on the Google
+            // Play store, and all released updates listed there (which go back to early
+            // June of 2013) required Android 4.0 and up, so we can be pretty sure that
+            // this bug is not present in any version earlier than 4.0 (ICS), which means
+            // that we can limit this fix to API level 14 and up.  And once the LatinIME
+            // problem is fixed, we can limit the scope of this workaround to end as of
+            // the last release that included the problem, since we can assume that
+            // users will not upgrade Google Keyboard to an EARLIER version than was
+            // originally included in their Android release.
+            //
+            // The bug that this addresses was FIXED but NOT RELEASED as of this AOSP
+            // commit:
+            //https://android.googlesource.com/platform/packages/inputmethods/LatinIME/+
+            // /b41bea65502ce7339665859d3c2c81b4a29194e4/java/src/com/android
+            // /inputmethod/latin/LatinIME.java
+            // so it can be assumed to affect all of KitKat released thus far
+            // (up to 4.4.2), and could even affect beyond KitKat, although I fully
+            // expect it to be incorporated into the next release *after* API level 19.
+            //
+            // When it IS released, this method should be changed to limit it to no
+            // higher than API level 19 (assuming that the fix is released before API
+            // level 20), just in order to limit the scope of this fix, since poking
+            // 1024 characters into the Editable object returned here is of course a
+            // kluge.  But right now the safest thing is just to not have an upper limit
+            // on the application of this kluge, since the fix for the problem it
+            // addresses has not yet been released (as of 1/7/2014).
+            if (Build.VERSION.SDK_INT >= 14) {
+                if (myEditable == null) {
+                    myEditable = new EditableAccomodatingLatinIMETypeNullIssues(
+                            EditableAccomodatingLatinIMETypeNullIssues.ONE_UNPROCESSED_CHARACTER);
+                    Selection.setSelection(myEditable, 1);
+                } else {
+                    int myEditableLength = myEditable.length();
+                    if (myEditableLength == 0) {
+                        //I actually HAVE seen this be zero on the Nexus 10 with the keyboard
+                        // that came with Android 4.4.2
+                        // On the Nexus 10 4.4.2 if I tapped away from the view and then back to it, the
+                        // myEditable would come back as null and I would create a new one.  This is also
+                        // what happens on other devices (e.g., the Nexus 6 with 4.4.2,
+                        // which has a slightly later version of the Google Keyboard).  But for the
+                        // Nexus 10 4.4.2, the keyboard had a strange behavior
+                        // when I tapped on the rack, and then tapped Done on the keyboard to close it,
+                        // and then tapped on the rack AGAIN.  In THAT situation,
+                        // the myEditable would NOT be set to NULL but its LENGTH would be ZERO.  So, I
+                        // just append to it in that situation.
+                        myEditable.append(
+                                EditableAccomodatingLatinIMETypeNullIssues.ONE_UNPROCESSED_CHARACTER);
+                        Selection.setSelection(myEditable, 1);
+                    }
+                }
+                return myEditable;
+            } else {
+                //Default behavior for keyboards that do not require any fix
+                return super.getEditable();
+            }
+        }
+
+        //This method is called INSTEAD of generating a KEYCODE_DEL event, by
+        // versions of Latin IME that have the bug described in Issue 42904.
+        @Override
+        public boolean deleteSurroundingText(int beforeLength, int afterLength) {
+            //If targetSdkVersion is set to anything AT or ABOVE API level 16
+            // then for the GOOGLE KEYBOARD versions DELIVERED
+            // with Android 4.1.x, 4.2.x or 4.3.x, NO KEYCODE_DEL EVENTS WILL BE
+            // GENERATED BY THE GOOGLE KEYBOARD (LatinIME) EVEN when TYPE_NULL
+            // is being returned as the InputType by your view from its
+            // onCreateInputMethod() override, due to a BUG in THOSE VERSIONS.
+            //
+            // When TYPE_NULL is specified (as this entire class assumes is being done
+            // by the views that use it, what WILL be generated INSTEAD of a KEYCODE_DEL
+            // is a deleteSurroundingText(1,0) call.  So, by overriding this
+            // deleteSurroundingText() method, we can fire the KEYDOWN/KEYUP events
+            // ourselves for KEYCODE_DEL.  This provides a workaround for the bug.
+            //
+            // The specific AOSP RELEASES involved are 4.1.1_r1 (the very first 4.1
+            // release) through 4.4_r0.8 (the release just prior to Android 4.4).
+            // This means that all of KitKat should not have the bug and will not
+            // need this workaround.
+            //
+            // Although 4.0.x (ICS) did not have this bug, it was possible to install
+            // later versions of the keyboard as an app on anything running 4.0 and up,
+            // so those versions are also potentially affected.
+            //
+            // The first version of separately-installable Google Keyboard shown on the
+            // Google Play store site by www.archive.org is Version 1.0.1869.683049,
+            // on June 6, 2013, and that version (and probably other, later ones)
+            // already had this bug.
+            //
+            //Since this required at least 4.0 to install, I believe that the bug will
+            // not be present on devices running versions of Android earlier than 4.0.
+            //
+            //AND, it should not be present on versions of Android at 4.4 and higher,
+            // since users will not "upgrade" to a version of Google Keyboard that
+            // is LOWER than the one they got installed with their version of Android
+            // in the first place, and the bug will have been fixed as of the 4.4 release.
+            //
+            // The above scope of the bug is reflected in the test below, which limits
+            // the application of the workaround to Android versions between 4.0.x and 4.3.x.
+            //
+            //UPDATE:  A popular third party keyboard was found that exhibits this same issue.  It
+            // was not fixed at the same time as the Google Play keyboard, and so the bug in that case
+            // is still in place beyond API LEVEL 19.  So, even though the Google Keyboard fixed this
+            // as of level 19, we cannot take out the fix based on that version number.  And so I've
+            // removed the test for an upper limit on the version; the fix will remain in place ad
+            // infinitum - but only when TYPE_NULL is used, so it *should* be harmless even when
+            // the keyboard does not have the problem...
+            if ((Build.VERSION.SDK_INT >= 14) // && (Build.VERSION.SDK_INT < 19)
+                    && (beforeLength == 1 && afterLength == 0)) {
+                //Send Backspace key down and up events to replace the ones omitted
+                // by the LatinIME keyboard.
+                return super.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL))
+                        && super.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+            } else {
+                //Really, I can't see how this would be invoked, given that we're using
+                // TYPE_NULL, for non-buggy versions, but in order to limit the impact
+                // of this change as much as possible (i.e., to versions at and above 4.0)
+                // I am using the original behavior here for non-affected versions.
+                return super.deleteSurroundingText(beforeLength, afterLength);
+            }
+        }
+    }
+
+
+    //Reference: http://stackoverflow.com/a/19980975/1478764
+    public static class EditableAccomodatingLatinIMETypeNullIssues extends SpannableStringBuilder {
+        EditableAccomodatingLatinIMETypeNullIssues(CharSequence source) {
+            super(source);
+        }
+
+        //This character must be ignored by your onKey() code.
+        public static CharSequence ONE_UNPROCESSED_CHARACTER = "/";
+
+        @Override
+        public SpannableStringBuilder replace(final int
+                                                      spannableStringStart, final int spannableStringEnd, CharSequence replacementSequence,
+                                              int replacementStart, int replacementEnd) {
+            if (replacementEnd > replacementStart) {
+                //In this case, there is something in the replacementSequence that the IME
+                // is attempting to replace part of the editable with.
+                //We don't really care about whatever might already be in the editable;
+                // we only care about making sure that SOMETHING ends up in it,
+                // so that the backspace key will continue to work.
+                // So, start by zeroing out whatever is there to begin with.
+                super.replace(0, length(), "", 0, 0);
+
+                //We DO care about preserving the new stuff that is replacing the stuff in the
+                // editable, because this stuff might be sent to us as a keydown event.  So, we
+                // insert the new stuff (typically, a single character) into the now-empty editable,
+                // and return the result to the caller.
+                return super.replace(0, 0, replacementSequence, replacementStart, replacementEnd);
+            }
+            else if (spannableStringEnd > spannableStringStart) {
+                //In this case, there is NOTHING in the replacementSequence, and something is
+                // being replaced in the editable.
+                // This is characteristic of a DELETION.
+                // So, start by zeroing out whatever is being replaced in the editable.
+                super.replace(0, length(), "", 0, 0);
+
+                //And now, we will place our ONE_UNPROCESSED_CHARACTER into the editable buffer, and return it.
+                return super.replace(0, 0, ONE_UNPROCESSED_CHARACTER, 0, 1);
+            }
+
+            // In this case, NOTHING is being replaced in the editable.  This code assumes that there
+            // is already something there.  This assumption is probably OK because in our
+            // InputConnectionAccomodatingLatinIMETypeNullIssues.getEditable() method
+            // we PLACE a ONE_UNPROCESSED_CHARACTER into the newly-created buffer.  So if there
+            // is nothing replacing the identified part
+            // of the editable, and no part of the editable that is being replaced, then we just
+            // leave whatever is in the editable ALONE,
+            // and we can be confident that there will be SOMETHING there.  This call to super.replace()
+            // in that case will be a no-op, except
+            // for the value it returns.
+            return super.replace(spannableStringStart, spannableStringEnd,
+                    replacementSequence, replacementStart, replacementEnd);
+        }
+    }
 
 
 }//End of GuitarChordView class
