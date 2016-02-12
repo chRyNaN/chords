@@ -1,3 +1,5 @@
+#GuitarChords
+
 ![Screenshot](https://github.com/chRyNaN/GuitarChords/blob/master/app/src/main/res/drawable/screenshot.png)
 
 An easily extensible and customizable native Android View to display guitar (and other stringed instruments) chords. 
