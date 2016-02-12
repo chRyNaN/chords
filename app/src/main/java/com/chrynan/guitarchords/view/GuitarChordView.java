@@ -17,7 +17,6 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -620,6 +619,13 @@ public class GuitarChordView extends View {
         }
     }
 
+    public void addMarkers(List<ChordMarker> markers){
+        for(ChordMarker marker : markers){
+            chord.addMarker(marker);
+        }
+        invalidate();
+    }
+
     public boolean removeMarker(ChordMarker marker){
         if(marker != null){
             if(chord != null){
@@ -1053,24 +1059,16 @@ public class GuitarChordView extends View {
         }
 
         public boolean contains(ChordMarker marker){
-            Log.d(TAG, "contains: marker = " + marker.toString());
-            Log.d(TAG, "bars");
             for(ChordMarker cm : bars){
-                Log.d(TAG, "cm = " + cm.toString());
                 if(cm.equals(marker)){
-                    Log.d(TAG, "return true");
                     return true;
                 }
             }
-            Log.d(TAG, "notes");
             for(ChordMarker cm : notes){
-                Log.d(TAG, "cm = " + cm.toString());
                 if(cm.equals(marker)){
-                    Log.d(TAG, "return true");
                     return true;
                 }
             }
-            Log.d(TAG, "return false");
             return false;
         }
 
@@ -1107,6 +1105,13 @@ public class GuitarChordView extends View {
 
         public List<ChordMarker> getIndividualNotes(){
             return notes;
+        }
+
+        public List<ChordMarker> getAllMarkers(){
+            List<ChordMarker> allMarkers = new ArrayList<>();
+            allMarkers.addAll(notes);
+            allMarkers.addAll(bars);
+            return allMarkers;
         }
 
         public List<Integer> getOpenStrings(){
