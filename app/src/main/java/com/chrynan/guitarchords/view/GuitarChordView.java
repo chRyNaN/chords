@@ -29,6 +29,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.chrynan.guitarchords.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -499,7 +502,7 @@ public class GuitarChordView extends View {
         return null;
     }
 
-    private boolean isInChartBounds(MotionEvent event){
+    protected boolean isInChartBounds(MotionEvent event){
         float x = event.getX();
         float y = event.getY();
         if(x >= (drawingBounds.left + fretNumberBounds.width()) && x < drawingBounds.right){
@@ -510,7 +513,7 @@ public class GuitarChordView extends View {
         return false;
     }
 
-    private boolean isInFretNumberBounds(MotionEvent event){
+    protected boolean isInFretNumberBounds(MotionEvent event){
         if(showFretNumbers){
             float x = event.getX();
             float y = event.getY();
@@ -523,7 +526,7 @@ public class GuitarChordView extends View {
         return false;
     }
 
-    private boolean isInStringMarkerBounds(MotionEvent event){
+    protected boolean isInStringMarkerBounds(MotionEvent event){
         float x = event.getX();
         float y = event.getY();
         if(x >= drawingBounds.left && x < drawingBounds.right){
@@ -534,7 +537,7 @@ public class GuitarChordView extends View {
         return false;
     }
 
-    private int getSelectedFret(MotionEvent event){
+    protected int getSelectedFret(MotionEvent event){
         int fretStart = chord.getFretStart();
         float y = event.getY();
         int i;
@@ -547,7 +550,7 @@ public class GuitarChordView extends View {
         return i;
     }
 
-    private int getSelectedString(MotionEvent event){
+    protected int getSelectedString(MotionEvent event){
         float x = event.getX();
         int i;
         for(i = 0; i < stringCount; i++){
@@ -898,6 +901,78 @@ public class GuitarChordView extends View {
             this.fretStart = chord.getFretStart();
             this.fretEnd = chord.getFretEnd();
             this.title = chord.getTitle();
+        }
+
+        public Chord(JSONObject obj){
+            this();
+            fromJSON(obj);
+        }
+
+        public void fromJSON(JSONObject obj){
+            try{
+                if(obj != null){
+                    if(obj.has("fretStart")){
+                        this.fretStart = obj.getInt("fretStart");
+                    }
+                    if(obj.has("fretEnd")){
+                        this.fretEnd = obj.getInt("fretEnd");
+                    }
+                    if(obj.has("title")){
+                        this.title = obj.getString("title");
+                    }
+                    if(obj.has("bars")){
+                        JSONArray bArray = obj.getJSONArray("bars");
+                        for(int i = 0; i < bArray.length(); i++){
+                            bars.add(new ChordMarker(bArray.getJSONObject(i)));
+                        }
+                    }
+                    if(obj.has("notes")){
+                        JSONArray nArray = obj.getJSONArray("notes");
+                        for(int i = 0; i < nArray.length(); i++){
+                            notes.add(new ChordMarker(nArray.getJSONObject(i)));
+                        }
+                    }
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        public JSONObject toJSON(){
+            try{
+                JSONObject obj = new JSONObject();
+                obj.put("fretStart", fretStart);
+                obj.put("fretEnd", fretEnd);
+                if(title != null){
+                    obj.put("title", title);
+                }
+                if(bars != null){
+                    JSONArray bArray = new JSONArray();
+                    for(ChordMarker marker : bars){
+                        bArray.put(marker.toJSON());
+                    }
+                    obj.put("bars", bArray);
+                }
+                if(notes != null){
+                    JSONArray nArray = new JSONArray();
+                    for(ChordMarker marker : notes){
+                        nArray.put(marker.toJSON());
+                    }
+                    obj.put("notes", nArray);
+                }
+                return obj;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public String toJSONString(){
+            JSONObject obj = this.toJSON();
+            if(obj != null){
+                return obj.toString();
+            }
+            return this.toString();
         }
 
         public void addMarker(ChordMarker marker){
@@ -1275,6 +1350,64 @@ public class GuitarChordView extends View {
             this.endString = marker.getEndString();
             this.fret = marker.getFret();
             this.finger = marker.getFinger();
+        }
+
+        public ChordMarker(JSONObject obj){
+            this.type = null;
+            this.startString = -1;
+            this.endString = -1;
+            this.fret = -1;
+            this.finger = -1;
+            fromJSON(obj);
+        }
+
+        public void fromJSON(JSONObject obj){
+            try{
+                if(obj != null){
+                    if(obj.has("type")){
+                        this.type = obj.getString("type");
+                    }
+                    if(obj.has("startString")){
+                        this.startString = obj.getInt("startString");
+                    }
+                    if(obj.has("endString")){
+                        this.endString = obj.getInt("endString");
+                    }
+                    if(obj.has("fret")){
+                        this.fret = obj.getInt("fret");
+                    }
+                    if(obj.has("finger")){
+                        this.finger = obj.getInt("finger");
+                    }
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        public JSONObject toJSON(){
+            try{
+                JSONObject obj = new JSONObject();
+                if(type != null){
+                    obj.put("type", type);
+                }
+                obj.put("startString", startString);
+                obj.put("endString", endString);
+                obj.put("fret", fret);
+                obj.put("finger", finger);
+                return obj;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public String toJSONString(){
+            JSONObject obj = this.toJSON();
+            if(obj != null){
+                return obj.toString();
+            }
+            return this.toString();
         }
 
         public String getType(){
