@@ -24,7 +24,7 @@ Example usage:
     android:layout_height="wrap_content" />
 ```
 
-```Java
+```java
 chordView = (GuitarChordView) findViewById(R.id.chord_view);
 chordView.setTitle("E Major");
 //Fret, String, Finger
@@ -47,7 +47,7 @@ Plenty of built in customization options. For instance:
     chordView:noteNumberColor="@color/light_primary"/>
 ```
 
-```Java
+```java
 chordView.setNoteColor(getColor(R.color.primary));
 chordView.setNoteNumberColor(getColor(R.color.light_primary));
 ```
