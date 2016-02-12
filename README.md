@@ -7,7 +7,7 @@ Simple to use and beautifully designed.
 
 Example usage:
 
-```Markup
+```XML
 <TextView
     android:id="@+id/chord_title"
     android:layout_width="match_parent"
@@ -37,7 +37,7 @@ chordTitle.setText(chordView.getTitle());
 
 Plenty of built in customization options. For instance:
 
-```Markup
+```XML
 <com.chrynan.guitarchords.view.GuitarChordView
     xmlns:chordView="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chord_view"
