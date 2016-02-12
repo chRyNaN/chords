@@ -44,6 +44,7 @@ public class EditGuitarChord extends GuitarChordView implements GuitarChordView.
 
     @Override
     public void onChordSelected(MotionEvent event, ChordMarker marker, boolean isMarkerInChord) {
+        //TODO add bar adding and removing support
         if(isMarkerInChord){
             if(event == null){
                 removeMarker(marker);
