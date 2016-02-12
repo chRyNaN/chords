@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -424,8 +425,10 @@ public class GuitarChordView extends View {
             int fret = NO_FRET, string = -1;
             fret = getSelectedFret(event);
             string = getSelectedString(event);
-            boolean c = detector.onTouchEvent(event);
-            if (c && event.getAction() == MotionEvent.ACTION_UP && touchEventMarker != null) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                detector.onTouchEvent(event);
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP && touchEventMarker != null) {
                 if (fret == touchEventMarker.getFret()) {
                     int startString = 1, endString = 1;
                     startString = (touchEventMarker.getStartString() < string) ? touchEventMarker.getStartString() : string;
@@ -439,8 +442,7 @@ public class GuitarChordView extends View {
                     return super.onTouchEvent(event);
                 }
             }
-            alertOnChordSelected(event, touchEventMarker, isMarkerInChord);
-            if (c && editable) {
+            if (editable) {
                 return true;
             }
         }else if(isInFretNumberBounds(event)){
@@ -501,7 +503,7 @@ public class GuitarChordView extends View {
         float x = event.getX();
         float y = event.getY();
         if(x >= (drawingBounds.left + fretNumberBounds.width()) && x < drawingBounds.right){
-            if(y >= (drawingBounds.top + stringMarkerBounds.height()) && x < drawingBounds.bottom){
+            if(y >= (drawingBounds.top + stringMarkerBounds.height()) && y < drawingBounds.bottom){
                 return true;
             }
         }
@@ -537,22 +539,23 @@ public class GuitarChordView extends View {
         float y = event.getY();
         int i;
         for(i = 0; i < chord.getFretCount(); i++){
-            if(y < (drawingBounds.top + stringMarkerBounds.height()) + (i * fretSize) + (i * fretMarkerSize)){
+            if(y < (stringMarkerBounds.bottom + (i * fretSize) + (i * fretMarkerSize))){
                 break;
             }
         }
-        return fretStart + i;
+        i = (fretStart < 0) ? i : (fretStart - 1) + i;
+        return i;
     }
 
     private int getSelectedString(MotionEvent event){
         float x = event.getX();
         int i;
-        for(i = 1; i <= stringCount; i++){
-            if(x < (stringMarkerBounds.left) + (i * stringDistance) + (i * stringSize)){
+        for(i = 0; i < stringCount; i++){
+            if(x < (((stringMarkerBounds.left) + (i * stringDistance) + (i * stringSize)) + (stringDistance / 2))){
                 break;
             }
         }
-        return i;
+        return stringCount - i;
     }
 
     protected float getVerticalCenterTextPosition(float originalYPosition, String text, Paint textPaint){
@@ -879,8 +882,8 @@ public class GuitarChordView extends View {
         public Chord(){
             this.bars = new ArrayList<>();
             this.notes = new ArrayList<>();
-            this.fretStart = NO_FRET;
-            this.fretEnd = NO_FRET;
+            this.fretStart = 1;
+            this.fretEnd = 4;
             this.title = BLANK_TITLE;
         }
 
@@ -911,12 +914,12 @@ public class GuitarChordView extends View {
                         //Add this marking to the bar list
                         bars.add(marker);
                         int fret = marker.getFret();
-                        fret = (fret < NO_FRET) ? NO_FRET : fret;
+                        fret = (fret < 1) ? 1 : fret;
                         fret = (fret > MAX_FRET) ? MAX_FRET : fret;
                         if(fretStart == NO_FRET && fretEnd == NO_FRET){
                             fretStart = fret;
                             fretEnd = fret;
-                        }else if(fret < fretStart){
+                        }else if(fret < fretStart && fret > 0){
                             fretStart = fret;
                         }else if(fret > fretEnd){
                             fretEnd = fret;
@@ -933,12 +936,12 @@ public class GuitarChordView extends View {
                     notes.removeAll(removeList); //Avoid ConcurrentModificationException
                     notes.add(marker);
                     int fret = marker.getFret();
-                    fret = (fret < NO_FRET) ? NO_FRET : fret;
+                    fret = (fret < 1) ? 1 : fret;
                     fret = (fret > MAX_FRET) ? MAX_FRET : fret;
                     if(fretStart == NO_FRET && fretEnd == NO_FRET){
                         fretStart = fret;
                         fretEnd = fret;
-                    }else if(fret < fretStart){
+                    }else if(fret < fretStart && fret > 0){
                         fretStart = fret;
                     }else if(fret > fretEnd){
                         fretEnd = fret;
@@ -975,7 +978,24 @@ public class GuitarChordView extends View {
         }
 
         public boolean contains(ChordMarker marker){
-            //TODO
+            Log.d(TAG, "contains: marker = " + marker.toString());
+            Log.d(TAG, "bars");
+            for(ChordMarker cm : bars){
+                Log.d(TAG, "cm = " + cm.toString());
+                if(cm.equals(marker)){
+                    Log.d(TAG, "return true");
+                    return true;
+                }
+            }
+            Log.d(TAG, "notes");
+            for(ChordMarker cm : notes){
+                Log.d(TAG, "cm = " + cm.toString());
+                if(cm.equals(marker)){
+                    Log.d(TAG, "return true");
+                    return true;
+                }
+            }
+            Log.d(TAG, "return false");
             return false;
         }
 
@@ -986,8 +1006,8 @@ public class GuitarChordView extends View {
         public void clear(){
             notes.clear();
             bars.clear();
-            fretStart = NO_FRET;
-            fretEnd = NO_FRET;
+            fretStart = 1;
+            fretEnd = 4;
             title = BLANK_TITLE;
         }
 
@@ -1000,6 +1020,9 @@ public class GuitarChordView extends View {
         }
 
         public int getFretCount(){
+            if((fretEnd - fretStart + 1) < 4){
+                return 4;
+            }
             return fretEnd - fretStart + 1;
         }
 
@@ -1127,6 +1150,41 @@ public class GuitarChordView extends View {
             this.title = title;
         }
 
+        @Override
+        public String toString() {
+            return "Chord{" +
+                    "bars=" + bars +
+                    ", notes=" + notes +
+                    ", fretStart=" + fretStart +
+                    ", fretEnd=" + fretEnd +
+                    ", title='" + title + '\'' +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Chord chord = (Chord) o;
+
+            if (fretStart != chord.fretStart) return false;
+            if (fretEnd != chord.fretEnd) return false;
+            if (bars != null ? !bars.equals(chord.bars) : chord.bars != null) return false;
+            if (notes != null ? !notes.equals(chord.notes) : chord.notes != null) return false;
+            return !(title != null ? !title.equals(chord.title) : chord.title != null);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = bars != null ? bars.hashCode() : 0;
+            result = 31 * result + (notes != null ? notes.hashCode() : 0);
+            result = 31 * result + fretStart;
+            result = 31 * result + fretEnd;
+            result = 31 * result + (title != null ? title.hashCode() : 0);
+            return result;
+        }
+
     }//End of Chord class
 
 
@@ -1237,6 +1295,41 @@ public class GuitarChordView extends View {
 
         public int getFinger(){
             return finger;
+        }
+
+        @Override
+        public String toString() {
+            return "ChordMarker{" +
+                    "type='" + type + '\'' +
+                    ", startString=" + startString +
+                    ", endString=" + endString +
+                    ", fret=" + fret +
+                    ", finger=" + finger +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ChordMarker that = (ChordMarker) o;
+
+            if (startString != that.startString) return false;
+            if (endString != that.endString) return false;
+            if (fret != that.fret) return false;
+            if (finger != that.finger) return false;
+            return !(type != null ? !type.equals(that.type) : that.type != null);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = type != null ? type.hashCode() : 0;
+            result = 31 * result + startString;
+            result = 31 * result + endString;
+            result = 31 * result + fret;
+            result = 31 * result + finger;
+            return result;
         }
 
     }//End of ChordMarker class
