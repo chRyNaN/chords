@@ -1084,6 +1084,26 @@ public class GuitarChordView extends View {
             title = BLANK_TITLE;
         }
 
+        public int getStringCount(){
+            int maxString = 1;
+            for(ChordMarker marker : getAllMarkers()){
+                if(marker.getEndString() > maxString){
+                    maxString = marker.getEndString();
+                }
+            }
+            for(Integer i : getOpenStrings()){
+                if(i > maxString){
+                    maxString = i;
+                }
+            }
+            for(Integer i : getMutedStrings()){
+                if(i > maxString){
+                    maxString = i;
+                }
+            }
+            return maxString;
+        }
+
         public int getFretStart(){
             return fretStart;
         }
