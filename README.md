@@ -51,3 +51,21 @@ Plenty of built in customization options. For instance:
 chordView.setNoteColor(getColor(R.color.primary));
 chordView.setNoteNumberColor(getColor(R.color.light_primary));
 ```
+
+Easily convert between different formats:
+
+```java
+/*
+ * String s:
+ * e |-----0------|
+ * B |-----1------|
+ * G |-----0------|
+ * D |-----2------|
+ * A |-----3------|
+ * E |------------|
+ */
+ //Display from String
+ chordView.setChord(ChordParser.parseFromASCII(s));
+ //Chord to String
+ String s = ChordParser.toASCII(chordView.getChord());
+```
