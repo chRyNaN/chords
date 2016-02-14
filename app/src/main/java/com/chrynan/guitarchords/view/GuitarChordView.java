@@ -1242,6 +1242,41 @@ public class GuitarChordView extends View {
             return marker;
         }
 
+        public int getFret(int string){
+            //returns the highest fret marked on the given string or 0, as in open, if none is marked
+            int fret = 0;
+            List<ChordMarker> markers = getAllNotesOnString(string);
+            if(markers != null){
+                for(ChordMarker marker : markers){
+                    if(marker.getFret() > fret){
+                        fret = marker.getFret();
+                    }
+                }
+            }
+            return fret;
+        }
+
+        public List<Integer> getStrings(int fret){
+            //returns all the strings that are marked with this fret
+            List<Integer> strings = new ArrayList<>();
+            if(fret == FRET_OPEN){
+                return getOpenStrings();
+            }else if(fret == FRET_MUTE){
+                return getMutedStrings();
+            }else{
+                List<ChordMarker> markers;
+                for(int i = 0; i < getStringCount(); i++){
+                    markers = getAllNotesOnString(i + 1);
+                    for(ChordMarker marker : markers){
+                        if(marker.getFret() == fret){
+                            strings.add(new Integer(marker.getFret()));
+                        }
+                    }
+                }
+            }
+            return strings;
+        }
+
         public String getTitle(){
             return title;
         }

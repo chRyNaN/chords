@@ -42,6 +42,89 @@ import java.util.List;
  */
 public class ChordParser {
 
+    public static GuitarChordView.Chord parseFromString(String string){
+        return parseFromString(string, false);
+    }
+
+    public static GuitarChordView.Chord parseFromString(String string, boolean firstStringFirst){
+        //String should be in format "x02210" where the position in the String determines the guitar string number
+        //(dependant on the boolean value, ex: firstStringFirst is true then string.charAt(0) (first number) corresponds
+        //to the first string on the guitar (high e in standard tuning); Default is false meaning the first char
+        //corresponds to the last string on the guitar (low e in standard tuning)).
+        if(string == null){
+            throw new IllegalArgumentException("String parameter in parseFromString method must not be null.");
+        }
+        GuitarChordView.Chord chord = new GuitarChordView.Chord();
+        string.toLowerCase();
+        char c;
+        if(firstStringFirst){
+            for(int i = 0; i < string.length(); i++){
+                c = string.charAt(i);
+                if(c == 'x'){
+                    chord.addMarker(new GuitarChordView.ChordMarker(i + 1, GuitarChordView.ChordMarker.FRET_MUTE,
+                            GuitarChordView.ChordMarker.NO_FINGER));
+                }else if(c == 'o' || c == '0' || c == ' '){
+                    chord.addMarker(new GuitarChordView.ChordMarker(i + 1, GuitarChordView.ChordMarker.FRET_OPEN,
+                            GuitarChordView.ChordMarker.NO_FINGER));
+                }else{
+                    chord.addMarker(new GuitarChordView.ChordMarker(i + 1, Integer.valueOf(String.valueOf(c)),
+                            GuitarChordView.ChordMarker.NO_FINGER));
+                }
+            }
+        }else{
+            for(int i = 0; i < string.length(); i++){
+                c = string.charAt(i);
+                if(c == 'x'){
+                    chord.addMarker(new GuitarChordView.ChordMarker(string.length() - i, GuitarChordView.ChordMarker.FRET_MUTE,
+                            GuitarChordView.ChordMarker.NO_FINGER));
+                }else if(c == 'o' || c == '0' || c == ' '){
+                    chord.addMarker(new GuitarChordView.ChordMarker(string.length() - i, GuitarChordView.ChordMarker.FRET_OPEN,
+                            GuitarChordView.ChordMarker.NO_FINGER));
+                }else{
+                    chord.addMarker(new GuitarChordView.ChordMarker(string.length() - i, Integer.valueOf(String.valueOf(c)),
+                            GuitarChordView.ChordMarker.NO_FINGER));
+                }
+            }
+        }
+        return chord;
+    }
+
+    public static String toString(GuitarChordView.Chord chord){
+        return toString(chord, false);
+    }
+
+    public static String toString(GuitarChordView.Chord chord, boolean firstStringFirst){
+        if(chord == null){
+            throw new IllegalArgumentException("Chord parameters in toString method must not be null.");
+        }
+        StringBuilder sb = new StringBuilder();
+        int fret = -1;
+        if(firstStringFirst){
+            for(int i = 0; i < chord.getStringCount(); i++){
+                fret = chord.getFret(i + 1);
+                if(fret == -1){
+                    sb.append("x");
+                }else if(fret == 0){
+                    sb.append("0");
+                }else{
+                    sb.append(String.valueOf(fret));
+                }
+            }
+        }else{
+            for(int i = chord.getStringCount(); i > 0; i--){
+                fret = chord.getFret(i);
+                if(fret == -1){
+                    sb.append("x");
+                }else if(fret == 0){
+                    sb.append("0");
+                }else{
+                    sb.append(String.valueOf(fret));
+                }
+            }
+        }
+        return sb.toString();
+    }
+
     public static GuitarChordView.Chord parseFromASCII(String singleASCIIChord){
         //Takes the first number on each line and counts that as a fret for the string it's on
         if(singleASCIIChord == null){
