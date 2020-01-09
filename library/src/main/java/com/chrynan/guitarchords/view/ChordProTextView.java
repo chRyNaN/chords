@@ -71,7 +71,7 @@ public class ChordProTextView extends TextView{
 
     //Can't override TextView's setText() methods because they're final (terrible design).
     //So, this method should be used instead.
-    public void setChordProText(String text){
+    public void setChordProText(final String text){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -84,7 +84,7 @@ public class ChordProTextView extends TextView{
                         tag.setChord(new GuitarChordView.Chord(ChordPro.getChordFromDefineTag(defineTag)));
                     }
                 }
-                SpannableStringBuilder sb = ChordPro.parseString(text);
+                final SpannableStringBuilder sb = ChordPro.parseString(text);
                 handler.post(new Runnable() {
                     @Override
                     public void run() {

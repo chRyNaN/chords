@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.ColorInt;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
@@ -18,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.chrynan.guitarchords.view.GuitarChordView;
+
+import androidx.annotation.ColorInt;
 
 /*
  * Copyright 2016 chRyNaN
