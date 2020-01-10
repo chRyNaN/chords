@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.chrynan.chords.R
+import com.chrynan.example.R
 import com.chrynan.guitarchords.model.Chord
 import kotlin.math.round
 
