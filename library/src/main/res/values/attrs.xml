@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="ChordView">
         <attr name="bridgeNutColor" format="color"/>
         <attr name="fretMarkerColor" format="color"/>
@@ -12,8 +13,13 @@
         <attr name="mutedText" format="string"/>
         <attr name="openStringText" format="string"/>
         <attr name="stringAmount" format="integer"/>
-        <attr name="editable" format="boolean"/>
         <attr name="showFingerNumbers" format="boolean"/>
         <attr name="showFretNumbers" format="boolean"/>
+        <attr name="stringLabelState" format="enum">
+            <enum name="number" value="0"/>
+            <enum name="label" value="1"/>
+            <enum name="hide" value="2"/>
+        </attr>
     </declare-styleable>
+
 </resources>

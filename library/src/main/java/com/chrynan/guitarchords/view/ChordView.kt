@@ -30,6 +30,11 @@ import kotlin.math.round
 open class ChordView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     var chord: Chord? = null
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
 
     var showFretNumbers = false
         set(value) {
@@ -41,27 +46,35 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
             field = value
             invalidate()
         }
-    var stringCount = 6
-        set(value) {
-            field = value.coerceAtLeast(0)
-            invalidate()
-        }
-    var fretStart = 0
-        set(value) {
-            field = value.coerceAtLeast(0)
-            invalidate()
-        }
-    var fretEnd = 4
-        set(value) {
-            field = value.coerceAtLeast(0)
-            invalidate()
-        }
-    var mutedText: String = MUTED_TEXT
+    var stringLabelState: StringLabelState = StringLabelState.HIDE
         set(value) {
             field = value
             invalidate()
         }
-    var openStringText: String = OPEN_STRING_TEXT
+    var stringCount = DEFAULT_STRING_COUNT
+        set(value) {
+            field = value.coerceAtLeast(0)
+            requestLayout()
+            invalidate()
+        }
+    var fretStart = DEFAULT_FRET_START
+        set(value) {
+            field = value.coerceAtLeast(1)
+            requestLayout()
+            invalidate()
+        }
+    var fretEnd = DEFAULT_FRET_END
+        set(value) {
+            field = value.coerceAtLeast(1)
+            requestLayout()
+            invalidate()
+        }
+    var mutedText: String = DEFAULT_MUTED_TEXT
+        set(value) {
+            field = value
+            invalidate()
+        }
+    var openStringText: String = DEFAULT_OPEN_TEXT
         set(value) {
             field = value
             invalidate()
@@ -146,7 +159,16 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
     private val stringMarkerBounds = RectF()
     private val fretNumberBounds = RectF()
 
-    private val barLinePath = Path()
+    private val fretCount: Int
+        get() = fretEnd - fretStart
+
+    private val fretLineRects = mutableListOf<RectF>()
+    private val stringLineRects = mutableListOf<RectF>()
+    private val fretNumberPoints = mutableListOf<PointF>()
+    private val notePositions = mutableListOf<NotePosition>()
+    private val barLinePaths = mutableListOf<BarPosition>()
+    private val stringLabelPositions = mutableListOf<StringPosition>()
+    private val stringMarkerPositions = mutableListOf<StringPosition>()
 
     private var fretSize = 0f //y value = 0
     private var stringDistance = 0f //x value = 0f
@@ -202,11 +224,15 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
                 noteNumberColor = a.getColor(R.styleable.ChordView_noteNumberColor, WHITE)
                 barLineColor = a.getColor(R.styleable.ChordView_barLineColor, DEFAULT_COLOR)
 
-                mutedText = a.getString(R.styleable.ChordView_mutedText) ?: MUTED_TEXT
+                mutedText = a.getString(R.styleable.ChordView_mutedText) ?: DEFAULT_MUTED_TEXT
+                openStringText = a.getString(R.styleable.ChordView_openStringText) ?: DEFAULT_OPEN_TEXT
 
-                openStringText = a.getString(R.styleable.ChordView_openStringText) ?: OPEN_STRING_TEXT
-
-                stringCount = a.getInt(R.styleable.ChordView_stringAmount, 6)
+                stringCount = a.getInt(R.styleable.ChordView_stringAmount, DEFAULT_STRING_COUNT)
+                stringLabelState = when (a.getInt(R.styleable.ChordView_stringLabelState, 0)) {
+                    0 -> StringLabelState.SHOW_NUMBER
+                    1 -> StringLabelState.SHOW_LABEL
+                    else -> StringLabelState.HIDE
+                }
 
                 showFingerNumbers = a.getBoolean(R.styleable.ChordView_showFingerNumbers, true)
                 showFretNumbers = a.getBoolean(R.styleable.ChordView_showFretNumbers, true)
@@ -216,8 +242,19 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
     }
 
-    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) { //TODO adjust lowest and highest notes to be within the draw bounds (notes on 1st and 6th string exceed draw bounds by half
-//the note size)
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        calculateSize()
+        calculateBarLinePositions()
+        calculateFretNumberPositions()
+        calculateFretPositions()
+        calculateNotePositions()
+        calculateStringMarkers()
+        calculateStringPositions()
+    }
+
+    private fun calculateSize() {
         var aWidth = width.toFloat() - (paddingLeft + paddingRight).toFloat()
         var aHeight = width.toFloat() - (paddingTop + paddingBottom).toFloat()
         val pWidth = aWidth
@@ -254,7 +291,6 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
         noteSize = stringDistance
         noteNumberSize = (noteSize * (3f / 4f))
 
-        //TODO need to take into account whether or not to show bridgeNut
         val fretCount = fretEnd - fretStart
         fretSize = round(((aHeight - (fretNumberSize + fretNumberSize / 2) - (fretCount + 1) * fretMarkerSize) / fretCount))
 
@@ -287,8 +323,8 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
         //I can optimize this later.
 
         //First draw the strings and fret markers
-        drawFrets(canvas)
-        drawStrings(canvas)
+        fretLineRects.forEach { canvas.drawLine(it, fretMarkerPaint) }
+        stringLineRects.forEach { canvas.drawLine(it, stringPaint) }
 
         //Next draw the fret numbers and string markers
         drawFretNumbers(canvas)
@@ -299,124 +335,201 @@ open class ChordView @JvmOverloads constructor(context: Context, attrs: Attribut
         drawNotes(canvas)
     }
 
-    private fun drawFrets(canvas: Canvas) {
-        //Fret markers; not worrying about whether or not to show the bridge nut now (since that wasn't calculated
-        //in to the drawing size)
-        //TODO need to take into account whether or not to show bridgeNut
-        val fretCount = fretEnd - fretStart
+    private fun calculateFretPositions() {
+        fretLineRects.clear()
 
-        for (i in 0 until fretCount + 1) {
-            canvas.drawLine(drawingBounds.left + fretNumberBounds.width(),
+        for (i in 0..fretCount) {
+            fretLineRects.add(RectF(
+                    drawingBounds.left + fretNumberBounds.width(),
                     drawingBounds.top + stringMarkerBounds.height() + i * fretSize + i * fretMarkerSize,
                     drawingBounds.right - stringSize,
-                    drawingBounds.top + stringMarkerBounds.height() + i * fretSize + i * fretMarkerSize,
-                    fretMarkerPaint)
+                    drawingBounds.top + stringMarkerBounds.height() + i * fretSize + i * fretMarkerSize))
         }
     }
 
-    private fun drawStrings(canvas: Canvas) {
-        //Strings
+    private fun calculateStringPositions() {
+        stringLineRects.clear()
+
         for (i in 0 until stringCount) {
-            canvas.drawLine(stringMarkerBounds.left + i * stringDistance + i * stringSize,
+            stringLineRects.add(RectF(
+                    stringMarkerBounds.left + i * stringDistance + i * stringSize,
                     drawingBounds.top + stringMarkerBounds.height(),
                     stringMarkerBounds.left + i * stringDistance + i * stringSize,
-                    drawingBounds.bottom - fretMarkerSize,
-                    stringPaint)
+                    drawingBounds.bottom - fretMarkerSize))
         }
+    }
+
+    private fun calculateFretNumberPositions() {
+        fretNumberPoints.clear()
+
+        for (i in fretStart..fretEnd) {
+            fretNumberPoints.add(PointF(
+                    drawingBounds.left + fretNumberBounds.width() / 2,
+                    getVerticalCenterTextPosition(stringMarkerBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretNumberPaint)))
+        }
+    }
+
+    private fun calculateBarLinePositions() {
+        barLinePaths.clear()
+
+        chord?.bars?.forEach {
+            val left = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.startString.number) * stringDistance +
+                    (stringCount - it.startString.number) * stringSize
+            val top = stringMarkerBounds.bottom + (it.fretNumber.number * fretSize + it.fretNumber.number * fretMarkerSize - fretSize / 2)
+            val right = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.endString.number) * stringDistance +
+                    (stringCount - it.endString.number) * stringSize
+            val bottom = 0f // TODO
+            val textX = 0f // TODO
+            val textY = 0f // TODO
+
+            barLinePaths.add(
+                    BarPosition(
+                            text = it.finger.position.toString(),
+                            textX = textX,
+                            textY = textY,
+                            left = left,
+                            top = top,
+                            right = right,
+                            bottom = bottom))
+        }
+    }
+
+    private fun calculateNotePositions() {
+        notePositions.clear()
+
+        chord?.notes?.forEach {
+            val startCenterX = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
+            val startCenterY = stringMarkerBounds.bottom + (it.fretNumber.number * fretSize + it.fretNumber.number * fretMarkerSize - fretSize / 2)
+
+            notePositions.add(
+                    NotePosition(
+                            text = it.finger.toString(),
+                            circleX = startCenterX,
+                            circleY = startCenterY,
+                            textX = startCenterX,
+                            textY = getVerticalCenterTextPosition(startCenterY, it.finger.toString(), noteNumberPaint)))
+        }
+    }
+
+    private fun calculateStringMarkers() {
+        stringLabelPositions.clear()
+        stringMarkerPositions.clear()
+
+        chord?.mutes?.forEach {
+            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.stringNumber.number) * stringDistance + (stringCount - it.stringNumber.number) * stringSize
+            val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, mutedText, stringMarkerPaint)
+
+            stringMarkerPositions.add(
+                    StringPosition(
+                            text = mutedText,
+                            textX = x,
+                            textY = y))
+        }
+
+        chord?.opens?.forEach {
+            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.stringNumber.number) * stringDistance + (stringCount - it.stringNumber.number) * stringSize
+            val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, openStringText, stringMarkerPaint)
+
+            stringMarkerPositions.add(
+                    StringPosition(
+                            text = openStringText,
+                            textX = x,
+                            textY = y))
+        }
+
+        // TODO calculate string labels
     }
 
     private fun drawFretNumbers(canvas: Canvas) {
         //Fret numbers; check if we are showing them or not
         if (showFretNumbers) {
-            val fretCount = fretEnd - fretStart
-
-            for (i in 0 until fretCount) {
-                canvas.drawText((i + 1).toString(),
-                        drawingBounds.left + fretNumberBounds.width() / 2,
-                        getVerticalCenterTextPosition(stringMarkerBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretNumberPaint),
-                        fretNumberPaint)
+            fretNumberPoints.forEachIndexed { index, point ->
+                canvas.drawText((fretStart + index).toString(), point.x, point.y, fretNumberPaint)
             }
         }
     }
 
     private fun drawStringMarkers(canvas: Canvas) {
         //String markers
-        chord?.mutes?.forEachIndexed { i, _ ->
-            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - i) * stringDistance + (stringCount - i) * stringSize
-            val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2,
-                    mutedText,
-                    stringMarkerPaint)
+        stringMarkerPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringMarkerPaint) }
 
-            canvas.drawText(mutedText, x, y, stringMarkerPaint)
-        }
-
-        chord?.opens?.forEachIndexed { i, _ ->
-            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - i) * stringDistance + (stringCount - i) * stringSize
-            val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, openStringText, stringMarkerPaint)
-
-            canvas.drawText(openStringText, x, y, stringMarkerPaint)
-        }
+        // TODO draw String labels/numbers
     }
 
     private fun drawBars(canvas: Canvas) {
         //Bars
-        chord?.bars?.forEach { bar ->
-            val startCenterX = drawingBounds.left + fretNumberBounds.width() + (stringCount - bar.startString.number) * stringDistance +
-                    (stringCount - bar.startString.number) * stringSize
-            val startCenterY = stringMarkerBounds.bottom + (bar.fretNumber.number * fretSize + bar.fretNumber.number * fretMarkerSize - fretSize / 2)
+        barLinePaths.forEach {
+            // Draw Bar
+            canvas.drawRect(it.left, it.top, it.right, it.bottom, barLinePaint)
 
-            val endCenterX = drawingBounds.left + fretNumberBounds.width() + (stringCount - bar.endString.number) * stringDistance +
-                    (stringCount - bar.endString.number) * stringSize
-
-            canvas.drawCircle(startCenterX, startCenterY, noteSize / 2.toFloat(), notePaint)
-            canvas.drawCircle(endCenterX, startCenterY, noteSize / 2.toFloat(), notePaint)
-
+            // Text
             if (showFingerNumbers) {
-                canvas.drawText(bar.finger.toString(), startCenterX,
-                        getVerticalCenterTextPosition(startCenterY, bar.finger.toString(), noteNumberPaint), noteNumberPaint)
-                canvas.drawText(bar.finger.toString(), endCenterX,
-                        getVerticalCenterTextPosition(startCenterY, bar.finger.toString(), noteNumberPaint), noteNumberPaint)
+                canvas.drawText(it.text, it.textX, it.textY, noteNumberPaint)
             }
-
-            barLinePath.reset()
-            barLinePath.moveTo(startCenterX, startCenterY - noteSize / 2)
-            barLinePath.quadTo((startCenterX + endCenterX) / 2,
-                    (startCenterY + startCenterY - noteSize / 2) / 4,
-                    endCenterX, startCenterY - noteSize / 2)
-
-            canvas.drawPath(barLinePath, barLinePaint)
         }
     }
 
     private fun drawNotes(canvas: Canvas) {
         //Individual notes
-        chord?.notes?.forEach {
-            val startCenterX = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance +
-                    (stringCount - it.string.number) * stringSize
-            val startCenterY = stringMarkerBounds.bottom + (it.fretNumber.number * fretSize + it.fretNumber.number * fretMarkerSize - fretSize / 2)
-
-            canvas.drawCircle(startCenterX, startCenterY, noteSize / 2.toFloat(), notePaint)
+        notePositions.forEach {
+            canvas.drawCircle(it.circleX, it.circleY, noteSize / 2f, notePaint)
 
             if (showFingerNumbers) {
-                canvas.drawText(it.finger.toString(), startCenterX,
-                        getVerticalCenterTextPosition(startCenterY, it.finger.toString(), noteNumberPaint), noteNumberPaint)
+                canvas.drawText(it.text, it.textX, it.textY, noteNumberPaint)
             }
         }
     }
 
     private fun getVerticalCenterTextPosition(originalYPosition: Float, text: String?, textPaint: Paint): Float {
         val bounds = Rect()
-        textPaint.getTextBounds(text, 0, text!!.length, bounds)
+        textPaint.getTextBounds(text, 0, text?.length ?: 0, bounds)
 
         return originalYPosition + bounds.height() / 2
     }
+
+    private fun Canvas.drawLine(rectF: RectF, paint: Paint) =
+            drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, paint)
 
     companion object {
 
         private const val DEFAULT_COLOR = Color.BLACK
         private const val WHITE = Color.WHITE
 
-        private const val MUTED_TEXT = "X"
-        private const val OPEN_STRING_TEXT = "O"
+        private const val DEFAULT_MUTED_TEXT = "X"
+        private const val DEFAULT_OPEN_TEXT = "O"
+        private const val DEFAULT_FRET_START = 1
+        private const val DEFAULT_FRET_END = 4
+        private const val DEFAULT_STRING_COUNT = 6
     }
+
+    enum class StringLabelState {
+
+        SHOW_NUMBER,
+        SHOW_LABEL,
+        HIDE
+    }
+
+    private data class NotePosition(
+            val text: String,
+            val circleX: Float,
+            val circleY: Float,
+            val textX: Float,
+            val textY: Float
+    )
+
+    private data class StringPosition(
+            val text: String,
+            val textX: Float,
+            val textY: Float
+    )
+
+    private data class BarPosition(
+            val text: String,
+            val left: Float,
+            val top: Float,
+            val right: Float,
+            val bottom: Float,
+            val textX: Float,
+            val textY: Float
+    )
 }
