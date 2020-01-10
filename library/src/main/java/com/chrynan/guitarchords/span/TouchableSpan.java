@@ -28,6 +28,7 @@ import androidx.annotation.ColorInt;
  * Created by chRyNaN on 2/13/2016. References: http://stackoverflow.com/a/7292485/1478764,
  * http://stackoverflow.com/a/20905824/1478764
  */
+
 /**
  * If an object of this type is attached to the text of a TextView
  * with a movement method of LinkTouchMovementMethod, the affected spans of
@@ -42,6 +43,7 @@ public abstract class TouchableSpan extends CharacterStyle implements UpdateAppe
 
     /**
      * Performs the touch action associated with this span.
+     *
      * @return
      */
     public abstract boolean onTouch(View widget, MotionEvent m);
@@ -50,13 +52,13 @@ public abstract class TouchableSpan extends CharacterStyle implements UpdateAppe
      * Could make the text underlined or change link color.
      */
     @Override
-    public void updateDrawState(TextPaint ds){
+    public void updateDrawState(TextPaint ds) {
         ds.setColor(isPressed ? pressedTextColor : textColor);
         ds.bgColor = isPressed ? pressedBackgroundColor : Color.TRANSPARENT;
         ds.setUnderlineText(false);
     }
 
-    public boolean isPressed(){
+    public boolean isPressed() {
         return isPressed;
     }
 
@@ -87,5 +89,4 @@ public abstract class TouchableSpan extends CharacterStyle implements UpdateAppe
     public void setPressedTextColor(@ColorInt int pressedTextColor) {
         this.pressedTextColor = pressedTextColor;
     }
-
 }

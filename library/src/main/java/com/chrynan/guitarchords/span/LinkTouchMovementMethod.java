@@ -23,6 +23,7 @@ import android.widget.TextView;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Created by chRyNaN on 2/13/2016. References: http://stackoverflow.com/a/7292485/1478764,
  * http://stackoverflow.com/a/20905824/1478764
@@ -34,10 +35,10 @@ public class LinkTouchMovementMethod extends LinkMovementMethod {
     @Override
     public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
         int action = event.getAction();
-        switch(action){
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 pressedSpan = getPressedSpan(widget, buffer, event);
-                if(pressedSpan != null) {
+                if (pressedSpan != null) {
                     pressedSpan.setPressed(true);
                     Selection.setSelection(buffer, buffer.getSpanStart(pressedSpan),
                             buffer.getSpanEnd(pressedSpan));
@@ -46,16 +47,16 @@ public class LinkTouchMovementMethod extends LinkMovementMethod {
                 break;
             case MotionEvent.ACTION_MOVE:
                 TouchableSpan touchedSpan = getPressedSpan(widget, buffer, event);
-                if(pressedSpan != null && touchedSpan != pressedSpan) {
+                if (pressedSpan != null && touchedSpan != pressedSpan) {
                     pressedSpan.setPressed(false);
                     pressedSpan = null;
                     Selection.removeSelection(buffer);
-                }else if(pressedSpan != null){
+                } else if (pressedSpan != null) {
                     pressedSpan.onTouch(widget, event);
                 }
                 break;
             default:
-                if(pressedSpan != null) {
+                if (pressedSpan != null) {
                     pressedSpan.onTouch(widget, event);
                     pressedSpan.setPressed(false);
                     super.onTouchEvent(widget, buffer, event);
@@ -89,11 +90,10 @@ public class LinkTouchMovementMethod extends LinkMovementMethod {
         return touchedSpan;
     }
 
-    public static MovementMethod getInstance(){
-        if(instance == null){
+    public static MovementMethod getInstance() {
+        if (instance == null) {
             instance = new LinkTouchMovementMethod();
         }
         return instance;
     }
-
 }
