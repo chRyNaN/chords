@@ -198,7 +198,7 @@ public class ChordPro {
                 baseFret = string.substring(baseFretStart + MetaTag.BASE_FRET.length(), string.length()).trim();
             }
             GuitarChordView.Chord chord = new GuitarChordView.Chord();
-            chord.setTitle(title);
+            chord.title = title;
             int b;
             try {
                 b = (Integer.valueOf(baseFret) < 0) ? 0 : Integer.valueOf(baseFret);
