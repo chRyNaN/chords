@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.chrynan.example.MainActivity">
 
-    <com.chrynan.guitarchords.view.GuitarChordView
+    <com.chrynan.guitarchords.view.ChordView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -27,7 +27,7 @@ import kotlin.math.round
 /**
  * A View class to display guitar (or other stringed fretted instruments) chords as a chart.
  */
-open class GuitarChordView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+open class ChordView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     var chord: Chord? = null
 
@@ -190,26 +190,26 @@ open class GuitarChordView @JvmOverloads constructor(context: Context, attrs: At
 
     init {
         if (attrs != null) {
-            val a = getContext().theme.obtainStyledAttributes(attrs, R.styleable.GuitarChordView, 0, 0)
+            val a = getContext().theme.obtainStyledAttributes(attrs, R.styleable.ChordView, 0, 0)
 
             try {
-                bridgeNutColor = a.getColor(R.styleable.GuitarChordView_bridgeNutColor, DEFAULT_COLOR)
-                fretMarkerColor = a.getColor(R.styleable.GuitarChordView_fretMarkerColor, DEFAULT_COLOR)
-                stringColor = a.getColor(R.styleable.GuitarChordView_stringColor, DEFAULT_COLOR)
-                fretNumberColor = a.getColor(R.styleable.GuitarChordView_fretNumberColor, DEFAULT_COLOR)
-                stringMarkerColor = a.getColor(R.styleable.GuitarChordView_stringMarkerColor, DEFAULT_COLOR)
-                noteColor = a.getColor(R.styleable.GuitarChordView_noteColor, DEFAULT_COLOR)
-                noteNumberColor = a.getColor(R.styleable.GuitarChordView_noteNumberColor, WHITE)
-                barLineColor = a.getColor(R.styleable.GuitarChordView_barLineColor, DEFAULT_COLOR)
+                bridgeNutColor = a.getColor(R.styleable.ChordView_bridgeNutColor, DEFAULT_COLOR)
+                fretMarkerColor = a.getColor(R.styleable.ChordView_fretMarkerColor, DEFAULT_COLOR)
+                stringColor = a.getColor(R.styleable.ChordView_stringColor, DEFAULT_COLOR)
+                fretNumberColor = a.getColor(R.styleable.ChordView_fretNumberColor, DEFAULT_COLOR)
+                stringMarkerColor = a.getColor(R.styleable.ChordView_stringMarkerColor, DEFAULT_COLOR)
+                noteColor = a.getColor(R.styleable.ChordView_noteColor, DEFAULT_COLOR)
+                noteNumberColor = a.getColor(R.styleable.ChordView_noteNumberColor, WHITE)
+                barLineColor = a.getColor(R.styleable.ChordView_barLineColor, DEFAULT_COLOR)
 
-                mutedText = a.getString(R.styleable.GuitarChordView_mutedText) ?: MUTED_TEXT
+                mutedText = a.getString(R.styleable.ChordView_mutedText) ?: MUTED_TEXT
 
-                openStringText = a.getString(R.styleable.GuitarChordView_openStringText) ?: OPEN_STRING_TEXT
+                openStringText = a.getString(R.styleable.ChordView_openStringText) ?: OPEN_STRING_TEXT
 
-                stringCount = a.getInt(R.styleable.GuitarChordView_stringAmount, 6)
+                stringCount = a.getInt(R.styleable.ChordView_stringAmount, 6)
 
-                showFingerNumbers = a.getBoolean(R.styleable.GuitarChordView_showFingerNumbers, true)
-                showFretNumbers = a.getBoolean(R.styleable.GuitarChordView_showFretNumbers, true)
+                showFingerNumbers = a.getBoolean(R.styleable.ChordView_showFingerNumbers, true)
+                showFretNumbers = a.getBoolean(R.styleable.ChordView_showFretNumbers, true)
             } finally {
                 a.recycle()
             }

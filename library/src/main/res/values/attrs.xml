@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="GuitarChordView">
+    <declare-styleable name="ChordView">
         <attr name="bridgeNutColor" format="color"/>
         <attr name="fretMarkerColor" format="color"/>
         <attr name="stringColor" format="color"/>
