@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="ChordView">
+    <declare-styleable name="ChordWidget">
         <attr name="bridgeNutColor" format="color"/>
         <attr name="fretMarkerColor" format="color"/>
         <attr name="stringColor" format="color"/>
