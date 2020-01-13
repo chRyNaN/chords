@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
                     fretNumber = FretNumber(number = 2),
                     string = ChordString(number = 5, label = "A"))
 
-            +ChordMarker.Open(stringNumber = ChordString(number = 4, label = "D"))
+            +ChordMarker.Open(string = ChordString(number = 4, label = "D"))
 
-            +ChordMarker.Open(stringNumber = ChordString(number = 3, label = "G"))
+            +ChordMarker.Open(string = ChordString(number = 3, label = "G"))
 
             +ChordMarker.Note(
                     finger = Finger.RING,

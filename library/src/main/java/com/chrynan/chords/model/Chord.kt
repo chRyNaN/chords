@@ -20,8 +20,8 @@ data class Chord(
             when {
                 it is ChordMarker.Note && it.string.number == number -> true
                 it is ChordMarker.Bar && (number in it.startString.number..it.endString.number) -> true
-                it is ChordMarker.Open && it.stringNumber.number == number -> true
-                it is ChordMarker.Muted && it.stringNumber.number == number -> true
+                it is ChordMarker.Open && it.string.number == number -> true
+                it is ChordMarker.Muted && it.string.number == number -> true
                 else -> false
             }
         }

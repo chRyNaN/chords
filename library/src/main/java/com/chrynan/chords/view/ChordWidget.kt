@@ -411,7 +411,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         stringMarkerPositions.clear()
 
         chord?.mutes?.forEach {
-            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.stringNumber.number) * stringDistance + (stringCount - it.stringNumber.number) * stringSize
+            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
             val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, mutedText, stringMarkerPaint)
 
             stringMarkerPositions.add(
@@ -422,7 +422,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
 
         chord?.opens?.forEach {
-            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.stringNumber.number) * stringDistance + (stringCount - it.stringNumber.number) * stringSize
+            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
             val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, openStringText, stringMarkerPaint)
 
             stringMarkerPositions.add(

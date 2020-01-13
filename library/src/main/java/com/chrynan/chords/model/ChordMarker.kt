@@ -3,13 +3,13 @@ package com.chrynan.chords.model
 sealed class ChordMarker {
 
     data class Note(
-            val finger: Finger,
+            val finger: Finger = Finger.UNKNOWN,
             val fretNumber: FretNumber,
             val string: ChordString
     ) : ChordMarker()
 
     data class Bar(
-            val finger: Finger,
+            val finger: Finger = Finger.UNKNOWN,
             val fretNumber: FretNumber,
             val startString: ChordString,
             val endString: ChordString
@@ -24,7 +24,7 @@ sealed class ChordMarker {
         }
     }
 
-    data class Open(val stringNumber: ChordString) : ChordMarker()
+    data class Open(val string: ChordString) : ChordMarker()
 
-    data class Muted(val stringNumber: ChordString) : ChordMarker()
+    data class Muted(val string: ChordString) : ChordMarker()
 }

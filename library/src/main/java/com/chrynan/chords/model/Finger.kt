@@ -2,6 +2,7 @@ package com.chrynan.chords.model
 
 enum class Finger(val position: Int) {
 
+    UNKNOWN(position = -1),
     INDEX(position = 1),
     MIDDLE(position = 2),
     RING(position = 3),

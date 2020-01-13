@@ -2,7 +2,10 @@ package com.chrynan.chords.parser
 
 import com.chrynan.chords.model.Chord
 
+/**
+ * An interface that parses an input into a [Chord].
+ */
 interface ChordParser<T> {
 
-    fun parse(item: T): Chord
+    suspend fun parse(item: T): Chord?
 }
