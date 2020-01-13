@@ -251,8 +251,8 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     private fun calculateSize() {
-        var aWidth = width.toFloat() - (paddingLeft + paddingRight).toFloat()
-        var aHeight = width.toFloat() - (paddingTop + paddingBottom).toFloat()
+        var aWidth = measuredWidth - (paddingLeft + paddingRight).toFloat()
+        var aHeight = measuredWidth - (paddingTop + paddingBottom).toFloat()
         val pWidth = aWidth
         val pHeight = aHeight
         val w = aHeight * (2f / 3f)
@@ -333,7 +333,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private fun calculateFretPositions() {
         fretLineRects.clear()
 
-        for (i in 0..fretCount) {
+        for (i in 0..fretCount + 1) {
             fretLineRects.add(RectF(
                     drawingBounds.left + fretNumberBounds.width(),
                     drawingBounds.top + stringMarkerBounds.height() + i * fretSize + i * fretMarkerSize,
@@ -350,14 +350,14 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
                     stringMarkerBounds.left + i * stringDistance + i * stringSize,
                     drawingBounds.top + stringMarkerBounds.height(),
                     stringMarkerBounds.left + i * stringDistance + i * stringSize,
-                    drawingBounds.bottom - fretMarkerSize))
+                    drawingBounds.top + stringMarkerBounds.height() + (fretCount + 1) * fretSize + (fretCount + 1) * fretMarkerSize))
         }
     }
 
     private fun calculateFretNumberPositions() {
         fretNumberPoints.clear()
 
-        for (i in fretStart..fretEnd) {
+        for (i in (fretStart - 1) until fretEnd) {
             fretNumberPoints.add(PointF(
                     drawingBounds.left + fretNumberBounds.width() / 2,
                     getVerticalCenterTextPosition(stringMarkerBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretNumberPaint)))

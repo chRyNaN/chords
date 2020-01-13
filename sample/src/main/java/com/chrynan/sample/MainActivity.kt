@@ -3,6 +3,8 @@ package com.chrynan.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chrynan.chords.model.*
+import com.chrynan.chords.view.ChordView
+import com.chrynan.chords.view.ChordViewBinder
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -10,6 +12,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        chordWidget?.let {
+            val binder = ChordViewBinder(it)
+            val model = ChordViewModel(fretEnd = 3, fretNumberColor = ChordView.DEFAULT_COLOR)
+            binder.bind(model)
+        }
 
         val chord = chord(name = "G") {
             +ChordMarker.Note(
