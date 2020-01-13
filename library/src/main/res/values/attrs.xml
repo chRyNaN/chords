@@ -2,7 +2,6 @@
 <resources>
 
     <declare-styleable name="ChordWidget">
-        <attr name="bridgeNutColor" format="color"/>
         <attr name="fretMarkerColor" format="color"/>
         <attr name="stringColor" format="color"/>
         <attr name="fretNumberColor" format="color"/>

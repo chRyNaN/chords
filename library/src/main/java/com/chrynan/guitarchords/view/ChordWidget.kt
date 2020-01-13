@@ -6,6 +6,16 @@ import android.util.AttributeSet
 import android.view.View
 import com.chrynan.example.R
 import com.chrynan.guitarchords.model.Chord
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_COLOR
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_FRET_END
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_FRET_START
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_OPEN_TEXT
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_STRING_COUNT
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
+import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_TEXT_COLOR
 import kotlin.math.round
 
 /*
@@ -37,17 +47,17 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
             invalidate()
         }
 
-    override var showFretNumbers = false
+    override var showFretNumbers = DEFAULT_SHOW_FRET_NUMBERS
         set(value) {
             field = value
             invalidate()
         }
-    override var showFingerNumbers = false
+    override var showFingerNumbers = DEFAULT_SHOW_FINGER_NUMBERS
         set(value) {
             field = value
             invalidate()
         }
-    override var stringLabelState: StringLabelState = StringLabelState.HIDE
+    override var stringLabelState: StringLabelState = DEFAULT_STRING_LABEL_STATE
         set(value) {
             field = value
             invalidate()
@@ -81,59 +91,49 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
             invalidate()
         }
 
-    override var bridgeNutColor = 0
-        set(value) {
-            field = value
-            bridgeNutPaint.color = value
-            invalidate()
-        }
-    override var fretMarkerColor = 0
+    override var fretMarkerColor = DEFAULT_COLOR
         set(value) {
             field = value
             fretMarkerPaint.color = value
             invalidate()
         }
-    override var stringColor = 0
+    override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
             stringPaint.color = value
             invalidate()
         }
-    override var fretNumberColor = 0
+    override var fretNumberColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
             fretNumberPaint.color = value
             invalidate()
         }
-    override var stringMarkerColor = 0
+    override var stringMarkerColor = DEFAULT_COLOR
         set(value) {
             field = value
             stringMarkerPaint.color = value
             invalidate()
         }
-    override var noteColor = 0
+    override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
             notePaint.color = value
             invalidate()
         }
-    override var noteNumberColor = 0
+    override var noteNumberColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
             noteNumberPaint.color = value
             invalidate()
         }
-    override var barLineColor = 0
+    override var barLineColor = DEFAULT_COLOR
         set(value) {
             field = value
             barLinePaint.color = value
             invalidate()
         }
 
-    private val bridgeNutPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.BUTT
-    }
     private val fretMarkerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
@@ -174,11 +174,6 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private var fretSize = 0f //y value = 0
     private var stringDistance = 0f //x value = 0f
 
-    private var bridgeNutSize = 0f
-        set(value) {
-            field = value
-            bridgeNutPaint.strokeWidth = value
-        }
     private var fretMarkerSize = 0f
         set(value) {
             field = value
@@ -216,13 +211,12 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
             val a = getContext().theme.obtainStyledAttributes(attrs, R.styleable.ChordWidget, 0, 0)
 
             try {
-                bridgeNutColor = a.getColor(R.styleable.ChordWidget_bridgeNutColor, DEFAULT_COLOR)
                 fretMarkerColor = a.getColor(R.styleable.ChordWidget_fretMarkerColor, DEFAULT_COLOR)
                 stringColor = a.getColor(R.styleable.ChordWidget_stringColor, DEFAULT_COLOR)
                 fretNumberColor = a.getColor(R.styleable.ChordWidget_fretNumberColor, DEFAULT_COLOR)
                 stringMarkerColor = a.getColor(R.styleable.ChordWidget_stringMarkerColor, DEFAULT_COLOR)
                 noteColor = a.getColor(R.styleable.ChordWidget_noteColor, DEFAULT_COLOR)
-                noteNumberColor = a.getColor(R.styleable.ChordWidget_noteNumberColor, WHITE)
+                noteNumberColor = a.getColor(R.styleable.ChordWidget_noteNumberColor, DEFAULT_TEXT_COLOR)
                 barLineColor = a.getColor(R.styleable.ChordWidget_barLineColor, DEFAULT_COLOR)
 
                 mutedText = a.getString(R.styleable.ChordWidget_mutedText) ?: DEFAULT_MUTED_TEXT
@@ -288,7 +282,6 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         stringSize = stringDistance / stringCount
         stringSize = if (stringSize < 1f) 1f else stringSize
         fretMarkerSize = stringSize
-        bridgeNutSize = 3 * stringSize
         noteSize = stringDistance
         noteNumberSize = (noteSize * (3f / 4f))
 
@@ -490,18 +483,6 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private fun Canvas.drawLine(rectF: RectF, paint: Paint) =
             drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, paint)
-
-    companion object {
-
-        private const val DEFAULT_COLOR = Color.BLACK
-        private const val WHITE = Color.WHITE
-
-        private const val DEFAULT_MUTED_TEXT = "X"
-        private const val DEFAULT_OPEN_TEXT = "O"
-        private const val DEFAULT_FRET_START = 1
-        private const val DEFAULT_FRET_END = 4
-        private const val DEFAULT_STRING_COUNT = 6
-    }
 
     private data class NotePosition(
             val text: String,
