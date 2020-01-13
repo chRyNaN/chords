@@ -1,3 +1,4 @@
 rootProject.name = "chords"
 
 include ":library"
+include ':sample'
