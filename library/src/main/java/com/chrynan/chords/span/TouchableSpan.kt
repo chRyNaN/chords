@@ -1,4 +1,4 @@
-package com.chrynan.guitarchords.span
+package com.chrynan.chords.span
 
 import android.graphics.Color
 import android.text.TextPaint

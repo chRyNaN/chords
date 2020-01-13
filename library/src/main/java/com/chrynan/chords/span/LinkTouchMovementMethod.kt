@@ -1,4 +1,4 @@
-package com.chrynan.guitarchords.span
+package com.chrynan.chords.span
 
 import android.text.Selection
 import android.text.Spannable

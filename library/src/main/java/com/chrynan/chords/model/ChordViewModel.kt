@@ -1,7 +1,7 @@
-package com.chrynan.guitarchords.model
+package com.chrynan.chords.model
 
-import com.chrynan.guitarchords.view.ChordView
-import com.chrynan.guitarchords.view.StringLabelState
+import com.chrynan.chords.view.ChordView
+import com.chrynan.chords.view.StringLabelState
 
 data class ChordViewModel(
         val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,

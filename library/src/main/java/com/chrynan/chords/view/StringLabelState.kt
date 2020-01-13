@@ -1,4 +1,4 @@
-package com.chrynan.guitarchords.view
+package com.chrynan.chords.view
 
 enum class StringLabelState {
 

@@ -1,4 +1,4 @@
-package com.chrynan.guitarchords.model
+package com.chrynan.chords.model
 
 class ChordBuilder(private val name: String? = null) {
 

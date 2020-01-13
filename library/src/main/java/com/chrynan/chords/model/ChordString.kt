@@ -1,4 +1,4 @@
-package com.chrynan.guitarchords.model
+package com.chrynan.chords.model
 
 data class ChordString(
         val number: Int,

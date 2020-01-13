@@ -1,4 +1,4 @@
-package com.chrynan.guitarchords.model
+package com.chrynan.chords.model
 
 enum class Finger(val position: Int) {
 

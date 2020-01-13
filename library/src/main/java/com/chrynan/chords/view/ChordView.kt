@@ -1,8 +1,8 @@
-package com.chrynan.guitarchords.view
+package com.chrynan.chords.view
 
 import android.graphics.Color
-import com.chrynan.guitarchords.model.Chord
-import com.chrynan.guitarchords.model.ColorInt
+import com.chrynan.chords.model.Chord
+import com.chrynan.chords.model.ColorInt
 
 interface ChordView {
 

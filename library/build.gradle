@@ -3,16 +3,17 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'digital.wup.android-maven-publish'
 
-group rootProject.ext.libraryGroup
-version rootProject.ext.libraryVersion
+group rootProject.libraryGroup
+version rootProject.libraryVersion
 
 android {
     compileSdkVersion 29
+
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode rootProject.ext.libraryVersionCode
-        versionName rootProject.ext.libraryVersion
+        versionCode rootProject.libraryVersionCode
+        versionName rootProject.libraryVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

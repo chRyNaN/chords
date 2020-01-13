@@ -1,6 +1,6 @@
-package com.chrynan.guitarchords.view
+package com.chrynan.chords.view
 
-import com.chrynan.guitarchords.model.ChordViewModel
+import com.chrynan.chords.model.ChordViewModel
 
 class ChordViewBinder(private val view: ChordView) {
 

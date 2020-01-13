@@ -1,21 +1,21 @@
-package com.chrynan.guitarchords.view
+package com.chrynan.chords.view
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.chrynan.example.R
-import com.chrynan.guitarchords.model.Chord
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_COLOR
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_FRET_END
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_FRET_START
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_OPEN_TEXT
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_STRING_COUNT
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
-import com.chrynan.guitarchords.view.ChordView.Companion.DEFAULT_TEXT_COLOR
+import com.chrynan.chords.model.Chord
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_COLOR
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_END
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_START
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_OPEN_TEXT
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_COUNT
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
+import com.chrynan.chords.view.ChordView.Companion.DEFAULT_TEXT_COLOR
 import kotlin.math.round
 
 /*
