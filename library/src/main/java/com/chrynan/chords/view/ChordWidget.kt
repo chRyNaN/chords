@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.chrynan.example.R
+import com.chrynan.chords.R
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_COLOR
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_END
@@ -220,7 +220,8 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 barLineColor = a.getColor(R.styleable.ChordWidget_barLineColor, DEFAULT_COLOR)
 
                 mutedText = a.getString(R.styleable.ChordWidget_mutedText) ?: DEFAULT_MUTED_TEXT
-                openStringText = a.getString(R.styleable.ChordWidget_openStringText) ?: DEFAULT_OPEN_TEXT
+                openStringText = a.getString(R.styleable.ChordWidget_openStringText)
+                        ?: DEFAULT_OPEN_TEXT
 
                 stringCount = a.getInt(R.styleable.ChordWidget_stringAmount, DEFAULT_STRING_COUNT)
                 stringLabelState = when (a.getInt(R.styleable.ChordWidget_stringLabelState, 0)) {
