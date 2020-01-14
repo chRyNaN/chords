@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chrynan.chords.model.ChordViewModel
 import com.chrynan.chords.model.ParcelableChartWrapper
 import com.chrynan.chords.model.ParcelableChordWrapper
+import com.chrynan.chords.view.ChordViewBinder
+import com.chrynan.chords.widget.ChordWidget
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_chord_bottom_sheet.*
 
@@ -32,6 +35,15 @@ class ChordBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        chordWidget?.let {
+            val binder = ChordViewBinder(it)
+            val model = ChordViewModel(fretNumberColor = ChordWidget.DEFAULT_COLOR,
+                    barLineColor = ChordWidget.DEFAULT_COLOR, fretMarkerColor = ChordWidget.DEFAULT_COLOR,
+                    noteColor = ChordWidget.DEFAULT_COLOR, noteNumberColor = ChordWidget.DEFAULT_TEXT_COLOR,
+                    stringColor = ChordWidget.DEFAULT_COLOR, stringMarkerColor = ChordWidget.DEFAULT_COLOR)
+            binder.bind(model)
+        }
 
         chordWidget?.chord = chordWrapper.chord
         chordWidget?.chart = chartWrapper.chart
