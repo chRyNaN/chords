@@ -1,71 +1,71 @@
-#GuitarChords
+# chords
 
 ![Screenshot](https://github.com/chRyNaN/GuitarChords/blob/master/app/src/main/res/drawable/screenshot.png)
 
 An easily extensible and customizable native Android View to display guitar (and other stringed instruments) chords. 
 Simple to use and beautifully designed.
 
-Example usage:
 
-```XML
-<TextView
-    android:id="@+id/chord_title"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center_horizontal"
-    android:layout_margin="16dp"
-    android:textSize="32sp"
-    android:textColor="@color/black"/>
-
-<com.chrynan.guitarchords.view.GuitarChordView
-    android:id="@+id/chord_view"
+**Defining `ChordWidget` in XML:**
+```xml
+<!-- Specify an exact size (MATCH_PARENT, MATCH_CONSTRAINTS, DP value) -->
+<com.chrynan.guitarchords.widget.ChordWidget
+    android:id="@+id/chordWidget"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 ```
 
-```java
-chordView = (GuitarChordView) findViewById(R.id.chord_view);
-chordView.setTitle("E Major");
-//Fret, String, Finger
-chordView.addNote(1, 3, 1);
-chordView.addNote(2, 4, 3);
-chordView.addNote(2, 5, 2);
-chordTitle = (TextView) findViewById(R.id.chord_title);
-chordTitle.setText(chordView.getTitle());
+**Creating a Chord using the DSL:**
+```kotlin
+val chord = chord(name = "G") {
+    +ChordMarker.Note(
+            finger = Finger.MIDDLE,
+            fretNumber = FretNumber(number = 3),
+            string = ChordString(number = 6, label = "E"))
+
+    +ChordMarker.Note(
+            finger = Finger.INDEX,
+            fretNumber = FretNumber(number = 2),
+            string = ChordString(number = 5, label = "A"))
+
+    +ChordMarker.Open(string = ChordString(number = 4, label = "D"))
+
+    +ChordMarker.Open(string = ChordString(number = 3, label = "G"))
+
+    +ChordMarker.Note(
+            finger = Finger.RING,
+            fretNumber = FretNumber(number = 3),
+            string = ChordString(number = 2, label = "B"))
+
+    +ChordMarker.Note(
+            finger = Finger.PINKY,
+            fretNumber = FretNumber(number = 3),
+            string = ChordString(number = 1, label = "e"))
+}
 ```
 
-Plenty of built in customization options. For instance:
-
-```XML
-<com.chrynan.guitarchords.view.GuitarChordView
-    xmlns:chordView="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/chord_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    chordView:noteColor="@color/primary"
-    chordView:noteNumberColor="@color/light_primary"/>
+**Applying a `Chord` to a `ChordWidget`:**
+```kotlin
+chordWidget?.chord = chord
 ```
 
-```java
-chordView.setNoteColor(getColor(R.color.primary));
-chordView.setNoteNumberColor(getColor(R.color.light_primary));
+**Parse ASCII Chord Diagrams:**
 ```
+val chordDiagram = """
+            C
+    e |-----0------|
+    B |-----1------|
+    G |-----0------|
+    D |-----2------|
+    A |-----3------|
+    E |------------|
+""".trimIndent()
 
-Easily convert between different formats:
+val parser = AsciiChordParser()
 
-```java
-/*
- * String s:
- * e |-----0------|
- * B |-----1------|
- * G |-----0------|
- * D |-----2------|
- * A |-----3------|
- * E |------------|
- */
- //Display from String
- chordView.setChord(ChordParser.parseFromASCII(s));
- //Chord to String
- String s = ChordParser.toASCII(chordView.getChord());
+launch {
+    // Parse is a suspending function and needs to be called from another suspending
+    // function or a coroutine
+    val chord = parser.parse(chordDiagram)
+}
 ```

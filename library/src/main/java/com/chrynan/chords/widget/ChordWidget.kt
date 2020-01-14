@@ -1,10 +1,11 @@
-package com.chrynan.chords.view
+package com.chrynan.chords.widget
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.chrynan.chords.R
+import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_END
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_START
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT

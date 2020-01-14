@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chrynan.chords.model.*
 import com.chrynan.chords.view.ChordViewBinder
-import com.chrynan.chords.view.ChordWidget
+import com.chrynan.chords.widget.ChordWidget
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
