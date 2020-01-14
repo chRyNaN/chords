@@ -28,39 +28,38 @@ import android.widget.TextView
  */
 class LinkTouchMovementMethod : LinkMovementMethod() {
 
-    private var pressedSpan: TouchableSpan? = null
-
     override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+        var pressedSpan: TouchableSpan? = null
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 pressedSpan = getPressedSpan(widget, buffer, event)
 
                 if (pressedSpan != null) {
-                    pressedSpan!!.isPressed = true
-                    Selection.setSelection(buffer, buffer.getSpanStart(pressedSpan),
-                            buffer.getSpanEnd(pressedSpan))
-                    pressedSpan!!.onTouch(widget, event)
+                    pressedSpan.isPressed = true
+
+                    Selection.setSelection(buffer, buffer.getSpanStart(pressedSpan), buffer.getSpanEnd(pressedSpan))
+
+                    pressedSpan.onTouch(widget, event)
                 }
             }
             MotionEvent.ACTION_MOVE -> {
                 val touchedSpan = getPressedSpan(widget, buffer, event)
 
                 if (pressedSpan != null && touchedSpan !== pressedSpan) {
-                    pressedSpan!!.isPressed = false
-                    pressedSpan = null
+                    pressedSpan.isPressed = false
+
                     Selection.removeSelection(buffer)
-                } else if (pressedSpan != null) {
-                    pressedSpan!!.onTouch(widget, event)
-                }
+                } else pressedSpan?.onTouch(widget, event)
             }
             else -> {
                 if (pressedSpan != null) {
-                    pressedSpan!!.onTouch(widget, event)
-                    pressedSpan!!.isPressed = false
+                    pressedSpan.onTouch(widget, event)
+
+                    pressedSpan.isPressed = false
+
                     super.onTouchEvent(widget, buffer, event)
                 }
-
-                pressedSpan = null
 
                 Selection.removeSelection(buffer)
             }
@@ -70,8 +69,8 @@ class LinkTouchMovementMethod : LinkMovementMethod() {
     }
 
     private fun getPressedSpan(textView: TextView, spannable: Spannable, event: MotionEvent): TouchableSpan? {
-        var x = event.x.toInt()
-        var y = event.y.toInt()
+        var x = event.x
+        var y = event.y
 
         x -= textView.totalPaddingLeft
         y -= textView.totalPaddingTop
@@ -79,15 +78,10 @@ class LinkTouchMovementMethod : LinkMovementMethod() {
         y += textView.scrollY
 
         val layout = textView.layout
-        val line = layout.getLineForVertical(y)
-        val off = layout.getOffsetForHorizontal(line, x.toFloat())
+        val line = layout.getLineForVertical(y.toInt())
+        val off = layout.getOffsetForHorizontal(line, x)
         val link = spannable.getSpans(off, off, TouchableSpan::class.java)
-        var touchedSpan: TouchableSpan? = null
 
-        if (link.isNotEmpty()) {
-            touchedSpan = link[0]
-        }
-
-        return touchedSpan
+        return if (link.isNotEmpty()) link[0] else null
     }
 }
