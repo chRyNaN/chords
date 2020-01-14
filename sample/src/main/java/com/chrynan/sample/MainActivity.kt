@@ -25,12 +25,12 @@ class MainActivity : AppCompatActivity() {
         val chord = chord(name = "G") {
             +ChordMarker.Note(
                     finger = Finger.MIDDLE,
-                    fretNumber = FretNumber(number = 3),
+                    fret = 3,
                     string = ChordString(number = 6, label = "E"))
 
             +ChordMarker.Note(
                     finger = Finger.INDEX,
-                    fretNumber = FretNumber(number = 2),
+                    fret = 2,
                     string = ChordString(number = 5, label = "A"))
 
             +ChordMarker.Open(string = ChordString(number = 4, label = "D"))
@@ -39,12 +39,12 @@ class MainActivity : AppCompatActivity() {
 
             +ChordMarker.Note(
                     finger = Finger.RING,
-                    fretNumber = FretNumber(number = 3),
+                    fret = 3,
                     string = ChordString(number = 2, label = "B"))
 
             +ChordMarker.Note(
                     finger = Finger.PINKY,
-                    fretNumber = FretNumber(number = 3),
+                    fret = 3,
                     string = ChordString(number = 1, label = "e"))
         }
 

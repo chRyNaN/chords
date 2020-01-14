@@ -368,7 +368,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         chord?.bars?.forEach {
             val left = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.startString.number) * stringDistance +
                     (stringCount - it.startString.number) * stringSize
-            val top = stringMarkerBounds.bottom + (it.fretNumber.number * fretSize + it.fretNumber.number * fretMarkerSize - fretSize / 2)
+            val top = stringMarkerBounds.bottom + (it.fret * fretSize + it.fret * fretMarkerSize - fretSize / 2)
             val right = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.endString.number) * stringDistance +
                     (stringCount - it.endString.number) * stringSize
             val bottom = 0f // TODO
@@ -392,7 +392,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
         chord?.notes?.forEach {
             val startCenterX = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
-            val startCenterY = stringMarkerBounds.bottom + (it.fretNumber.number * fretSize + it.fretNumber.number * fretMarkerSize - fretSize / 2)
+            val startCenterY = stringMarkerBounds.bottom + (it.fret * fretSize + it.fret * fretMarkerSize - fretSize / 2)
 
             notePositions.add(
                     NotePosition(

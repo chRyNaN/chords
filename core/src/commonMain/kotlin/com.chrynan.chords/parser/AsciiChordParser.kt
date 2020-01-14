@@ -3,7 +3,6 @@ package com.chrynan.chords.parser
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordMarker
 import com.chrynan.chords.model.ChordString
-import com.chrynan.chords.model.FretNumber
 import com.chrynan.chords.util.isDigit
 
 /**
@@ -26,7 +25,7 @@ import com.chrynan.chords.util.isDigit
  * - Each following line will be processed as a [ChordString].
  * ---- The first line will be the first [ChordString] (1) and the numbers will increase for
  *      subsequent lines.
- * ---- Lines may begin with an optional label before any [tabDelimiters] or [FretNumber]s.
+ * ---- Lines may begin with an optional label before any [tabDelimiters] or Frets.
  * ---- All [Int]s on a line after the first [tabDelimiters], and separated by [tabDelimiters],
  *      will be considered the [FretNumbers] for [ChordMarker.Note]s.
  * ---- The absence of an [Int] on a line, will be considered a muted line or a line that should
@@ -94,7 +93,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
             frets.isEmpty() -> listOf(ChordMarker.Muted(ChordString(stringNumber, label)))
             frets.contains(0) -> listOf(ChordMarker.Open(ChordString(stringNumber, label)))
             else -> frets.map {
-                ChordMarker.Note(fretNumber = FretNumber(it), string = ChordString(stringNumber, label))
+                ChordMarker.Note(fret = it, string = ChordString(stringNumber, label))
             }
         }
     }

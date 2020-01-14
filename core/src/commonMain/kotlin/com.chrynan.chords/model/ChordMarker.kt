@@ -4,13 +4,13 @@ sealed class ChordMarker {
 
     data class Note(
             val finger: Finger = Finger.UNKNOWN,
-            val fretNumber: FretNumber,
+            val fret: Int,
             val string: ChordString
     ) : ChordMarker()
 
     data class Bar(
             val finger: Finger = Finger.UNKNOWN,
-            val fretNumber: FretNumber,
+            val fret: Int,
             val startString: ChordString,
             val endString: ChordString
     ) : ChordMarker() {
@@ -18,7 +18,7 @@ sealed class ChordMarker {
         val notes: Set<Note> by lazy {
             (startString.number..endString.number).map {
                 Note(finger = finger,
-                        fretNumber = fretNumber,
+                        fret = fret,
                         string = ChordString(number = it))
             }.toSet()
         }
