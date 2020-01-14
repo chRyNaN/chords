@@ -2,6 +2,11 @@ package com.chrynan.chords.model
 
 sealed class ChordMarker {
 
+    /**
+     * The [MarkerType] of this [ChordMarker]. This is useful for parsing.
+     */
+    abstract val type: MarkerType
+
     data class Note(
             override val fret: FretNumber,
             override val finger: Finger = Finger.UNKNOWN,
@@ -9,7 +14,10 @@ sealed class ChordMarker {
     ) : ChordMarker(),
             FretMarker,
             FingerMarker,
-            StringMarker
+            StringMarker {
+
+        override val type = MarkerType.NOTE
+    }
 
     data class Bar(
             override val fret: FretNumber,
@@ -21,6 +29,8 @@ sealed class ChordMarker {
             FingerMarker,
             StringRangeMarker {
 
+        override val type = MarkerType.BAR
+
         override val string = startString
     }
 
@@ -28,9 +38,14 @@ sealed class ChordMarker {
             FretMarker,
             StringMarker {
 
+        override val type = MarkerType.OPEN
+
         override val fret: FretNumber = FretNumber(0)
     }
 
     data class Muted(override val string: StringNumber) : ChordMarker(),
-            StringMarker
+            StringMarker {
+
+        override val type = MarkerType.MUTED
+    }
 }

@@ -10,4 +10,9 @@ enum class Finger(val position: Int) {
     THUMB(position = 5);
 
     override fun toString() = "$position"
+
+    companion object {
+
+        fun fromPosition(position: Int) = values().firstOrNull { it.position == position } ?: UNKNOWN
+    }
 }
