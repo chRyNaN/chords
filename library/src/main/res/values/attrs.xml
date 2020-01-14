@@ -11,7 +11,6 @@
         <attr name="barLineColor" format="color"/>
         <attr name="mutedText" format="string"/>
         <attr name="openStringText" format="string"/>
-        <attr name="stringAmount" format="integer"/>
         <attr name="showFingerNumbers" format="boolean"/>
         <attr name="showFretNumbers" format="boolean"/>
         <attr name="stringLabelState" format="enum">

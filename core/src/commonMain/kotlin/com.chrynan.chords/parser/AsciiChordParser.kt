@@ -1,8 +1,6 @@
 package com.chrynan.chords.parser
 
-import com.chrynan.chords.model.Chord
-import com.chrynan.chords.model.ChordMarker
-import com.chrynan.chords.model.ChordString
+import com.chrynan.chords.model.*
 import com.chrynan.chords.util.isDigit
 
 /**
@@ -22,8 +20,8 @@ import com.chrynan.chords.util.isDigit
  * ---- If there is a chord name present, the whole line will be used as the chord name.
  * ---- If there are any [tabDelimiters] on the chord name line, it will be considered a 'normal'
  *      line.
- * - Each following line will be processed as a [ChordString].
- * ---- The first line will be the first [ChordString] (1) and the numbers will increase for
+ * - Each following line will be processed as a [StringNumber].
+ * ---- The first line will be the first [StringNumber] (1) and the numbers will increase for
  *      subsequent lines.
  * ---- Lines may begin with an optional label before any [tabDelimiters] or Frets.
  * ---- All [Int]s on a line after the first [tabDelimiters], and separated by [tabDelimiters],
@@ -39,7 +37,7 @@ import com.chrynan.chords.util.isDigit
  */
 class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) : ChordParser<String> {
 
-    override suspend fun parse(item: String): Chord? {
+    override suspend fun parse(item: String): ChordResult? {
         if (tabDelimiters.isEmpty()) return null
 
         val trimmedInput = item.trim()
@@ -63,7 +61,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
                         .flatten()
                         .toSet()
 
-        return Chord(name = name, markers = markers)
+        return ChordResult(chord = Chord(name = name, markers = markers))
     }
 
     private fun String.parseLineAsString(stringNumber: Int, tabDelimiters: Set<Char>): List<ChordMarker> {
@@ -90,10 +88,10 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
         val label = if (labelStringBuilder.isBlank()) null else labelStringBuilder.toString()
 
         return when {
-            frets.isEmpty() -> listOf(ChordMarker.Muted(ChordString(stringNumber, label)))
-            frets.contains(0) -> listOf(ChordMarker.Open(ChordString(stringNumber, label)))
+            frets.isEmpty() -> listOf(ChordMarker.Muted(StringNumber(stringNumber)))
+            frets.contains(0) -> listOf(ChordMarker.Open(StringNumber(stringNumber)))
             else -> frets.map {
-                ChordMarker.Note(fret = it, string = ChordString(stringNumber, label))
+                ChordMarker.Note(fret = FretNumber(it), string = StringNumber(stringNumber))
             }
         }
     }

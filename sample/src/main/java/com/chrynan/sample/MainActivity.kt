@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         chordWidget?.let {
             val binder = ChordViewBinder(it)
-            val model = ChordViewModel(fretEnd = 3, fretNumberColor = ChordWidget.DEFAULT_COLOR,
+            val model = ChordViewModel(fretNumberColor = ChordWidget.DEFAULT_COLOR,
                     barLineColor = ChordWidget.DEFAULT_COLOR, fretMarkerColor = ChordWidget.DEFAULT_COLOR,
                     noteColor = ChordWidget.DEFAULT_COLOR, noteNumberColor = ChordWidget.DEFAULT_TEXT_COLOR,
                     stringColor = ChordWidget.DEFAULT_COLOR, stringMarkerColor = ChordWidget.DEFAULT_COLOR)
@@ -25,27 +25,27 @@ class MainActivity : AppCompatActivity() {
         val chord = chord(name = "G") {
             +ChordMarker.Note(
                     finger = Finger.MIDDLE,
-                    fret = 3,
-                    string = ChordString(number = 6, label = "E"))
+                    fret = FretNumber(3),
+                    string = StringNumber(number = 6))
 
             +ChordMarker.Note(
                     finger = Finger.INDEX,
-                    fret = 2,
-                    string = ChordString(number = 5, label = "A"))
+                    fret = FretNumber(2),
+                    string = StringNumber(number = 5))
 
-            +ChordMarker.Open(string = ChordString(number = 4, label = "D"))
+            +ChordMarker.Open(string = StringNumber(number = 4))
 
-            +ChordMarker.Open(string = ChordString(number = 3, label = "G"))
+            +ChordMarker.Open(string = StringNumber(number = 3))
 
             +ChordMarker.Note(
                     finger = Finger.RING,
-                    fret = 3,
-                    string = ChordString(number = 2, label = "B"))
+                    fret = FretNumber(3),
+                    string = StringNumber(number = 2))
 
             +ChordMarker.Note(
                     finger = Finger.PINKY,
-                    fret = 3,
-                    string = ChordString(number = 1, label = "e"))
+                    fret = FretNumber(3),
+                    string = StringNumber(number = 1))
         }
 
         chordWidget?.chord = chord

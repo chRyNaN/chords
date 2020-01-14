@@ -5,14 +5,12 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.chrynan.chords.R
+import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.view.ChordView
-import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_END
-import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_START
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_OPEN_TEXT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
-import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_COUNT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
 import kotlin.math.round
 
@@ -45,6 +43,13 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
             invalidate()
         }
 
+    override var chart: ChordChart = ChordChart(fretStart = 1, fretEnd = 3, stringCount = 6)
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
+
     override var showFretNumbers = DEFAULT_SHOW_FRET_NUMBERS
         set(value) {
             field = value
@@ -58,24 +63,6 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     override var stringLabelState: com.chrynan.chords.model.StringLabelState = DEFAULT_STRING_LABEL_STATE
         set(value) {
             field = value
-            invalidate()
-        }
-    override var stringCount = DEFAULT_STRING_COUNT
-        set(value) {
-            field = value.coerceAtLeast(0)
-            requestLayout()
-            invalidate()
-        }
-    override var fretStart = DEFAULT_FRET_START
-        set(value) {
-            field = value.coerceAtLeast(1)
-            requestLayout()
-            invalidate()
-        }
-    override var fretEnd = DEFAULT_FRET_END
-        set(value) {
-            field = value.coerceAtLeast(1)
-            requestLayout()
             invalidate()
         }
     override var mutedText: String = DEFAULT_MUTED_TEXT
@@ -159,7 +146,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private val fretNumberBounds = RectF()
 
     private val fretCount: Int
-        get() = fretEnd - fretStart
+        get() = chart.fretEnd - chart.fretStart
 
     private val fretLineRects = mutableListOf<RectF>()
     private val stringLineRects = mutableListOf<RectF>()
@@ -221,7 +208,6 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 openStringText = a.getString(R.styleable.ChordWidget_openStringText)
                         ?: DEFAULT_OPEN_TEXT
 
-                stringCount = a.getInt(R.styleable.ChordWidget_stringAmount, DEFAULT_STRING_COUNT)
                 stringLabelState = when (a.getInt(R.styleable.ChordWidget_stringLabelState, 0)) {
                     0 -> com.chrynan.chords.model.StringLabelState.SHOW_NUMBER
                     1 -> com.chrynan.chords.model.StringLabelState.SHOW_LABEL
@@ -269,22 +255,21 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 (pHeight - aHeight) / 2 + aHeight)
 
         if (showFretNumbers) {
-            fretNumberSize = (aWidth / (stringCount + 1) * (3f / 4f))
+            fretNumberSize = (aWidth / (chart.stringCount + 1) * (3f / 4f))
             stringMarkerSize = fretNumberSize
-            stringDistance = (aWidth - (fretNumberSize + fretNumberSize / 2)) / stringCount
+            stringDistance = (aWidth - (fretNumberSize + fretNumberSize / 2)) / chart.stringCount
         } else {
             fretNumberSize = 0f
-            stringMarkerSize = (aWidth / (stringCount + 1) * (3f / 4f))
-            stringDistance = aWidth / stringCount
+            stringMarkerSize = (aWidth / (chart.stringCount + 1) * (3f / 4f))
+            stringDistance = aWidth / chart.stringCount
         }
 
-        stringSize = stringDistance / stringCount
+        stringSize = stringDistance / chart.stringCount
         stringSize = if (stringSize < 1f) 1f else stringSize
         fretMarkerSize = stringSize
         noteSize = stringDistance
         noteNumberSize = (noteSize * (3f / 4f))
 
-        val fretCount = fretEnd - fretStart
         fretSize = round(((aHeight - (fretNumberSize + fretNumberSize / 2) - (fretCount + 1) * fretMarkerSize) / fretCount))
 
         if (showFretNumbers) {
@@ -343,7 +328,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private fun calculateStringPositions() {
         stringLineRects.clear()
 
-        for (i in 0 until stringCount) {
+        for (i in 0 until chart.stringCount) {
             stringLineRects.add(RectF(
                     stringMarkerBounds.left + i * stringDistance + i * stringSize,
                     drawingBounds.top + stringMarkerBounds.height(),
@@ -355,7 +340,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private fun calculateFretNumberPositions() {
         fretNumberPoints.clear()
 
-        for (i in (fretStart - 1) until fretEnd) {
+        for (i in (chart.fretStart - 1) until chart.fretEnd) {
             fretNumberPoints.add(PointF(
                     drawingBounds.left + fretNumberBounds.width() / 2,
                     getVerticalCenterTextPosition(stringMarkerBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretNumberPaint)))
@@ -366,11 +351,11 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         barLinePaths.clear()
 
         chord?.bars?.forEach {
-            val left = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.startString.number) * stringDistance +
-                    (stringCount - it.startString.number) * stringSize
-            val top = stringMarkerBounds.bottom + (it.fret * fretSize + it.fret * fretMarkerSize - fretSize / 2)
-            val right = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.endString.number) * stringDistance +
-                    (stringCount - it.endString.number) * stringSize
+            val left = drawingBounds.left + fretNumberBounds.width() + (chart.stringCount - it.startString.number) * stringDistance +
+                    (chart.stringCount - it.startString.number) * stringSize
+            val top = stringMarkerBounds.bottom + (it.fret.number * fretSize + it.fret.number * fretMarkerSize - fretSize / 2)
+            val right = drawingBounds.left + fretNumberBounds.width() + (chart.stringCount - it.endString.number) * stringDistance +
+                    (chart.stringCount - it.endString.number) * stringSize
             val bottom = 0f // TODO
             val textX = 0f // TODO
             val textY = 0f // TODO
@@ -391,8 +376,8 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         notePositions.clear()
 
         chord?.notes?.forEach {
-            val startCenterX = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
-            val startCenterY = stringMarkerBounds.bottom + (it.fret * fretSize + it.fret * fretMarkerSize - fretSize / 2)
+            val startCenterX = drawingBounds.left + fretNumberBounds.width() + (chart.stringCount - it.string.number) * stringDistance + (chart.stringCount - it.string.number) * stringSize
+            val startCenterY = stringMarkerBounds.bottom + (it.fret.number * fretSize + it.fret.number * fretMarkerSize - fretSize / 2)
 
             notePositions.add(
                     NotePosition(
@@ -409,7 +394,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         stringMarkerPositions.clear()
 
         chord?.mutes?.forEach {
-            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
+            val x = drawingBounds.left + fretNumberBounds.width() + (chart.stringCount - it.string.number) * stringDistance + (chart.stringCount - it.string.number) * stringSize
             val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, mutedText, stringMarkerPaint)
 
             stringMarkerPositions.add(
@@ -420,7 +405,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
 
         chord?.opens?.forEach {
-            val x = drawingBounds.left + fretNumberBounds.width() + (stringCount - it.string.number) * stringDistance + (stringCount - it.string.number) * stringSize
+            val x = drawingBounds.left + fretNumberBounds.width() + (chart.stringCount - it.string.number) * stringDistance + (chart.stringCount - it.string.number) * stringSize
             val y = getVerticalCenterTextPosition(drawingBounds.top + stringMarkerBounds.height() / 2, openStringText, stringMarkerPaint)
 
             stringMarkerPositions.add(
@@ -437,7 +422,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
         //Fret numbers; check if we are showing them or not
         if (showFretNumbers) {
             fretNumberPoints.forEachIndexed { index, point ->
-                canvas.drawText((fretStart + index).toString(), point.x, point.y, fretNumberPaint)
+                canvas.drawText((chart.fretStart + index).toString(), point.x, point.y, fretNumberPaint)
             }
         }
     }

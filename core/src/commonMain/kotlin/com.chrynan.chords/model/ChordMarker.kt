@@ -3,28 +3,34 @@ package com.chrynan.chords.model
 sealed class ChordMarker {
 
     data class Note(
-            val finger: Finger = Finger.UNKNOWN,
-            val fret: Int,
-            val string: ChordString
-    ) : ChordMarker()
+            override val fret: FretNumber,
+            override val finger: Finger = Finger.UNKNOWN,
+            override val string: StringNumber
+    ) : ChordMarker(),
+            FretMarker,
+            FingerMarker,
+            StringMarker
 
     data class Bar(
-            val finger: Finger = Finger.UNKNOWN,
-            val fret: Int,
-            val startString: ChordString,
-            val endString: ChordString
-    ) : ChordMarker() {
+            override val fret: FretNumber,
+            override val finger: Finger = Finger.UNKNOWN,
+            override val startString: StringNumber,
+            override val endString: StringNumber
+    ) : ChordMarker(),
+            FretMarker,
+            FingerMarker,
+            StringRangeMarker {
 
-        val notes: Set<Note> by lazy {
-            (startString.number..endString.number).map {
-                Note(finger = finger,
-                        fret = fret,
-                        string = ChordString(number = it))
-            }.toSet()
-        }
+        override val string = startString
     }
 
-    data class Open(val string: ChordString) : ChordMarker()
+    data class Open(override val string: StringNumber) : ChordMarker(),
+            FretMarker,
+            StringMarker {
 
-    data class Muted(val string: ChordString) : ChordMarker()
+        override val fret: FretNumber = FretNumber(0)
+    }
+
+    data class Muted(override val string: StringNumber) : ChordMarker(),
+            StringMarker
 }

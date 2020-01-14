@@ -1,6 +1,6 @@
 package com.chrynan.chords.model
 
-data class ChordString(
-        val number: Int,
+data class StringLabel(
+        val string: Int,
         val label: String? = null
 )

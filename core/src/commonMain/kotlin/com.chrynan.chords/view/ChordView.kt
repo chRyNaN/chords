@@ -1,6 +1,7 @@
 package com.chrynan.chords.view
 
 import com.chrynan.chords.model.Chord
+import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.ColorInt
 import com.chrynan.chords.model.StringLabelState
 
@@ -8,17 +9,13 @@ interface ChordView {
 
     var chord: Chord?
 
+    var chart: ChordChart
+
     var showFretNumbers: Boolean
 
     var showFingerNumbers: Boolean
 
     var stringLabelState: StringLabelState
-
-    var stringCount: Int
-
-    var fretStart: Int
-
-    var fretEnd: Int
 
     var mutedText: String
 
