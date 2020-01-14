@@ -29,23 +29,27 @@ import android.view.View
  *
  * If an object of this type is attached to the text of a TextView
  * with a movement method of LinkTouchMovementMethod, the affected spans of
- * text can be selected.  If touched, the [.onTouch] method will
+ * text can be selected.  If touched, the [onTouch] method will
  * be called.
  */
 abstract class TouchableSpan : CharacterStyle(), UpdateAppearance {
 
     var isPressed = false
+        internal set
+
     var backgroundColor = Color.TRANSPARENT
     var pressedBackgroundColor = Color.TRANSPARENT
     var textColor = Color.BLUE
     var pressedTextColor = Color.BLUE
+    var isUnderlined = false
+    var isUnderlinedWhenPressed = false
 
     /**
      * Performs the touch action associated with this span.
      *
      * @return
      */
-    abstract fun onTouch(widget: View?, m: MotionEvent?): Boolean
+    abstract fun onTouch(widget: View, m: MotionEvent): Boolean
 
     /**
      * Could make the text underlined or change link color.
@@ -54,7 +58,7 @@ abstract class TouchableSpan : CharacterStyle(), UpdateAppearance {
         textPaint.apply {
             color = if (isPressed) pressedTextColor else textColor
             bgColor = if (isPressed) pressedBackgroundColor else backgroundColor
-            isUnderlineText = false
+            isUnderlineText = if (isPressed) isUnderlinedWhenPressed else isUnderlined
         }
     }
 }
