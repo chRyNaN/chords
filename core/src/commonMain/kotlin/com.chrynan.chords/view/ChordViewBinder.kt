@@ -1,10 +1,8 @@
 package com.chrynan.chords.view
 
-import com.chrynan.chords.model.ChordViewModel
-
 class ChordViewBinder(private val view: ChordView) {
 
-    fun bind(viewModel: ChordViewModel) {
+    fun bind(viewModel: com.chrynan.chords.model.ChordViewModel) {
         view.fretStart = viewModel.fretStart
         view.fretEnd = viewModel.fretEnd
         view.barLineColor = viewModel.barLineColor

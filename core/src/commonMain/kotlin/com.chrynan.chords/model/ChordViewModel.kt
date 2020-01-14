@@ -1,7 +1,6 @@
 package com.chrynan.chords.model
 
 import com.chrynan.chords.view.ChordView
-import com.chrynan.chords.view.StringLabelState
 
 data class ChordViewModel(
         val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
@@ -12,11 +11,11 @@ data class ChordViewModel(
         val fretEnd: Int = ChordView.DEFAULT_FRET_END,
         val mutedText: String = ChordView.DEFAULT_MUTED_TEXT,
         val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-        val fretMarkerColor: ColorInt = ChordView.DEFAULT_COLOR,
-        val stringMarkerColor: ColorInt = ChordView.DEFAULT_COLOR,
-        val stringColor: ColorInt = ChordView.DEFAULT_COLOR,
-        val noteColor: ColorInt = ChordView.DEFAULT_COLOR,
-        val barLineColor: ColorInt = ChordView.DEFAULT_COLOR,
-        val noteNumberColor: ColorInt = ChordView.DEFAULT_TEXT_COLOR,
-        val fretNumberColor: ColorInt = ChordView.DEFAULT_TEXT_COLOR
+        val fretMarkerColor: ColorInt,
+        val stringMarkerColor: ColorInt,
+        val stringColor: ColorInt,
+        val noteColor: ColorInt,
+        val barLineColor: ColorInt,
+        val noteNumberColor: ColorInt,
+        val fretNumberColor: ColorInt
 )

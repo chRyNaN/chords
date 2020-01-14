@@ -5,8 +5,6 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.chrynan.chords.R
-import com.chrynan.chords.model.Chord
-import com.chrynan.chords.view.ChordView.Companion.DEFAULT_COLOR
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_END
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FRET_START
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
@@ -15,7 +13,6 @@ import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_COUNT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
-import com.chrynan.chords.view.ChordView.Companion.DEFAULT_TEXT_COLOR
 import kotlin.math.round
 
 /*
@@ -40,7 +37,7 @@ import kotlin.math.round
 class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
         ChordView {
 
-    override var chord: Chord? = null
+    override var chord: com.chrynan.chords.model.Chord? = null
         set(value) {
             field = value
             requestLayout()
@@ -57,7 +54,7 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
             field = value
             invalidate()
         }
-    override var stringLabelState: StringLabelState = DEFAULT_STRING_LABEL_STATE
+    override var stringLabelState: com.chrynan.chords.model.StringLabelState = DEFAULT_STRING_LABEL_STATE
         set(value) {
             field = value
             invalidate()
@@ -225,9 +222,9 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
                 stringCount = a.getInt(R.styleable.ChordWidget_stringAmount, DEFAULT_STRING_COUNT)
                 stringLabelState = when (a.getInt(R.styleable.ChordWidget_stringLabelState, 0)) {
-                    0 -> StringLabelState.SHOW_NUMBER
-                    1 -> StringLabelState.SHOW_LABEL
-                    else -> StringLabelState.HIDE
+                    0 -> com.chrynan.chords.model.StringLabelState.SHOW_NUMBER
+                    1 -> com.chrynan.chords.model.StringLabelState.SHOW_LABEL
+                    else -> com.chrynan.chords.model.StringLabelState.HIDE
                 }
 
                 showFingerNumbers = a.getBoolean(R.styleable.ChordWidget_showFingerNumbers, true)
@@ -484,6 +481,12 @@ class ChordWidget @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private fun Canvas.drawLine(rectF: RectF, paint: Paint) =
             drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, paint)
+
+    companion object {
+
+        const val DEFAULT_COLOR = Color.BLACK
+        const val DEFAULT_TEXT_COLOR = Color.WHITE
+    }
 
     private data class NotePosition(
             val text: String,

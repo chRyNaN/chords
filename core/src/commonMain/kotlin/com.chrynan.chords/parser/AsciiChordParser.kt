@@ -4,6 +4,7 @@ import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordMarker
 import com.chrynan.chords.model.ChordString
 import com.chrynan.chords.model.FretNumber
+import com.chrynan.chords.util.isDigit
 
 /**
  * Parses a simple ASCII Chord Diagram String into a [Chord]. This [ChordParser] handles String

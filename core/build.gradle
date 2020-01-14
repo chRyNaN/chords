@@ -1,0 +1,62 @@
+apply plugin: 'kotlin-multiplatform'
+apply plugin: 'maven-publish'
+
+group rootProject.libraryGroup
+version rootProject.libraryVersion
+
+kotlin {
+    jvm()
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+            }
+        }
+        jsMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+            }
+        }
+    }
+}
+
+configurations {
+    compileClasspath
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/${libraryOwner}/${libraryRepo}")
+
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("KEY")
+            }
+        }
+    }
+    publications {
+        kotlinMultiplatform {
+            artifactId = "chords-core"
+        }
+        jvm {
+            artifactId = "chords-core-jvm"
+        }
+        metadata {
+            artifactId = "chords-core-metadata"
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
+    }
+}

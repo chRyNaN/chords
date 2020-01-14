@@ -8,13 +8,13 @@ class ChordBuilder(private val name: String? = null) {
         markers.add(this)
     }
 
-    internal fun build(): Chord = Chord(
+    internal fun build(): com.chrynan.chords.model.Chord = com.chrynan.chords.model.Chord(
             name = name,
             markers = markers)
 }
 
 
-fun chord(name: String? = null, builder: ChordBuilder.() -> Unit): Chord {
+fun chord(name: String? = null, builder: ChordBuilder.() -> Unit): com.chrynan.chords.model.Chord {
     val chordBuilder = ChordBuilder(name = name)
     builder.invoke(chordBuilder)
     return chordBuilder.build()

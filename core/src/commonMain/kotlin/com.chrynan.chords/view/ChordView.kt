@@ -1,8 +1,8 @@
 package com.chrynan.chords.view
 
-import android.graphics.Color
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ColorInt
+import com.chrynan.chords.model.StringLabelState
 
 interface ChordView {
 
@@ -40,8 +40,6 @@ interface ChordView {
 
     companion object {
 
-        const val DEFAULT_COLOR = Color.BLACK
-        const val DEFAULT_TEXT_COLOR = Color.WHITE
         const val DEFAULT_MUTED_TEXT = "X"
         const val DEFAULT_OPEN_TEXT = "O"
         const val DEFAULT_FRET_START = 1
