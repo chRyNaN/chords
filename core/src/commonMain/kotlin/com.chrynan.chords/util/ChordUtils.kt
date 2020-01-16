@@ -2,6 +2,7 @@ package com.chrynan.chords.util
 
 import com.chrynan.chords.model.*
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Retrieves the [ChordMarker.Note]s that make up this [ChordMarker.Bar].
@@ -27,6 +28,19 @@ fun Chord.getMarkersOnString(string: StringNumber): List<ChordMarker> =
                 it is ChordMarker.Bar && (string.number in it.startString.number..it.endString.number) -> true
                 it is ChordMarker.Open && it.string.number == string.number -> true
                 it is ChordMarker.Muted && it.string.number == string.number -> true
+                else -> false
+            }
+        }
+
+/**
+ * Retrieves the [ChordMarker]s that are on the provided [FretNumber] within this [Chord].
+ *
+ * @author chRyNaN
+ */
+fun Chord.getMarkersOnFret(fret: FretNumber): List<ChordMarker> =
+        markers.filter {
+            when {
+                it is FretMarker && it.fret == fret -> true
                 else -> false
             }
         }
@@ -65,6 +79,25 @@ val Chord.maxFret: Int
             else -> -1
         }
     }.max() ?: -1
+
+/**
+ * Retrieve the minimum String that is in this [Chord] with a [ChordMarker]. If there are no [ChordMarker]s in this
+ * [Chord], then -1 will be returned. Note that this is different from [ChordChart.stringCount]. This retrieves the min
+ * String number from this [Chord] that has a [ChordMarker]. [ChordChart.stringCount] retrieves the amount of Strings
+ * to display in the chart.
+ *
+ * @see [ChordChart]
+ * @author chRyNaN
+ */
+val Chord.minString: Int
+    get() = markers.map {
+        when (it) {
+            is ChordMarker.Bar -> min(it.endString.number, it.startString.number)
+            is ChordMarker.Note -> it.string.number
+            is ChordMarker.Open -> it.string.number
+            is ChordMarker.Muted -> it.string.number
+        }
+    }.min() ?: -1
 
 /**
  * Retrieves the maximum String that is in this [Chord] with a [ChordMarker]. If there are no [ChordMarker]s in this

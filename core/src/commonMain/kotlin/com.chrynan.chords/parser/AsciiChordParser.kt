@@ -37,10 +37,10 @@ import com.chrynan.chords.util.isDigit
  */
 class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) : ChordParser<String> {
 
-    override suspend fun parse(item: String): ChordResult? {
+    override suspend fun parse(input: String): ChordParseResult? {
         if (tabDelimiters.isEmpty()) return null
 
-        val trimmedInput = item.trim()
+        val trimmedInput = input.trim()
         if (trimmedInput.isBlank()) return null
 
         val lines = trimmedInput.lines()
@@ -61,7 +61,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
                         .flatten()
                         .toSet()
 
-        return ChordResult(chord = Chord(name = name, markers = markers))
+        return ChordParseResult(chord = Chord(name = name, markers = markers))
     }
 
     private fun String.parseLineAsString(stringNumber: Int, tabDelimiters: Set<Char>): List<ChordMarker> {
