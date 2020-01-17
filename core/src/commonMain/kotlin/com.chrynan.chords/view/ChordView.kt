@@ -11,39 +11,37 @@ interface ChordView {
 
     var chart: ChordChart
 
+    var fitToHeight: Boolean
+
     var showFretNumbers: Boolean
 
     var showFingerNumbers: Boolean
 
     var stringLabelState: StringLabelState
 
-    var mutedText: String
+    var mutedStringText: String
 
     var openStringText: String
 
-    var fretMarkerColor: ColorInt
+    var fretColor: ColorInt
+
+    var fretLabelTextColor: ColorInt
 
     var stringColor: ColorInt
 
-    var fretNumberColor: ColorInt
-
-    var stringMarkerColor: ColorInt
+    var stringLabelTextColor: ColorInt
 
     var noteColor: ColorInt
 
-    var noteNumberColor: ColorInt
-
-    var barLineColor: ColorInt
+    var noteLabelTextColor: ColorInt
 
     companion object {
 
         const val DEFAULT_MUTED_TEXT = "X"
         const val DEFAULT_OPEN_TEXT = "O"
-        const val DEFAULT_FRET_START = 1
-        const val DEFAULT_FRET_END = 4
-        const val DEFAULT_STRING_COUNT = 6
         const val DEFAULT_SHOW_FINGER_NUMBERS = true
         const val DEFAULT_SHOW_FRET_NUMBERS = true
+        const val DEFAULT_FIT_TO_HEIGHT = false
         val DEFAULT_STRING_LABEL_STATE = StringLabelState.HIDE
     }
 }

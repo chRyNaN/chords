@@ -2,14 +2,13 @@
 <resources>
 
     <declare-styleable name="ChordWidget">
-        <attr name="fretMarkerColor" format="color"/>
+        <attr name="fretColor" format="color"/>
+        <attr name="fretLabelTextColor" format="color"/>
         <attr name="stringColor" format="color"/>
-        <attr name="fretNumberColor" format="color"/>
-        <attr name="stringMarkerColor" format="color"/>
+        <attr name="stringLabelTextColor" format="color"/>
         <attr name="noteColor" format="color"/>
-        <attr name="noteNumberColor" format="color"/>
-        <attr name="barLineColor" format="color"/>
-        <attr name="mutedText" format="string"/>
+        <attr name="noteLabelTextColor" format="color"/>
+        <attr name="mutedStringText" format="string"/>
         <attr name="openStringText" format="string"/>
         <attr name="showFingerNumbers" format="boolean"/>
         <attr name="showFretNumbers" format="boolean"/>
@@ -18,6 +17,7 @@
             <enum name="label" value="1"/>
             <enum name="hide" value="2"/>
         </attr>
+        <attr name="fitToHeight" format="boolean"/>
     </declare-styleable>
 
 </resources>
