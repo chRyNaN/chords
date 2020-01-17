@@ -50,16 +50,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onChordSpanSelected(chord: Chord) {
-        val labels = setOf(
-                StringLabel(string = 1, label = "e"),
-                StringLabel(string = 2, label = "B"),
-                StringLabel(string = 3, label = "G"),
-                StringLabel(string = 4, label = "D"),
-                StringLabel(string = 5, label = "A"),
-                StringLabel(string = 6, label = "E")
-        )
-        val chart = ChordChart(stringLabels = labels)
-        ChordBottomSheetDialogFragment.newInstance(chord, chart)
+
+        ChordBottomSheetDialogFragment.newInstance(chord, ChordChart.STANDARD_TUNING_GUITAR_CHART)
                 .show(supportFragmentManager, null)
     }
 }
