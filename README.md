@@ -2,54 +2,111 @@
 
 ![Screenshot](https://github.com/chRyNaN/GuitarChords/blob/master/app/src/main/res/drawable/screenshot.png)
 
-An easily extensible and customizable native Android View to display guitar (and other stringed instruments) chords. 
+An easily customizable native Android View to display guitar (and other stringed instruments) chords. 
 Simple to use and beautifully designed.
 
+## Building the library
+The library is provided through [Github Packages](https://github.com/chRyNaN/chords/packages). Checkout the [releases](https://github.com/chRyNaN/chords/releases) page to get the latest version.
+
+### Repository
+```kotlin
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/chrynan/chords")
+    }
+}
+```
+
+### Dependencies
+**Core Kotlin Common:**
+```kotlin
+implementation("com.chrynan.chords:chords-core:VERSION")
+```
+
+**Core Kotlin JVM:**
+```kotlin
+implementation("com.chrynan.chords:chords-core-jvm:VERSION")
+```
+
+**Android Library:**
+```kotlin
+implementation("com.chrynan.chords:chords-android:VERSION")
+```
+
+## Using the library
+There are a few main components to using the library:
+
+* `ChordWidget` is the Android View that displays the chord.
+* `ChordChart` is a class that represents information about the chord chart that will be displayed.
+* `Chord` is a class that represents the markers on a chord that will be displayed.
 
 **Defining `ChordWidget` in XML:**
 ```xml
-<!-- Specify an exact size (MATCH_PARENT, MATCH_CONSTRAINTS, DP value) -->
-<com.chrynan.guitarchords.widget.ChordWidget
+<!-- Specify an exact size (MATCH_PARENT, MATCH_CONSTRAINTS, DP value). -->
+<com.chrynan.chords.widget.ChordWidget
     android:id="@+id/chordWidget"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 ```
 
-**Creating a Chord using the DSL:**
+**Assigning a `ChordChart` to a `ChordWidget`:**
 ```kotlin
-val chord = chord(name = "G") {
-    +ChordMarker.Note(
-            finger = Finger.MIDDLE,
-            fretNumber = FretNumber(number = 3),
-            string = ChordString(number = 6, label = "E"))
-
-    +ChordMarker.Note(
-            finger = Finger.INDEX,
-            fretNumber = FretNumber(number = 2),
-            string = ChordString(number = 5, label = "A"))
-
-    +ChordMarker.Open(string = ChordString(number = 4, label = "D"))
-
-    +ChordMarker.Open(string = ChordString(number = 3, label = "G"))
-
-    +ChordMarker.Note(
-            finger = Finger.RING,
-            fretNumber = FretNumber(number = 3),
-            string = ChordString(number = 2, label = "B"))
-
-    +ChordMarker.Note(
-            finger = Finger.PINKY,
-            fretNumber = FretNumber(number = 3),
-            string = ChordString(number = 1, label = "e"))
-}
+chordWidget?.chart = ChordChart(
+                         fretStart = 1,
+                         fretEnd = 2,
+                         stringCount = 6,
+                         stringLabels = setOf(
+                             StringLabel(string = 1, label = "e"),
+                             StringLabel(string = 2, label = "B"),
+                             StringLabel(string = 3, label = "G"),
+                             StringLabel(string = 4, label = "D"),
+                             StringLabel(string = 5, label = "A"),
+                             StringLabel(string = 6, label = "E")))
 ```
 
-**Applying a `Chord` to a `ChordWidget`:**
+**Creating a Chord using the DSL:**
+```kotlin
+val chord = chord("G") {
+            +ChordMarker.Note(
+                    fret = FretNumber(3),
+                    finger = Finger.MIDDLE,
+                    string = StringNumber(6)
+            )
+            +ChordMarker.Note(
+                    fret = FretNumber(2),
+                    finger = Finger.INDEX,
+                    string = StringNumber(5)
+            )
+            +ChordMarker.Open(string = StringNumber(4))
+            +ChordMarker.Open(string = StringNumber(3))
+            +ChordMarker.Note(
+                    fret = FretNumber(3),
+                    finger = Finger.RING,
+                    string = StringNumber(2)
+            )
+            +ChordMarker.Note(
+                    fret = FretNumber(3),
+                    finger = Finger.PINKY,
+                    string = StringNumber(1)
+            )
+        }
+```
+
+**Assigning a `Chord` to a `ChordWidget`:**
 ```kotlin
 chordWidget?.chord = chord
 ```
 
-**Parse ASCII Chord Diagrams:**
+**Note:** This library doesn't try to coerce values to fit into a chart or exclude values that exceed the chart bounds. If the `ChordChart` and `Chord` have inconsistent values, the `ChordWidget` may look peculiar.
+It's important for the user of the library to properly handle coordinating the different components.
+
+### Parsing Chords from other formats
+The `ChordParser` interface takes in an input type and outputs a `Chord`. This interface can be implemented for different format input types. There are a couple provided `ChordParser` implementations.
+
+**AsciiChordParser:**
+
+`AsciiChordParser` parses a `String` input of an ASCII Chord Diagram and outputs a `Chord`.
+
 ```
 val chordDiagram = """
             C
@@ -64,8 +121,159 @@ val chordDiagram = """
 val parser = AsciiChordParser()
 
 launch {
-    // Parse is a suspending function and needs to be called from another suspending
+    // parse() is a suspending function and needs to be called from another suspending
     // function or a coroutine
     val chord = parser.parse(chordDiagram)
 }
+```
+
+### Customizing the appearance
+`ChordWidget` implements the `ChordView` interface which contains properties to alter the appearance of the view.
+
+**ChordView:**
+```kotlin
+interface ChordView {
+
+    ...
+
+    var fitToHeight: Boolean
+
+    var showFretNumbers: Boolean
+
+    var showFingerNumbers: Boolean
+
+    var stringLabelState: StringLabelState
+
+    var mutedStringText: String
+
+    var openStringText: String
+
+    var fretColor: ColorInt
+
+    var fretLabelTextColor: ColorInt
+
+    var stringColor: ColorInt
+
+    var stringLabelTextColor: ColorInt
+
+    var noteColor: ColorInt
+
+    var noteLabelTextColor: ColorInt
+
+    ...
+}
+```
+
+**Updating properties directly on ChordWidget:**
+```kotlin
+chordWidget?.noteColor = Color.BLUE
+chordWidget?.openStringText = "o"
+```
+
+**Updating properties using a ViewModel and Binder:**
+```kotlin
+val binder = ChordViewBinder(chordWidget)
+        
+val viewModel = ChordViewModel(
+                    fretColor = Color.BLACK,
+                    fretLabelTextColor = Color.WHITE,
+                    stringLabelTextColor = Color.BLACK,
+                    stringColor = Color.BLACK,
+                    noteColor = Color.BLACK,
+                    noteLabelTextColor = Color.WHITE)
+
+binder.bind(viewModel)
+```
+
+**Updating properties in XML:**
+```xml
+<com.chrynan.chords.widget.ChordWidget
+        android:id="@+id/chordWidget"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        app:stringLabelState="label"
+        app:showFretNumbers="false"/>
+```
+
+**Available XML Attributes:**
+```xml
+<attr name="fretColor" format="color"/>
+<attr name="fretLabelTextColor" format="color"/>
+<attr name="stringColor" format="color"/>
+<attr name="stringLabelTextColor" format="color"/>
+<attr name="noteColor" format="color"/>
+<attr name="noteLabelTextColor" format="color"/>
+<attr name="mutedStringText" format="string"/>
+<attr name="openStringText" format="string"/>
+<attr name="showFingerNumbers" format="boolean"/>
+<attr name="showFretNumbers" format="boolean"/>
+<attr name="stringLabelState" format="enum">
+    <enum name="number" value="0"/>
+    <enum name="label" value="1"/>
+    <enum name="hide" value="2"/>
+</attr>
+<attr name="fitToHeight" format="boolean"/>
+```
+
+### Selectable Chord names in Text
+The library comes with a `ChordSpan` which allows the pairing of text with a `Chord`. And when the `ChordSpan` is selected, a listener is alerted with the `Chord`.
+
+**Adding a `ChordSpan` to a `TextView`:**
+```kotlin
+val text = SpannableString("G")
+val span = ChordSpan(chord, this) // "this" refers to the listener
+
+text.setSpan(span, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+textView?.text = text
+// Need to specify LinkTouchMovementMethod as the movement method for clicks to work
+textView?.movementMethod = LinkTouchMovementMethod()
+```
+
+**Listening to `Chord` selected events:**
+```kotlin
+class MainActivity : AppCompatActivity(),
+    ChordSpan.SelectedListener {
+
+    override fun onChordSpanSelected(chord: Chord) {
+        // Perform action with chord
+    }
+}
+```
+
+**Customizing the `ChordSpan` appearance:**
+
+`ChordSpan` extends from `TouchableSpan` which has the following customizable properties:
+```kotlin
+var backgroundColor = Color.TRANSPARENT
+var pressedBackgroundColor = Color.TRANSPARENT
+var textColor = Color.BLUE
+var pressedTextColor = Color.BLUE
+var isUnderlined = false
+var isUnderlinedWhenPressed = false
+```
+
+These properties can be changed on the span:
+```kotlin
+span.textColor = Color.RED
+```
+
+### Sample
+Checkout the `sample` module for a full example on using the library.
+
+## License
+```
+Copyright 2020 chRyNaN
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```

@@ -6,12 +6,12 @@ class ChordViewBinder(private val view: ChordView) {
 
     fun bind(viewModel: ChordViewModel) {
         view.fitToHeight = viewModel.fitToHeight
-        view.fretColor = viewModel.fretMarkerColor
-        view.fretLabelTextColor = viewModel.fretNumberColor
-        view.noteLabelTextColor = viewModel.noteNumberColor
+        view.fretColor = viewModel.fretColor
+        view.fretLabelTextColor = viewModel.fretLabelTextColor
         view.noteColor = viewModel.noteColor
+        view.noteLabelTextColor = viewModel.noteLabelTextColor
         view.stringColor = viewModel.stringColor
-        view.stringLabelTextColor = viewModel.stringMarkerColor
+        view.stringLabelTextColor = viewModel.stringLabelTextColor
         view.openStringText = viewModel.openStringText
         view.mutedStringText = viewModel.mutedText
         view.showFingerNumbers = viewModel.showFingerNumbers

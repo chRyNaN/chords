@@ -9,10 +9,10 @@ data class ChordViewModel(
         val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
         val mutedText: String = ChordView.DEFAULT_MUTED_TEXT,
         val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-        val fretMarkerColor: ColorInt,
-        val stringMarkerColor: ColorInt,
+        val fretColor: ColorInt,
+        val fretLabelTextColor: ColorInt,
         val stringColor: ColorInt,
+        val stringLabelTextColor: ColorInt,
         val noteColor: ColorInt,
-        val noteNumberColor: ColorInt,
-        val fretNumberColor: ColorInt
+        val noteLabelTextColor: ColorInt
 )
