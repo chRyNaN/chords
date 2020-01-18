@@ -8,6 +8,7 @@ import com.chrynan.chords.R
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.StringLabelState
+import com.chrynan.chords.util.getTypeface
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FIT_TO_HEIGHT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
@@ -126,6 +127,15 @@ class ChordWidget : View,
             invalidate()
         }
 
+    var typeface: Typeface = Typeface.DEFAULT
+        set(value) {
+            field = value
+            fretLabelTextPaint.typeface = value
+            noteLabelTextPaint.typeface = value
+            stringLabelTextPaint.typeface = value
+            invalidate()
+        }
+
     private val fretPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
@@ -234,6 +244,8 @@ class ChordWidget : View,
 
                     showFingerNumbers = a.getBoolean(R.styleable.ChordWidget_showFingerNumbers, DEFAULT_SHOW_FINGER_NUMBERS)
                     showFretNumbers = a.getBoolean(R.styleable.ChordWidget_showFretNumbers, DEFAULT_SHOW_FRET_NUMBERS)
+
+                    a.getTypeface(context, R.styleable.ChordWidget_typeface)?.let { typeface = it }
                 } finally {
                     a.recycle()
                 }
