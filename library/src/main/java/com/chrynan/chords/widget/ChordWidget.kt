@@ -145,7 +145,7 @@ class ChordWidget : View,
         textAlign = Paint.Align.CENTER
     }
     private val barLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
+        style = Paint.Style.FILL
     }
 
     private val drawingBounds = RectF()
@@ -367,14 +367,14 @@ class ChordWidget : View,
         barLinePaths.clear()
 
         chord?.bars?.forEach {
-            val left = chartBounds.left + (chart.stringCount - it.startString.number) * stringDistance +
-                    (chart.stringCount - it.startString.number) * stringSize
-            val top = chartBounds.top + (it.fret.number * fretSize + it.fret.number * fretMarkerSize - fretSize / 2)
-            val right = chartBounds.left + (chart.stringCount - it.endString.number) * stringDistance +
-                    (chart.stringCount - it.endString.number) * stringSize
-            val bottom = 0f // TODO
-            val textX = 0f // TODO
-            val textY = 0f // TODO
+            val left = (chartBounds.left + (chart.stringCount - it.endString.number) * stringDistance +
+                    (chart.stringCount - it.endString.number) * stringSize) - noteSize / 2
+            val top = chartBounds.top + (it.fret.number * fretSize + it.fret.number * fretMarkerSize - fretSize / 2) - (noteSize / 2)
+            val right = (chartBounds.left + (chart.stringCount - it.startString.number) * stringDistance +
+                    (chart.stringCount - it.startString.number) * stringSize) + (noteSize / 2)
+            val bottom = top + noteSize
+            val textX = left + (right - left) / 2
+            val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, it.finger.name, noteLabelTextPaint)
 
             barLinePaths.add(
                     BarPosition(
@@ -472,7 +472,7 @@ class ChordWidget : View,
         // Bars
         barLinePaths.forEach {
             // Draw Bar
-            canvas.drawRect(it.left, it.top, it.right, it.bottom, barLinePaint)
+            canvas.drawRoundRect(it.left, it.top, it.right, it.bottom, (it.bottom - it.top), (it.bottom - it.top), barLinePaint)
 
             // Text
             if (showFingerNumbers) {

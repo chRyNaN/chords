@@ -39,6 +39,12 @@ class MainActivity : AppCompatActivity(),
                     finger = Finger.PINKY,
                     string = StringNumber(1)
             )
+            +ChordMarker.Bar(
+                    fret = FretNumber(1),
+                    finger = Finger.INDEX,
+                    startString = StringNumber(1),
+                    endString = StringNumber(6)
+            )
         }
 
         val text = SpannableString("G")
