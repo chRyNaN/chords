@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="chord_card_size">120dp</dimen>
+    <dimen name="chord_card_corner_radius">8dp</dimen>
+    <dimen name="chord_card_padding">16dp</dimen>
+    <dimen name="chord_card_margin">4dp</dimen>
 
+    <dimen name="chord_list_horizontal_padding">16dp</dimen>
+    <dimen name="chord_list_vertical_padding">4dp</dimen>
+    <dimen name="chord_list_title_horizontal_margin">16dp</dimen>
+    <dimen name="chord_list_title_top_margin">16dp</dimen>
+    <dimen name="chord_list_title_bottom_margin">4dp</dimen>
+
+    <dimen name="main_recycler_view_margin_top">16dp</dimen>
+
+    <dimen name="tall_toolbar_height">240dp</dimen>
+
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">24sp</dimen>
+    <dimen name="text_size_large">36sp</dimen>
 
 </resources>

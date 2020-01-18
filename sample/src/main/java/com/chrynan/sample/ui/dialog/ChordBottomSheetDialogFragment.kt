@@ -1,4 +1,4 @@
-package com.chrynan.sample
+package com.chrynan.sample.ui.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.ParcelableChartWrapper
 import com.chrynan.chords.model.ParcelableChordWrapper
+import com.chrynan.sample.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_chord_bottom_sheet.*
 

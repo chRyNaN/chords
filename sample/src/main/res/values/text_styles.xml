@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.ExpandedTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textColor">@color/text_primary_light_color</item>
+    </style>
+
+    <style name="TextAppearance.CollapsedTitle" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/text_primary_light_color</item>
+    </style>
+
+</resources>
