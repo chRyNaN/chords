@@ -1,9 +1,10 @@
 # chords
 
-![Screenshot](https://github.com/chRyNaN/GuitarChords/blob/master/app/src/main/res/drawable/screenshot.png)
-
 An easily customizable native Android View to display guitar (and other stringed instruments) chords. 
 Simple to use and beautifully designed.
+
+<img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-180759.png" width="300"></img>
+<img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-183742.png" width="300"></img>
 
 ## Building the library
 The library is provided through [Github Packages](https://github.com/chRyNaN/chords/packages). Checkout the [releases](https://github.com/chRyNaN/chords/releases) page to get the latest version.
@@ -259,7 +260,7 @@ These properties can be changed on the span:
 span.textColor = Color.RED
 ```
 
-### Passing `Chord`s between components
+### Passing Chords between components
 The model classes are not `Parcelable` because they are in a Kotlin multi-platform module and don't have access to Android Framework classes. But the Android library module does have wrapper classes that handle the serialization and de-serialization of the `Chord` and `ChordChart` models.
 
 These classes are `ParcelableChordWrapper` and `ParcelableChartWrapper`. To pass `Chord` and `ChordChart` between components, such as, in a Bundle, just wrap them with their respective wrapper models.
