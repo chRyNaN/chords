@@ -213,6 +213,7 @@ binder.bind(viewModel)
     <enum name="hide" value="2"/>
 </attr>
 <attr name="fitToHeight" format="boolean"/>
+<attr name="typeface" format="reference"/>
 ```
 
 ### Selectable Chord names in Text
