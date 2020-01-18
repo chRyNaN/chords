@@ -259,6 +259,18 @@ These properties can be changed on the span:
 span.textColor = Color.RED
 ```
 
+### Passing `Chord`s between components
+The model classes are not `Parcelable` because they are in a Kotlin multi-platform module and don't have access to Android Framework classes. But the Android library module does have wrapper classes that handle the serialization and de-serialization of the `Chord` and `ChordChart` models.
+
+These classes are `ParcelableChordWrapper` and `ParcelableChartWrapper`. To pass `Chord` and `ChordChart` between components, such as, in a Bundle, just wrap them with their respective wrapper models.
+```kotlin
+arguments = 
+    Bundle().apply {
+        putParcelable(KEY_CHORD, ParcelableChordWrapper(chord))
+        putParcelable(KEY_CHART, ParcelableChartWrapper(chart))
+    }
+```
+
 ### Sample
 Checkout the `sample` module for a full example on using the library.
 
