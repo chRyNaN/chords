@@ -102,11 +102,11 @@ chordWidget?.chord = chord
 It's important for the user of the library to properly handle coordinating the different components.
 
 ### Parsing Chords from other formats
-The `ChordParser` interface takes in an input type and outputs a `Chord`. This interface can be implemented for different format input types. There are a couple provided `ChordParser` implementations.
+The `ChordParser` interface takes in an input type and outputs a `ChordParseResult`. This interface can be implemented for different format input types. There are a couple provided `ChordParser` implementations.
 
 **AsciiChordParser:**
 
-`AsciiChordParser` parses a `String` input of an ASCII Chord Diagram and outputs a `Chord`.
+`AsciiChordParser` parses a `String` input of an ASCII Chord Diagram and outputs a `ChordParseResult` containing a `Chord`.
 
 ```
 val chordDiagram = """
@@ -124,7 +124,9 @@ val parser = AsciiChordParser()
 launch {
     // parse() is a suspending function and needs to be called from another suspending
     // function or a coroutine
-    val chord = parser.parse(chordDiagram)
+    val result = parser.parse(chordDiagram)
+    val chord = result.chord
+    val stringLabels = result.stringLabels
 }
 ```
 
@@ -270,6 +272,35 @@ arguments =
         putParcelable(KEY_CHORD, ParcelableChordWrapper(chord))
         putParcelable(KEY_CHART, ParcelableChartWrapper(chart))
     }
+```
+
+Then retrieve the wrappers just as you would with any other Parcelable object.
+```kotlin
+arguments?.getParcelable<ParcelableChordWrapper>(KEY_CHORD)
+arguments?.getParcelable<ParcelableChartWrapper>(KEY_CHART)
+```
+
+For convenience, there are extension functions on the `Bundle` and `Intent` objects which handle the wrapping and unwrapping of the `Chord` and `ChordChart` objects.
+
+**Bundle:**
+```kotlin
+arguments =
+    Bundle().apply {
+        putChord(KEY_CHORD, chord)
+        putChordChart(KEY_CHART, chart)
+    }
+
+val chord = arguments?.getChord(KEY_CHORD)
+val chart = arguments?.getChordChart(KEY_CHART)
+```
+
+**Intent:**
+```kotlin
+intent.putChord(KEY_CHORD, chord)
+intent.putChordChart(KEY_CHART, chart)
+
+val chord = intent.getChordExtra(KEY_CHORD)
+val chart = intent.getChordChartExtra(KEY_CHART)
 ```
 
 ### Sample
