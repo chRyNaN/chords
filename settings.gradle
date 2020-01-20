@@ -2,6 +2,6 @@ rootProject.name = "chords"
 
 include ":core"
 include ":library"
-include ":sample"
+include ":compose"
 
 enableFeaturePreview('GRADLE_METADATA')
