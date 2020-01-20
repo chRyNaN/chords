@@ -7,6 +7,9 @@ data class ChordChart(
         val stringLabels: Set<StringLabel> = emptySet()
 ) {
 
+    val fretCount: Int
+        get() = fretEnd - fretStart + 1
+
     companion object {
 
         const val DEFAULT_FRET_START = 1
