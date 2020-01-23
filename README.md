@@ -9,13 +9,13 @@ Simple to use and beautifully designed.
 This library has been updated significantly from it's original version and the process is detailed in this [blog post](https://chrynan.codes/converting-an-old-java-library-to-kotlin/).
 
 ## Building the library
-The library is provided through [Github Packages](https://github.com/chRyNaN/chords/packages). Checkout the [releases](https://github.com/chRyNaN/chords/releases) page to get the latest version.
+The library is provided through [Bintray](https://bintray.com/). Checkout the [releases](https://github.com/chRyNaN/chords/releases) page to get the latest version.
 
 ### Repository
 ```kotlin
 repositories {
     maven {
-        url = uri("https://maven.pkg.github.com/chrynan/chords")
+        url = uri("https://dl.bintray.com/chrynan/chrynan")
     }
 }
 ```
