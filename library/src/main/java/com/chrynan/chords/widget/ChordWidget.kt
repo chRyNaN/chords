@@ -380,7 +380,7 @@ class ChordWidget : View,
         barLinePaths.clear()
 
         chord?.bars?.forEach { bar ->
-            if (bar.fret.number < chart.fretEnd && bar.endString.number < chart.stringCount + 1) {
+            if (bar.fret.number in chart.fretStart..chart.fretEnd && bar.endString.number < chart.stringCount + 1) {
                 val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
                         (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
                 val top = chartBounds.top + (bar.fret.number * fretSize + bar.fret.number * fretMarkerSize - fretSize / 2) - (noteSize / 2)
@@ -407,7 +407,7 @@ class ChordWidget : View,
         notePositions.clear()
 
         chord?.notes?.forEach { note ->
-            if (note.fret.number < chart.fretEnd && note.string.number < chart.stringCount + 1) {
+            if (note.fret.number in chart.fretStart..chart.fretEnd && note.string.number < chart.stringCount + 1) {
                 val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
                 val startCenterY = chartBounds.top + (note.fret.number * fretSize + note.fret.number * fretMarkerSize - fretSize / 2)
 
