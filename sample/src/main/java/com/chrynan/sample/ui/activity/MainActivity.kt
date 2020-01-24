@@ -30,7 +30,7 @@ class MainActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        collapsingToolbarLayout?.title = "Open Guitar Chords"
+        collapsingToolbarLayout?.title = "Chords"
 
         setSupportActionBar(toolbar)
 
