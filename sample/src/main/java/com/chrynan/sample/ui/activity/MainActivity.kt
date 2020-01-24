@@ -2,7 +2,9 @@ package com.chrynan.sample.ui.activity
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chrynan.aaaah.DiffProcessor
+import com.chrynan.aaaah.AndroidDiffDispatcher
+import com.chrynan.aaaah.AndroidDiffProcessor
+import com.chrynan.aaaah.DiffUtilCalculator
 import com.chrynan.aaaah.ManagerRecyclerViewAdapter
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
@@ -12,8 +14,6 @@ import com.chrynan.sample.presenter.MainPresenter
 import com.chrynan.sample.repository.OpenGuitarChordSource
 import com.chrynan.sample.ui.adapter.ChordAdapter
 import com.chrynan.sample.ui.adapter.ChordListAdapter
-import com.chrynan.sample.ui.adapter.core.AndroidDiffDispatcher
-import com.chrynan.sample.ui.adapter.core.AndroidDiffProcessor
 import com.chrynan.sample.ui.adapter.core.BaseAdapterItemHandler
 import com.chrynan.sample.ui.dialog.ChordBottomSheetDialogFragment
 import com.chrynan.sample.view.MainView
@@ -27,7 +27,7 @@ class MainActivity : BaseActivity(),
             ManagerRecyclerViewAdapter(adapters = setOf(ChordListAdapter(this)))
     private val chordRepository = OpenGuitarChordSource()
     private val diffDispatcher = AndroidDiffDispatcher(adapter)
-    private val diffProcessor = AndroidDiffProcessor<AdapterItemViewModel>(DiffProcessor())
+    private val diffProcessor = AndroidDiffProcessor<AdapterItemViewModel>(DiffUtilCalculator())
     private val adapterItemHandler = BaseAdapterItemHandler(
             coroutineDispatchers = dispatchers,
             diffDispatcher = diffDispatcher,
