@@ -9,6 +9,7 @@ import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.ParcelableChartWrapper
 import com.chrynan.chords.model.ParcelableChordWrapper
 import com.chrynan.sample.R
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_chord_bottom_sheet.*
 
@@ -39,5 +40,13 @@ class ChordBottomSheetDialogFragment : BottomSheetDialogFragment() {
         chordTitleTextView?.text = chordWrapper.chord.name
         chordWidget?.chord = chordWrapper.chord
         chordWidget?.chart = chartWrapper?.chart ?: ChordChart()
+
+        view.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+                view.removeOnLayoutChangeListener(this)
+                val behavior = (dialog as? BottomSheetDialog)?.behavior
+                behavior?.peekHeight = chordWidget?.bottom ?: 400
+            }
+        })
     }
 }
