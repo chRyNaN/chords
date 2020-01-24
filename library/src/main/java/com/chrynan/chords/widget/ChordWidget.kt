@@ -232,7 +232,8 @@ class ChordWidget : View,
                     noteColor = a.getColor(R.styleable.ChordWidget_noteColor, DEFAULT_COLOR)
                     noteLabelTextColor = a.getColor(R.styleable.ChordWidget_noteLabelTextColor, DEFAULT_TEXT_COLOR)
 
-                    mutedStringText = a.getString(R.styleable.ChordWidget_mutedStringText) ?: DEFAULT_MUTED_TEXT
+                    mutedStringText = a.getString(R.styleable.ChordWidget_mutedStringText)
+                            ?: DEFAULT_MUTED_TEXT
                     openStringText = a.getString(R.styleable.ChordWidget_openStringText)
                             ?: DEFAULT_OPEN_TEXT
 
@@ -378,42 +379,46 @@ class ChordWidget : View,
     private fun calculateBarLinePositions() {
         barLinePaths.clear()
 
-        chord?.bars?.forEach {
-            val left = (chartBounds.left + (chart.stringCount - it.endString.number) * stringDistance +
-                    (chart.stringCount - it.endString.number) * stringSize) - noteSize / 2
-            val top = chartBounds.top + (it.fret.number * fretSize + it.fret.number * fretMarkerSize - fretSize / 2) - (noteSize / 2)
-            val right = (chartBounds.left + (chart.stringCount - it.startString.number) * stringDistance +
-                    (chart.stringCount - it.startString.number) * stringSize) + (noteSize / 2)
-            val bottom = top + noteSize
-            val textX = left + (right - left) / 2
-            val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, it.finger.name, noteLabelTextPaint)
+        chord?.bars?.forEach { bar ->
+            if (bar.fret.number < chart.fretEnd && bar.endString.number < chart.stringCount + 1) {
+                val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
+                        (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
+                val top = chartBounds.top + (bar.fret.number * fretSize + bar.fret.number * fretMarkerSize - fretSize / 2) - (noteSize / 2)
+                val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
+                        (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
+                val bottom = top + noteSize
+                val textX = left + (right - left) / 2
+                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, bar.finger.name, noteLabelTextPaint)
 
-            barLinePaths.add(
-                    BarPosition(
-                            text = it.finger.position.toString(),
-                            textX = textX,
-                            textY = textY,
-                            left = left,
-                            top = top,
-                            right = right,
-                            bottom = bottom))
+                barLinePaths.add(
+                        BarPosition(
+                                text = bar.finger.position.toString(),
+                                textX = textX,
+                                textY = textY,
+                                left = left,
+                                top = top,
+                                right = right,
+                                bottom = bottom))
+            }
         }
     }
 
     private fun calculateNotePositions() {
         notePositions.clear()
 
-        chord?.notes?.forEach {
-            val startCenterX = chartBounds.left + (chart.stringCount - it.string.number) * stringDistance + (chart.stringCount - it.string.number) * stringSize
-            val startCenterY = chartBounds.top + (it.fret.number * fretSize + it.fret.number * fretMarkerSize - fretSize / 2)
+        chord?.notes?.forEach { note ->
+            if (note.fret.number < chart.fretEnd && note.string.number < chart.stringCount + 1) {
+                val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
+                val startCenterY = chartBounds.top + (note.fret.number * fretSize + note.fret.number * fretMarkerSize - fretSize / 2)
 
-            notePositions.add(
-                    NotePosition(
-                            text = it.finger.toString(),
-                            circleX = startCenterX,
-                            circleY = startCenterY,
-                            textX = startCenterX,
-                            textY = getVerticalCenterTextPosition(startCenterY, it.finger.toString(), noteLabelTextPaint)))
+                notePositions.add(
+                        NotePosition(
+                                text = note.finger.toString(),
+                                circleX = startCenterX,
+                                circleY = startCenterY,
+                                textX = startCenterX,
+                                textY = getVerticalCenterTextPosition(startCenterY, note.finger.toString(), noteLabelTextPaint)))
+            }
         }
     }
 
@@ -422,42 +427,48 @@ class ChordWidget : View,
         stringTopMarkerPositions.clear()
 
         // Top string mute labels
-        chord?.mutes?.forEach {
-            val x = chartBounds.left + (chart.stringCount - it.string.number) * stringDistance + (chart.stringCount - it.string.number) * stringSize
-            val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height() / 2, mutedStringText, stringLabelTextPaint)
+        chord?.mutes?.forEach { muted ->
+            if (muted.string.number < chart.stringCount + 1) {
+                val x = chartBounds.left + (chart.stringCount - muted.string.number) * stringDistance + (chart.stringCount - muted.string.number) * stringSize
+                val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height() / 2, mutedStringText, stringLabelTextPaint)
 
-            stringTopMarkerPositions.add(
-                    StringPosition(
-                            text = mutedStringText,
-                            textX = x,
-                            textY = y))
+                stringTopMarkerPositions.add(
+                        StringPosition(
+                                text = mutedStringText,
+                                textX = x,
+                                textY = y))
+            }
         }
 
         // Top string open labels
-        chord?.opens?.forEach {
-            val x = chartBounds.left + (chart.stringCount - it.string.number) * stringDistance + (chart.stringCount - it.string.number) * stringSize
-            val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height() / 2, openStringText, stringLabelTextPaint)
+        chord?.opens?.forEach { open ->
+            if (open.string.number < chart.stringCount + 1) {
+                val x = chartBounds.left + (chart.stringCount - open.string.number) * stringDistance + (chart.stringCount - open.string.number) * stringSize
+                val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height() / 2, openStringText, stringLabelTextPaint)
 
-            stringTopMarkerPositions.add(
-                    StringPosition(
-                            text = openStringText,
-                            textX = x,
-                            textY = y))
+                stringTopMarkerPositions.add(
+                        StringPosition(
+                                text = openStringText,
+                                textX = x,
+                                textY = y))
+            }
         }
 
         if (showBottomStringLabels) {
-            chart.stringLabels.forEach {
-                val label = if (stringLabelState == StringLabelState.SHOW_NUMBER) it.string.toString() else it.label
+            chart.stringLabels.forEach { stringLabel ->
+                if (stringLabel.string < chart.stringCount + 1) {
+                    val label = if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
 
-                if (label != null) {
-                    val x = chartBounds.left + (chart.stringCount - it.string) * stringDistance + (chart.stringCount - it.string) * stringSize
-                    val y = getVerticalCenterTextPosition(chartBounds.bottom + stringBottomLabelBounds.height() / 2, label, stringLabelTextPaint)
+                    if (label != null) {
+                        val x = chartBounds.left + (chart.stringCount - stringLabel.string) * stringDistance + (chart.stringCount - stringLabel.string) * stringSize
+                        val y = getVerticalCenterTextPosition(chartBounds.bottom + stringBottomLabelBounds.height() / 2, label, stringLabelTextPaint)
 
-                    stringBottomLabelPositions.add(
-                            StringPosition(
-                                    text = label,
-                                    textX = x,
-                                    textY = y))
+                        stringBottomLabelPositions.add(
+                                StringPosition(
+                                        text = label,
+                                        textX = x,
+                                        textY = y))
+                    }
                 }
             }
         }
