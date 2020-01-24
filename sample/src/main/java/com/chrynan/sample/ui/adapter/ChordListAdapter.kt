@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chrynan.aaaah.*
 import com.chrynan.sample.R
 import com.chrynan.sample.model.AdapterItemViewModel
@@ -13,7 +14,10 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Adapter
-class ChordListAdapter @Inject constructor(@Named("NestedChordListAdapter") private val adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel>) : AnotherAdapter<ChordListViewModel>() {
+class ChordListAdapter @Inject constructor(
+        @Named("NestedChordListAdapter") private val adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel>,
+        private val viewPool: RecyclerView.RecycledViewPool
+) : AnotherAdapter<ChordListViewModel>() {
 
     override val viewType = AdapterViewType.from(this::class.java)
 
@@ -27,6 +31,7 @@ class ChordListAdapter @Inject constructor(@Named("NestedChordListAdapter") priv
             titleTextView?.text = item.title
             recyclerView?.adapter = adapter
             recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView?.setRecycledViewPool(viewPool)
             adapter.items = item.items
         }
     }

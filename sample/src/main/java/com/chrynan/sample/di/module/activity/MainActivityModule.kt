@@ -1,6 +1,7 @@
 package com.chrynan.sample.di.module.activity
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chrynan.aaaah.*
 import com.chrynan.sample.di.scope.ActivityScope
 import com.chrynan.sample.model.AdapterItemViewModel
@@ -52,6 +53,11 @@ internal abstract class MainActivityModule {
         @JvmStatic
         @Named("NestedChordListAdapter")
         fun provideChordManagerAdapter(chordAdapter: ChordAdapter): ManagerRecyclerViewAdapter<AdapterItemViewModel> = anotherAdapterManager(chordAdapter)
+
+        @Provides
+        @JvmStatic
+        @ActivityScope
+        fun provideRecycledViewPool() = RecyclerView.RecycledViewPool()
     }
 
     @Binds

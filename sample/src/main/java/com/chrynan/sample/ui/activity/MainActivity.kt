@@ -2,6 +2,7 @@ package com.chrynan.sample.ui.activity
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chrynan.aaaah.ManagerRecyclerViewAdapter
 import com.chrynan.chords.model.Chord
 import com.chrynan.sample.R
@@ -24,6 +25,9 @@ class MainActivity : BaseActivity(),
     lateinit var layoutManager: LinearLayoutManager
 
     @Inject
+    lateinit var viewPool: RecyclerView.RecycledViewPool
+
+    @Inject
     override lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +40,7 @@ class MainActivity : BaseActivity(),
 
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = layoutManager
+        recyclerView?.setRecycledViewPool(viewPool)
 
         presenter.getChords()
     }
