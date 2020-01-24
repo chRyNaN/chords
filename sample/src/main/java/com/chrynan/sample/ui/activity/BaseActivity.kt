@@ -1,63 +1,41 @@
 package com.chrynan.sample.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.coroutineScope
 import com.chrynan.sample.coroutine.ActivityCoroutineScope
-import com.chrynan.sample.coroutine.AndroidCoroutineDispatchers
 import com.chrynan.sample.presenter.Presenter
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
+import dagger.android.support.DaggerAppCompatActivity
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseActivity : AppCompatActivity(),
+abstract class BaseActivity : DaggerAppCompatActivity(),
         ActivityCoroutineScope {
 
     override val coroutineContext: CoroutineContext
-        get() = job + dispatchers.main
-
-    protected val dispatchers = AndroidCoroutineDispatchers()
-
-    private lateinit var job: Job
+        get() = lifecycle.coroutineScope.coroutineContext
 
     protected open val presenter: Presenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        job = SupervisorJob()
-
-        bindToPresenter()
+        presenter?.bind()
     }
 
     override fun onRestart() {
         super.onRestart()
 
-        bindToPresenter()
+        presenter?.bind()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        unbindFromPresenter()
+        presenter?.unbind()
 
         super.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
-        job.cancel()
-
-        unbindFromPresenter()
+        presenter?.unbind()
 
         super.onDestroy()
-    }
-
-    private fun bindToPresenter() {
-        if (presenter?.isBound == false) {
-            presenter?.bind()
-        }
-    }
-
-    private fun unbindFromPresenter() {
-        if (presenter?.isBound == true) {
-            presenter?.unbind()
-        }
     }
 }

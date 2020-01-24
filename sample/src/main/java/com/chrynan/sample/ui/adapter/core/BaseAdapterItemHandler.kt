@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class BaseAdapterItemHandler<VM : AdapterItemViewModel>(
+class BaseAdapterItemHandler<VM : AdapterItemViewModel> @Inject constructor(
         private val diffProcessor: DiffProcessor<VM>,
         private val diffDispatcher: DiffDispatcher<VM>,
         private val coroutineDispatchers: CoroutineDispatchers

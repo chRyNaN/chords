@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+
     <dimen name="chord_card_size">120dp</dimen>
     <dimen name="chord_card_corner_radius">8dp</dimen>
     <dimen name="chord_card_padding">16dp</dimen>
@@ -12,6 +16,9 @@
     <dimen name="chord_list_title_top_margin">16dp</dimen>
     <dimen name="chord_list_title_bottom_margin">4dp</dimen>
 
+    <dimen name="chord_bottom_sheet_diagram_width">200dp</dimen>
+    <dimen name="chord_bottom_sheet_diagram_height">300dp</dimen>
+
     <dimen name="main_recycler_view_margin_top">16dp</dimen>
 
     <dimen name="tall_toolbar_height">240dp</dimen>
@@ -19,5 +26,6 @@
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_medium">24sp</dimen>
     <dimen name="text_size_large">36sp</dimen>
+    <dimen name="text_size_xlarge">48sp</dimen>
 
 </resources>

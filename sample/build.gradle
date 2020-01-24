@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -27,6 +28,7 @@ android {
 repositories {
     jcenter()
     google()
+    mavenCentral()
     maven {
         url = "https://dl.bintray.com/chrynan/chrynan"
     }
@@ -45,10 +47,23 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
+    implementation "androidx.arch.core:core-common:2.1.0"
+    implementation "androidx.arch.core:core-runtime:2.1.0"
+    implementation "androidx.lifecycle:lifecycle-common:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'
+
+    implementation "io.coil-kt:coil:0.8.0"
 
     implementation "com.chrynan.aaaah:aaaah-core-jvm:0.5.0"
     implementation "com.chrynan.aaaah:aaaah-libraryx:0.5.0"
     implementation "com.chrynan.aaaah:aaaah-annotation:0.5.0"
+
+    implementation "com.google.dagger:dagger:2.19"
+    implementation "com.google.dagger:dagger-android-support:2.19"
+    kapt "com.google.dagger:dagger-android-processor:2.19"
+    kapt "com.google.dagger:dagger-compiler:2.19"
 }

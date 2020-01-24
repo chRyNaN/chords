@@ -6,8 +6,9 @@ import com.chrynan.sample.model.ChordListViewModel
 import com.chrynan.sample.model.ChordViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class OpenGuitarChordSource : ChordRepository {
+class OpenGuitarChordSource @Inject constructor() : ChordRepository {
 
     private val chordA by lazy {
         chord("A") {

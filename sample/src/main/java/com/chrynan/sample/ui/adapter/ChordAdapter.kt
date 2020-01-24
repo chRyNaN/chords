@@ -8,9 +8,10 @@ import com.chrynan.chords.model.Chord
 import com.chrynan.sample.R
 import com.chrynan.sample.model.ChordViewModel
 import kotlinx.android.synthetic.main.adapter_chord.view.*
+import javax.inject.Inject
 
 @Adapter
-class ChordAdapter(private val listener: ChordSelectedListener) : AnotherAdapter<ChordViewModel>() {
+class ChordAdapter @Inject constructor(private val listener: ChordSelectedListener) : AnotherAdapter<ChordViewModel>() {
 
     override val viewType = AdapterViewType.from(this::class.java)
 

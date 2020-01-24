@@ -1,8 +1,9 @@
 package com.chrynan.sample.coroutine
 
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Inject
 
-class AndroidCoroutineDispatchers : CoroutineDispatchers {
+class AndroidCoroutineDispatchers @Inject constructor() : CoroutineDispatchers {
 
     override val main = Dispatchers.Main
     override val default = Dispatchers.Default

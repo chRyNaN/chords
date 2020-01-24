@@ -7,8 +7,9 @@ import com.chrynan.sample.ui.adapter.core.AdapterItemHandler
 import com.chrynan.sample.view.MainView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
+import javax.inject.Inject
 
-class MainPresenter(
+class MainPresenter @Inject constructor(
         dispatchers: CoroutineDispatchers,
         private val view: MainView,
         private val repository: ChordRepository,

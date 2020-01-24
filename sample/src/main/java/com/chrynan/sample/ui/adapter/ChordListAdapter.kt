@@ -9,12 +9,11 @@ import com.chrynan.sample.R
 import com.chrynan.sample.model.AdapterItemViewModel
 import com.chrynan.sample.model.ChordListViewModel
 import kotlinx.android.synthetic.main.adapter_chord_list.view.*
+import javax.inject.Inject
+import javax.inject.Named
 
 @Adapter
-class ChordListAdapter(listener: ChordAdapter.ChordSelectedListener) : AnotherAdapter<ChordListViewModel>() {
-
-    private val adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel> =
-            ManagerRecyclerViewAdapter(adapters = setOf(ChordAdapter(listener)))
+class ChordListAdapter @Inject constructor(@Named("NestedChordListAdapter") private val adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel>) : AnotherAdapter<ChordListViewModel>() {
 
     override val viewType = AdapterViewType.from(this::class.java)
 

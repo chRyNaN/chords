@@ -2,42 +2,29 @@ package com.chrynan.sample.ui.activity
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chrynan.aaaah.AndroidDiffDispatcher
-import com.chrynan.aaaah.AndroidDiffProcessor
-import com.chrynan.aaaah.DiffUtilCalculator
 import com.chrynan.aaaah.ManagerRecyclerViewAdapter
 import com.chrynan.chords.model.Chord
-import com.chrynan.chords.model.ChordChart
 import com.chrynan.sample.R
 import com.chrynan.sample.model.AdapterItemViewModel
 import com.chrynan.sample.presenter.MainPresenter
-import com.chrynan.sample.repository.OpenGuitarChordSource
 import com.chrynan.sample.ui.adapter.ChordAdapter
-import com.chrynan.sample.ui.adapter.ChordListAdapter
-import com.chrynan.sample.ui.adapter.core.BaseAdapterItemHandler
 import com.chrynan.sample.ui.dialog.ChordBottomSheetDialogFragment
 import com.chrynan.sample.view.MainView
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : BaseActivity(),
         MainView,
         ChordAdapter.ChordSelectedListener {
 
-    private val adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel> =
-            ManagerRecyclerViewAdapter(adapters = setOf(ChordListAdapter(this)))
-    private val chordRepository = OpenGuitarChordSource()
-    private val diffDispatcher = AndroidDiffDispatcher(adapter)
-    private val diffProcessor = AndroidDiffProcessor<AdapterItemViewModel>(DiffUtilCalculator())
-    private val adapterItemHandler = BaseAdapterItemHandler(
-            coroutineDispatchers = dispatchers,
-            diffDispatcher = diffDispatcher,
-            diffProcessor = diffProcessor)
+    @Inject
+    lateinit var adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel>
 
-    override val presenter = MainPresenter(
-            dispatchers = dispatchers,
-            view = this,
-            repository = chordRepository,
-            adapterItemHandler = adapterItemHandler)
+    @Inject
+    lateinit var layoutManager: LinearLayoutManager
+
+    @Inject
+    override lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +35,13 @@ class MainActivity : BaseActivity(),
         setSupportActionBar(toolbar)
 
         recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = layoutManager
 
         presenter.getChords()
     }
 
     override fun onChordSelected(chord: Chord) {
-        ChordBottomSheetDialogFragment.newInstance(chord, ChordChart.STANDARD_TUNING_GUITAR_CHART)
+        ChordBottomSheetDialogFragment.newInstance(chord)
                 .show(supportFragmentManager, null)
     }
 }
