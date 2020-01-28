@@ -1,5 +1,7 @@
 package com.chrynan.sample.util
 
+import com.chrynan.sample.model.DiatonicScale
+import com.chrynan.sample.model.DiatonicScaleMode
 import com.chrynan.sample.model.ToneEqualNote
 
 val ToneEqualNote.Companion.A_FLAT
@@ -16,3 +18,7 @@ val ToneEqualNote.Companion.E_FLAT
 
 val ToneEqualNote.Companion.G_FLAT
     get() = ToneEqualNote.F_SHARP
+
+fun ToneEqualNote.majorScale(): DiatonicScale = DiatonicScale(tonic = this, mode = DiatonicScaleMode.IONIAN)
+
+fun ToneEqualNote.relativeMinorScale(): DiatonicScale = DiatonicScale(tonic = this, mode = DiatonicScaleMode.AEOLIAN)

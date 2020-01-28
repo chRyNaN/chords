@@ -1,7 +1,6 @@
 package com.chrynan.sample.util
 
-import com.chrynan.sample.model.Scale
-import com.chrynan.sample.model.ScaleStep
+import com.chrynan.sample.model.*
 
 /**
  * A musical scale that has seven pitches per octave. A Diatonic scale is a Heptatonic scale
@@ -10,7 +9,7 @@ import com.chrynan.sample.model.ScaleStep
  * @author chRyNaN
  */
 val Scale.isHeptatonic: Boolean
-    get() = octaveRepeating && semitones.size == 7
+    get() = semitones.size == 7
 
 /**
  * A musical scale that is a heptatonic scale and that includes five whole steps (whole tones) and
@@ -89,3 +88,43 @@ suspend fun Scale.isDiatonic(): Boolean {
 
     return true
 }
+
+/**
+ * A convenience property around the [Scale.tonic] property.
+ *
+ * @author chRyNaN
+ */
+val Scale.rootNote: ToneEqualNote
+    get() = tonic
+
+/**
+ * Retrieves the [List] of [ScaleStep]s for this [Scale]. These are derived from the
+ * [Scale.semitones] values.
+ *
+ * @author chRyNaN
+ */
+val Scale.steps: List<ScaleStep>
+    get() = semitones.mapEvaluate(initialValue = semitones.first()) { previous, next ->
+        val value = next.value - previous.value
+        ScaleStep(value)
+    }
+
+/**
+ * Retrieves the [List] of [ToneEqualNote]s for this [Scale]. These are derived from the
+ * [Scale.semitones] values.
+ *
+ * @author chRyNaN
+ */
+val Scale.notes: List<ToneEqualNote>
+    get() = semitones.map { ToneEqualNote.VALUES[it.value % ToneEqualNote.SIZE] }
+
+/**
+ * Returns the [DiatonicScaleInterval]s for this [DiatonicScale].
+ *
+ * @author chRyNaN
+ */
+val DiatonicScale.intervals: List<DiatonicScaleInterval>
+    get() = semitones.mapEvaluate(initialValue = semitones.first()) { previous, next ->
+        val value = next.value - previous.value
+        if (value == 2) DiatonicScaleInterval.WHOLE else DiatonicScaleInterval.HALF
+    }

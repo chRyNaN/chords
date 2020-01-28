@@ -1,5 +1,11 @@
 package com.chrynan.sample.model
 
+/**
+ * This class represents the interval of semitones in a scale between each successive note. A Whole
+ * Step is considered to be two semitones and a Half Step is a single semitone.
+ *
+ * @author chRyNaN
+ */
 data class ScaleStep(val value: Int) {
 
     companion object {
