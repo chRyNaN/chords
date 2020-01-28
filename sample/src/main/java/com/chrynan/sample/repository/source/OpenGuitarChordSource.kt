@@ -1,8 +1,8 @@
 package com.chrynan.sample.repository.source
 
-import com.chrynan.sample.model.AdapterItemViewModel
-import com.chrynan.sample.model.ChordListViewModel
-import com.chrynan.sample.model.ChordViewModel
+import com.chrynan.sample.viewmodel.AdapterItemViewModel
+import com.chrynan.sample.viewmodel.ChordListViewModel
+import com.chrynan.sample.viewmodel.ChordViewModel
 import com.chrynan.sample.repository.ChordRepository
 import com.chrynan.sample.repository.values.openStandardGuitarChords
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,8 @@ class OpenGuitarChordSource @Inject constructor() : ChordRepository {
         val openChords = ChordListViewModel(
                 title = "Open Standard Guitar Chords",
                 items = openStandardGuitarChords.map {
-                    ChordViewModel(title = it.name ?: "", chord = it)
+                    ChordViewModel(title = it.name
+                            ?: "", chord = it)
                 })
         val items = mutableListOf<AdapterItemViewModel>()
 

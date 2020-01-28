@@ -1,7 +1,7 @@
 package com.chrynan.sample.presenter
 
 import com.chrynan.sample.coroutine.CoroutineDispatchers
-import com.chrynan.sample.model.AdapterItemViewModel
+import com.chrynan.sample.viewmodel.AdapterItemViewModel
 import com.chrynan.sample.repository.ChordRepository
 import com.chrynan.sample.ui.adapter.core.AdapterItemHandler
 import com.chrynan.sample.view.MainView

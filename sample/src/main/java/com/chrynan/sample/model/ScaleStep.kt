@@ -7,4 +7,6 @@ data class ScaleStep(val value: Int) {
         val WHOLE = ScaleStep(2)
         val HALF = ScaleStep(1)
     }
+
+    operator fun compareTo(other: ScaleStep) = value.compareTo(other.value)
 }

@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chrynan.aaaah.*
 import com.chrynan.sample.R
-import com.chrynan.sample.model.AdapterItemViewModel
-import com.chrynan.sample.model.ChordListViewModel
+import com.chrynan.sample.viewmodel.AdapterItemViewModel
+import com.chrynan.sample.viewmodel.ChordListViewModel
 import kotlinx.android.synthetic.main.adapter_chord_list.view.*
 import javax.inject.Inject
 import javax.inject.Named

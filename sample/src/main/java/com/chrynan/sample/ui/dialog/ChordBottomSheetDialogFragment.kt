@@ -14,7 +14,7 @@ import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.util.*
 import com.chrynan.sample.R
 import com.chrynan.sample.coroutine.AndroidCoroutineDispatchers
-import com.chrynan.sample.model.AdapterItemViewModel
+import com.chrynan.sample.viewmodel.AdapterItemViewModel
 import com.chrynan.sample.repository.source.OpenGuitarChordSource
 import com.chrynan.sample.ui.adapter.core.BaseAdapterItemHandler
 import com.chrynan.sample.ui.view.ChordInfoView

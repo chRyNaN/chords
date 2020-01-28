@@ -1,4 +1,4 @@
-package com.chrynan.sample.model
+package com.chrynan.sample.viewmodel
 
 import com.chrynan.aaaah.asUniqueAdapterId
 

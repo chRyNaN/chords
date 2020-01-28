@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chrynan.aaaah.*
 import com.chrynan.sample.di.scope.ActivityScope
-import com.chrynan.sample.model.AdapterItemViewModel
+import com.chrynan.sample.viewmodel.AdapterItemViewModel
 import com.chrynan.sample.ui.activity.MainActivity
 import com.chrynan.sample.ui.adapter.ChordAdapter
 import com.chrynan.sample.ui.adapter.ChordListAdapter

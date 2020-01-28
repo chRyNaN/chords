@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chrynan.aaaah.ManagerRecyclerViewAdapter
 import com.chrynan.chords.model.Chord
 import com.chrynan.sample.R
-import com.chrynan.sample.model.AdapterItemViewModel
+import com.chrynan.sample.viewmodel.AdapterItemViewModel
 import com.chrynan.sample.presenter.MainPresenter
 import com.chrynan.sample.ui.adapter.ChordAdapter
 import com.chrynan.sample.ui.dialog.ChordBottomSheetDialogFragment

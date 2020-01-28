@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.chrynan.aaaah.*
 import com.chrynan.chords.model.Chord
 import com.chrynan.sample.R
-import com.chrynan.sample.model.ChordViewModel
+import com.chrynan.sample.viewmodel.ChordViewModel
 import kotlinx.android.synthetic.main.adapter_chord.view.*
 import javax.inject.Inject
 
