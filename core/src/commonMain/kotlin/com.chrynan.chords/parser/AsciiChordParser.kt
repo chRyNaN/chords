@@ -34,6 +34,8 @@ import com.chrynan.chords.util.isDigit
  *
  * @param [tabDelimiters] The [Set] of [String] delimiters used to separate the optional label and
  *        fret numbers (Ex: "|" and "-"). This set cannot be empty.
+ *
+ * @author chRyNaN
  */
 class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) : ChordParser<String> {
 
