@@ -53,18 +53,23 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
 
         val linesToParse = if (firstLineContainsDelimiters) lines else lines.subList(1, lines.size)
 
-        val markers =
+        val chordStringMarkers =
                 linesToParse.asSequence()
                         .mapIndexed { index, line ->
                             line.parseLineAsString(stringNumber = index + 1, tabDelimiters = tabDelimiters)
                         }
-                        .flatten()
-                        .toSet()
 
-        return ChordParseResult(chord = Chord(name = name, markers = markers))
+        val markers = chordStringMarkers.map { it.markers }
+                .flatten()
+                .toSet()
+
+        val labels = chordStringMarkers.map { it.label }
+                .toSet()
+
+        return ChordParseResult(chord = Chord(name = name, markers = markers), stringLabels = labels)
     }
 
-    private fun String.parseLineAsString(stringNumber: Int, tabDelimiters: Set<Char>): List<ChordMarker> {
+    private fun String.parseLineAsString(stringNumber: Int, tabDelimiters: Set<Char>): ChordStringMarker {
         val labelStringBuilder = StringBuilder()
         val fretStringBuilder = StringBuilder()
         val frets = mutableSetOf<Int>()
@@ -87,12 +92,21 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
 
         val label = if (labelStringBuilder.isBlank()) null else labelStringBuilder.toString()
 
-        return when {
+        val markers = when {
             frets.isEmpty() -> listOf(ChordMarker.Muted(StringNumber(stringNumber)))
             frets.contains(0) -> listOf(ChordMarker.Open(StringNumber(stringNumber)))
             else -> frets.map {
                 ChordMarker.Note(fret = FretNumber(it), string = StringNumber(stringNumber))
             }
         }
+
+        return ChordStringMarker(
+                label = StringLabel(string = stringNumber, label = label),
+                markers = markers)
     }
+
+    private data class ChordStringMarker(
+            val label: StringLabel,
+            val markers: List<ChordMarker>
+    )
 }
