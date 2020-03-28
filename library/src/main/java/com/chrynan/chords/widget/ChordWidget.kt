@@ -369,7 +369,7 @@ class ChordWidget : View,
     private fun calculateFretNumberPositions() {
         fretNumberPoints.clear()
 
-        for (i in 0 until chart.fretEnd) {
+        for (i in 0 .. (chart.fretEnd - chart.fretStart)) {
             fretNumberPoints.add(PointF(
                     drawingBounds.left + fretSideLabelBounds.width() / 2,
                     getVerticalCenterTextPosition(stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretLabelTextPaint)))
@@ -381,10 +381,10 @@ class ChordWidget : View,
 
         chord?.bars?.forEach { bar ->
             if (bar.fret.number in chart.fretStart..chart.fretEnd && bar.endString.number < chart.stringCount + 1) {
-                val relativeHeight = bar.fret.number - (chart.fretStart - 1)
+                val relativeFretNumber = bar.fret.number - (chart.fretStart - 1)
                 val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
                         (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
-                val top = chartBounds.top + (relativeHeight * fretSize + relativeHeight * fretMarkerSize - fretSize / 2) - (noteSize / 2)
+                val top = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
                 val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
                         (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
                 val bottom = top + noteSize
@@ -409,9 +409,9 @@ class ChordWidget : View,
 
         chord?.notes?.forEach { note ->
             if (note.fret.number in chart.fretStart..chart.fretEnd && note.string.number < chart.stringCount + 1) {
-                val relativeHeight = note.fret.number - (chart.fretStart - 1)
+                val relativeFretNumber = note.fret.number - (chart.fretStart - 1)
                 val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
-                val startCenterY = chartBounds.top + (relativeHeight * fretSize + relativeHeight * fretMarkerSize - fretSize / 2)
+                val startCenterY = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
 
                 notePositions.add(
                         NotePosition(
