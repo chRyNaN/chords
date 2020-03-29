@@ -221,7 +221,9 @@ binder.bind(viewModel)
     <enum name="hide" value="2"/>
 </attr>
 <attr name="fitToHeight" format="boolean"/>
-<attr name="typeface" format="reference"/>
+<attr name="fretLabelTypeface" format="reference"/>
+<attr name="noteLabelTypeface" format="reference"/>
+<attr name="stringLabelTypeface" format="reference"/>
 ```
 
 ### Selectable Chord names in Text
@@ -297,6 +299,20 @@ arguments =
 
 val chord = arguments?.getChord(KEY_CHORD)
 val chart = arguments?.getChordChart(KEY_CHART)
+```
+
+There is also a convenience `ChordAndChart` class (with similar Parcelable extension functions) for when both a `Chord` and a `ChordChart` need to be passed between Android components together.
+
+```kotlin
+val chordAndChart = ChordAndChart(chord = chord, chart = chordChart)
+
+// Bundle
+arguments = bundle.putChordAndChart(KEY_CHORD_AND_CHART, chordAndChart)
+arguments?.getChordAndChart(KEY_CHORD_AND_CHART)
+
+// Intent
+intent.putChordAndChartExtra(KEY_CHORD_AND_CHART, chordAndChart)
+intent.getChordAndChartExtra(KEY_CHORD_AND_CHART)
 ```
 
 **Intent:**
