@@ -52,7 +52,7 @@ class ChordWidget : View,
             invalidate()
         }
 
-    override var chart: ChordChart = ChordChart(fretStart = 1, fretEnd = 3, stringCount = 6)
+    override var chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART
         set(value) {
             field = value
             requestLayout()
@@ -199,7 +199,7 @@ class ChordWidget : View,
     private val fretSideLabelBounds = RectF()
 
     private val fretCount: Int
-        get() = chart.fretEnd - chart.fretStart + 1
+        get() = chart.fretEnd.number - chart.fretStart.number + 1
 
     private val showBottomStringLabels: Boolean
         get() = stringLabelState != StringLabelState.HIDE && chart.stringLabels.isNotEmpty()
@@ -405,7 +405,7 @@ class ChordWidget : View,
     private fun calculateFretNumberPositions() {
         fretNumberPoints.clear()
 
-        for (i in 0..(chart.fretEnd - chart.fretStart)) {
+        for (i in 0..(chart.fretEnd.number - chart.fretStart.number)) {
             fretNumberPoints.add(PointF(
                     drawingBounds.left + fretSideLabelBounds.width() / 2,
                     getVerticalCenterTextPosition(stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretLabelTextPaint)))
@@ -416,8 +416,8 @@ class ChordWidget : View,
         barLinePaths.clear()
 
         chord?.bars?.forEach { bar ->
-            if (bar.fret.number in chart.fretStart..chart.fretEnd && bar.endString.number < chart.stringCount + 1) {
-                val relativeFretNumber = bar.fret.number - (chart.fretStart - 1)
+            if (bar.fret.number in chart.fretStart.number..chart.fretEnd.number && bar.endString.number < chart.stringCount + 1) {
+                val relativeFretNumber = bar.fret.number - (chart.fretStart.number - 1)
                 val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
                         (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
                 val top = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
@@ -444,8 +444,8 @@ class ChordWidget : View,
         notePositions.clear()
 
         chord?.notes?.forEach { note ->
-            if (note.fret.number in chart.fretStart..chart.fretEnd && note.string.number < chart.stringCount + 1) {
-                val relativeFretNumber = note.fret.number - (chart.fretStart - 1)
+            if (note.fret.number in chart.fretStart.number..chart.fretEnd.number && note.string.number < chart.stringCount + 1) {
+                val relativeFretNumber = note.fret.number - (chart.fretStart.number - 1)
                 val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
                 val startCenterY = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
 
@@ -516,7 +516,7 @@ class ChordWidget : View,
         // Fret numbers; check if we are showing them or not
         if (showFretNumbers) {
             fretNumberPoints.forEachIndexed { index, point ->
-                canvas.drawText((chart.fretStart + index).toString(), point.x, point.y, fretLabelTextPaint)
+                canvas.drawText((chart.fretStart.number + index).toString(), point.x, point.y, fretLabelTextPaint)
             }
         }
     }

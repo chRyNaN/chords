@@ -11,6 +11,7 @@ import com.chrynan.aaaah.DiffUtilCalculator
 import com.chrynan.aaaah.ManagerRecyclerViewAdapter
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
+import com.chrynan.chords.model.FretNumber
 import com.chrynan.chords.util.*
 import com.chrynan.sample.R
 import com.chrynan.sample.coroutine.AndroidCoroutineDispatchers
@@ -65,7 +66,7 @@ class ChordBottomSheetDialogFragment : BottomSheetDialogFragment(),
         chordTitleTextView?.text = chord.name
         chordWidget?.chord = chord
         chordWidget?.chart = chart
-                ?: defaultChordChart.copy(fretEnd = max(chord.maxFret, defaultChordChart.fretEnd))
+                ?: defaultChordChart.copy(fretEnd = FretNumber(max(chord.maxFret, defaultChordChart.fretEnd.number)))
 
         view.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
             override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
