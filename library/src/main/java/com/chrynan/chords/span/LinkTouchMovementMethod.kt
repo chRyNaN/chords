@@ -25,6 +25,11 @@ import android.widget.TextView
 /**
  * References: http://stackoverflow.com/a/7292485/1478764,
  * http://stackoverflow.com/a/20905824/1478764
+ *
+ * An implementation of a [LinkMovementMethod] which handles touch events and delegates them to a
+ * [TouchableSpan].
+ *
+ * @author chRyNaN
  */
 class LinkTouchMovementMethod : LinkMovementMethod() {
 
@@ -36,7 +41,7 @@ class LinkTouchMovementMethod : LinkMovementMethod() {
                 pressedSpan = getPressedSpan(widget, buffer, event)
 
                 if (pressedSpan != null) {
-                    pressedSpan.isPressed = true
+                    pressedSpan.isSelected = true
 
                     Selection.setSelection(buffer, buffer.getSpanStart(pressedSpan), buffer.getSpanEnd(pressedSpan))
 
@@ -47,7 +52,7 @@ class LinkTouchMovementMethod : LinkMovementMethod() {
                 val touchedSpan = getPressedSpan(widget, buffer, event)
 
                 if (pressedSpan != null && touchedSpan !== pressedSpan) {
-                    pressedSpan.isPressed = false
+                    pressedSpan.isSelected = false
 
                     Selection.removeSelection(buffer)
                 } else pressedSpan?.onTouch(widget, event)
@@ -56,7 +61,7 @@ class LinkTouchMovementMethod : LinkMovementMethod() {
                 if (pressedSpan != null) {
                     pressedSpan.onTouch(widget, event)
 
-                    pressedSpan.isPressed = false
+                    pressedSpan.isSelected = false
 
                     super.onTouchEvent(widget, buffer, event)
                 }
