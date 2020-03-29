@@ -5,6 +5,11 @@ import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.ColorInt
 import com.chrynan.chords.model.StringLabelState
 
+/**
+ * An interface representing a UI Widget that can display a [ChordChart] for a [Chord].
+ *
+ * @author chRyNaN
+ */
 interface ChordView {
 
     var chord: Chord?
