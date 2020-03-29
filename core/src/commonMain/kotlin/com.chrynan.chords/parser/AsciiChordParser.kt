@@ -1,5 +1,6 @@
 package com.chrynan.chords.parser
 
+import com.chrynan.chords.exception.AsciiChordParseException
 import com.chrynan.chords.model.*
 import com.chrynan.chords.util.isDigit
 
@@ -39,11 +40,11 @@ import com.chrynan.chords.util.isDigit
  */
 class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) : ChordParser<String> {
 
-    override suspend fun parse(input: String): ChordParseResult? {
-        if (tabDelimiters.isEmpty()) return null
+    override suspend fun parse(input: String): ChordParseResult {
+        if (tabDelimiters.isEmpty()) throw AsciiChordParseException(message = "Tab delimiters must not be empty for ${AsciiChordParser::class.simpleName}.")
 
         val trimmedInput = input.trim()
-        if (trimmedInput.isBlank()) return null
+        if (trimmedInput.isBlank()) throw AsciiChordParseException(message = "Input must not be empty or blank for ${AsciiChordParser::class.simpleName}.")
 
         val lines = trimmedInput.lines()
 

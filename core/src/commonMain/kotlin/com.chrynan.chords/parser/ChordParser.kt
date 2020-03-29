@@ -8,4 +8,4 @@ import com.chrynan.chords.model.ChordParseResult
  *
  * @author chRyNaN
  */
-interface ChordParser<T> : Parser<T, ChordParseResult?>
+interface ChordParser<T> : Parser<T, ChordParseResult>
