@@ -94,7 +94,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
 
         val label = if (labelStringBuilder.isBlank()) null else labelStringBuilder.toString()
 
-        val markers = when {
+        val markers: List<ChordMarker> = when {
             frets.isEmpty() -> listOf(ChordMarker.Muted(StringNumber(stringNumber)))
             frets.contains(0) -> listOf(ChordMarker.Open(StringNumber(stringNumber)))
             else -> frets.map {
