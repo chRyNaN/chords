@@ -47,8 +47,14 @@
         <!-- The [ColorInt] value that will be used for the note and bar labels. -->
         <attr name="noteLabelTextColor" format="color" />
 
-        <!-- The typeface to be used for all the text in the view. -->
-        <attr name="typeface" format="reference" />
+        <!-- The typeface to be used for the fret label text in the view. -->
+        <attr name="fretLabelTypeface" format="reference" />
+
+        <!-- The typeface to be used for the note label text in the view. -->
+        <attr name="noteLabelTypeface" format="reference" />
+
+        <!-- The typeface to be used for the string label text in the view. -->
+        <attr name="stringLabelTypeface" format="reference" />
 
     </declare-styleable>
 

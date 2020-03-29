@@ -36,7 +36,11 @@ import kotlin.math.round
  */
 
 /**
- * A View class to display guitar (or other stringed fretted instruments) chords as a chart.
+ * An Android [View] class to display guitar (or other stringed fretted instruments) chords as a
+ * chart. This class implements the [ChordView] interface and displays a [ChordChart] for a
+ * provided [Chord].
+ *
+ * @author chRyNaN
  */
 class ChordWidget : View,
         ChordView {
@@ -127,12 +131,42 @@ class ChordWidget : View,
             invalidate()
         }
 
-    var typeface: Typeface = Typeface.DEFAULT
+    /**
+     * The [Typeface] that is used for the fret label text. This defaults to [Typeface.DEFAULT].
+     *
+     * @author chRyNaN
+     */
+    var fretLabelTypeface: Typeface = Typeface.DEFAULT
         set(value) {
             field = value
             fretLabelTextPaint.typeface = value
+            requestLayout()
+            invalidate()
+        }
+
+    /**
+     * The [Typeface] that is used for the note label text. This defaults to [Typeface.DEFAULT].
+     *
+     * @author chRyNaN
+     */
+    var noteLabelTypeface: Typeface = Typeface.DEFAULT
+        set(value) {
+            field = value
             noteLabelTextPaint.typeface = value
+            requestLayout()
+            invalidate()
+        }
+
+    /**
+     * The [Typeface] that is used for the string label text. This defaults to [Typeface.DEFAULT].
+     *
+     * @author chRyNaN
+     */
+    var stringLabelTypeface: Typeface = Typeface.DEFAULT
+        set(value) {
+            field = value
             stringLabelTextPaint.typeface = value
+            requestLayout()
             invalidate()
         }
 
@@ -246,7 +280,9 @@ class ChordWidget : View,
                     showFingerNumbers = a.getBoolean(R.styleable.ChordWidget_showFingerNumbers, DEFAULT_SHOW_FINGER_NUMBERS)
                     showFretNumbers = a.getBoolean(R.styleable.ChordWidget_showFretNumbers, DEFAULT_SHOW_FRET_NUMBERS)
 
-                    a.getTypeface(context, R.styleable.ChordWidget_typeface)?.let { typeface = it }
+                    a.getTypeface(context, R.styleable.ChordWidget_fretLabelTypeface)?.let { fretLabelTypeface = it }
+                    a.getTypeface(context, R.styleable.ChordWidget_noteLabelTypeface)?.let { noteLabelTypeface = it }
+                    a.getTypeface(context, R.styleable.ChordWidget_stringLabelTypeface)?.let { stringLabelTypeface = it }
                 } finally {
                     a.recycle()
                 }
@@ -369,7 +405,7 @@ class ChordWidget : View,
     private fun calculateFretNumberPositions() {
         fretNumberPoints.clear()
 
-        for (i in 0 .. (chart.fretEnd - chart.fretStart)) {
+        for (i in 0..(chart.fretEnd - chart.fretStart)) {
             fretNumberPoints.add(PointF(
                     drawingBounds.left + fretSideLabelBounds.width() / 2,
                     getVerticalCenterTextPosition(stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretLabelTextPaint)))
