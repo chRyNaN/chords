@@ -1,5 +1,28 @@
 package com.chrynan.chords.model
 
+import com.chrynan.chords.view.ChordView
+
+/**
+ * A representation of a diagram used to display a fretted string instrument Chord. This contains
+ * information related to the visual diagram, such as the [fretStart] and [fretEnd].
+ *
+ * A chord diagram usually displays the frets as horizontal rows separated by lines (fret markers).
+ * This diagram starts with the first being the [fretStart] and ends with the [fretEnd]. And a
+ * chord diagram usually displays the strings as vertical columns. This diagram contains
+ * [stringCount] as the amount of strings. The [stringLabels] are usually displayed at one of the
+ * ends of the strings in the diagram, if they are to be drawn.
+ *
+ * Note that this does not contain information about the View, such as colors and text. For that
+ * information, refer to the [ChordViewModel] and [ChordView] classes.
+ *
+ * @property [fretStart] The starting [FretNumber] of this diagram.
+ * @property [fretEnd] The ending [FretNumber] of this diagram.
+ * @property [stringCount] An [Int] specifying the amount of strings in this diagram.
+ * @property [stringLabels] A [Set] of [StringLabel]s for each string in this diagram. The amount
+ * of labels should match the [stringCount].
+ *
+ * @author chRyNaN
+ */
 data class ChordChart(
         val fretStart: FretNumber = DEFAULT_FRET_START,
         val fretEnd: FretNumber = DEFAULT_FRET_END,

@@ -1,6 +1,16 @@
 package com.chrynan.chords.model
 
-class ChordBuilder(private val name: String? = null) {
+/**
+ * A DSL Builder class for creating a [Chord]. Use the [chord] function to obtain an instance of
+ * this class. This allows the creation of a [Chord] using a Kotlin DSL. For example:
+ *
+ * chord {
+ *     +ChordMarker.Open(StringNumber(1))
+ * }
+ *
+ * @author chRyNaN
+ */
+class ChordBuilder internal constructor(private val name: String? = null) {
 
     private val markers = mutableSetOf<ChordMarker>()
 
@@ -8,13 +18,21 @@ class ChordBuilder(private val name: String? = null) {
         markers.add(this)
     }
 
-    internal fun build(): com.chrynan.chords.model.Chord = com.chrynan.chords.model.Chord(
+    internal fun build(): Chord = Chord(
             name = name,
             markers = markers)
 }
 
-
-fun chord(name: String? = null, builder: ChordBuilder.() -> Unit): com.chrynan.chords.model.Chord {
+/**
+ * The entry point into the [Chord] Kotlin DSL. This function creates a [Chord] using the
+ * [ChordBuilder] class.
+ *
+ * @param [name] The name of the [Chord] being created.
+ * @param [builder] The scoped Kotlin DSL builder used to create the [Chord].
+ *
+ * @author chRyNaN
+ */
+fun chord(name: String? = null, builder: ChordBuilder.() -> Unit): Chord {
     val chordBuilder = ChordBuilder(name = name)
     builder.invoke(chordBuilder)
     return chordBuilder.build()

@@ -1,5 +1,12 @@
 package com.chrynan.chords.model
 
+/**
+ * An enum used to indicate which finger on a hand should be used to play a note.
+ *
+ * @property [position] A value indicating the finger position.
+ *
+ * @author chRyNaN
+ */
 enum class Finger(val position: Int) {
 
     UNKNOWN(position = -1),
@@ -13,6 +20,12 @@ enum class Finger(val position: Int) {
 
     companion object {
 
-        fun fromPosition(position: Int) = values().firstOrNull { it.position == position } ?: UNKNOWN
+        /**
+         * Retrieves a [Finger] from the provided [position].
+         *
+         * @author chRyNaN
+         */
+        fun fromPosition(position: Int) = values().firstOrNull { it.position == position }
+                ?: UNKNOWN
     }
 }
