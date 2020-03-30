@@ -241,10 +241,29 @@ textView?.text = text
 textView?.movementMethod = LinkTouchMovementMethod()
 ```
 
+**Using DSL functions to add a `ChordSpan` to a `TextView:**
+```kotlin
+val textBuilder = buildSpannableString {
+        +chordSpan(chord, listener)
+
+        +chordSpan("G", chord) {
+            // Handle click event
+        }
+
+        +styledChordSpan(chord, listener) {
+            this.backgroundColor = Color.BLUE
+        }
+}
+
+textView?.text = textBuilder
+// Need to specify LinkTouchMovementMethod as the movement method for clicks to work
+textView?.movementMethod = LinkTouchMovementMethod()
+```
+
 **Listening to `Chord` selected events:**
 ```kotlin
 class MainActivity : AppCompatActivity(),
-    ChordSpan.SelectedListener {
+    ChordSpan.ChordSelectedListener {
 
     override fun onChordSpanSelected(chord: Chord) {
         // Perform action with chord
