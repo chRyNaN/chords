@@ -58,16 +58,16 @@ There are a few main components to using the library:
 **Assigning a `ChordChart` to a `ChordWidget`:**
 ```kotlin
 chordWidget?.chart = ChordChart(
-                         fretStart = 1,
-                         fretEnd = 2,
+                         fretStart = FretNumber(1),
+                         fretEnd = FretNumber(2),
                          stringCount = 6,
                          stringLabels = setOf(
-                             StringLabel(string = 1, label = "e"),
-                             StringLabel(string = 2, label = "B"),
-                             StringLabel(string = 3, label = "G"),
-                             StringLabel(string = 4, label = "D"),
-                             StringLabel(string = 5, label = "A"),
-                             StringLabel(string = 6, label = "E")))
+                             StringLabel(string = StringNumber(1), label = "e"),
+                             StringLabel(string = StringNumber(2), label = "B"),
+                             StringLabel(string = StringNumber(3), label = "G"),
+                             StringLabel(string = StringNumber(4), label = "D"),
+                             StringLabel(string = StringNumber(5), label = "A"),
+                             StringLabel(string = StringNumber(6), label = "E")))
 ```
 
 **Creating a Chord using the DSL:**
@@ -254,14 +254,16 @@ class MainActivity : AppCompatActivity(),
 
 **Customizing the `ChordSpan` appearance:**
 
-`ChordSpan` extends from `TouchableSpan` which has the following customizable properties:
+`ChordSpan` extends from `TouchableSpan` which inherits from `TouchableSpanView` and has the following customizable properties:
 ```kotlin
 var backgroundColor = Color.TRANSPARENT
-var pressedBackgroundColor = Color.TRANSPARENT
+var selectedBackgroundColor = Color.TRANSPARENT
 var textColor = Color.BLUE
-var pressedTextColor = Color.BLUE
+var selectedTextColor = Color.BLUE
 var isUnderlined = false
-var isUnderlinedWhenPressed = false
+var isUnderlinedWhenSelected = false
+var textTypeface = Typeface.DEFAULT
+var selectedTextTypeface = Typeface.DEFAULT
 ```
 
 These properties can be changed on the span:
