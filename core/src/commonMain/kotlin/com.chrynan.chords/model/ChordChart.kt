@@ -48,12 +48,12 @@ data class ChordChart(
         val STANDARD_TUNING_GUITAR_CHART = ChordChart(
                 stringCount = DEFAULT_GUITAR_STRING_COUNT,
                 stringLabels = setOf(
-                        StringLabel(string = 1, label = "e"),
-                        StringLabel(string = 2, label = "B"),
-                        StringLabel(string = 3, label = "G"),
-                        StringLabel(string = 4, label = "D"),
-                        StringLabel(string = 5, label = "A"),
-                        StringLabel(string = 6, label = "E")))
+                        StringLabel(string = StringNumber(1), label = "e"),
+                        StringLabel(string = StringNumber(2), label = "B"),
+                        StringLabel(string = StringNumber(3), label = "G"),
+                        StringLabel(string = StringNumber(4), label = "D"),
+                        StringLabel(string = StringNumber(5), label = "A"),
+                        StringLabel(string = StringNumber(6), label = "E")))
 
         /**
          * A [ChordChart] representing a four string ukelele in standard tuning (C). This is a
@@ -64,10 +64,10 @@ data class ChordChart(
         val STANDARD_TUNING_UKELELE = ChordChart(
                 stringCount = DEFAULT_UKELEL_STRING_COUNT,
                 stringLabels = setOf(
-                        StringLabel(string = 1, label = "A"),
-                        StringLabel(string = 2, label = "E"),
-                        StringLabel(string = 3, label = "C"),
-                        StringLabel(string = 4, label = "G")))
+                        StringLabel(string = StringNumber(1), label = "A"),
+                        StringLabel(string = StringNumber(2), label = "E"),
+                        StringLabel(string = StringNumber(3), label = "C"),
+                        StringLabel(string = StringNumber(4), label = "G")))
 
         /**
          * A [ChordChart] representing a five string banjo in standard tuning (G). This is a
@@ -78,10 +78,10 @@ data class ChordChart(
         val STANDARD_TUNING_BANJO = ChordChart(
                 stringCount = DEFAULT_BANJO_STRING_COUNT,
                 stringLabels = setOf(
-                        StringLabel(string = 1, label = "d"),
-                        StringLabel(string = 2, label = "B"),
-                        StringLabel(string = 3, label = "g"),
-                        StringLabel(string = 4, label = "D"),
-                        StringLabel(string = 5, label = "G")))
+                        StringLabel(string = StringNumber(1), label = "d"),
+                        StringLabel(string = StringNumber(2), label = "B"),
+                        StringLabel(string = StringNumber(3), label = "g"),
+                        StringLabel(string = StringNumber(4), label = "D"),
+                        StringLabel(string = StringNumber(5), label = "G")))
     }
 }

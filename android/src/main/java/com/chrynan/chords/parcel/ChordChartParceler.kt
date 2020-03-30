@@ -4,6 +4,7 @@ import android.os.Parcel
 import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.FretNumber
 import com.chrynan.chords.model.StringLabel
+import com.chrynan.chords.model.StringNumber
 import kotlinx.android.parcel.Parceler
 
 object ChordChartParceler : Parceler<ChordChart> {
@@ -15,7 +16,7 @@ object ChordChartParceler : Parceler<ChordChart> {
         val stringLabels = mutableSetOf<StringLabel>()
 
         while (parcel.dataPosition() < parcel.dataSize()) {
-            stringLabels.add(StringLabel(parcel.readInt(), parcel.readString()))
+            stringLabels.add(StringLabel(StringNumber(parcel.readInt()), parcel.readString()))
         }
 
         return ChordChart(
@@ -31,7 +32,7 @@ object ChordChartParceler : Parceler<ChordChart> {
         parcel.writeInt(stringCount)
 
         stringLabels.forEach {
-            parcel.writeInt(it.string)
+            parcel.writeInt(it.string.number)
             parcel.writeString(it.label)
         }
     }

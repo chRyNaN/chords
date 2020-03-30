@@ -494,11 +494,11 @@ class ChordWidget : View,
 
         if (showBottomStringLabels) {
             chart.stringLabels.forEach { stringLabel ->
-                if (stringLabel.string < chart.stringCount + 1) {
+                if (stringLabel.string.number < chart.stringCount + 1) {
                     val label = if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
 
                     if (label != null) {
-                        val x = chartBounds.left + (chart.stringCount - stringLabel.string) * stringDistance + (chart.stringCount - stringLabel.string) * stringSize
+                        val x = chartBounds.left + (chart.stringCount - stringLabel.string.number) * stringDistance + (chart.stringCount - stringLabel.string.number) * stringSize
                         val y = getVerticalCenterTextPosition(chartBounds.bottom + stringBottomLabelBounds.height() / 2, label, stringLabelTextPaint)
 
                         stringBottomLabelPositions.add(

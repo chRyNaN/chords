@@ -104,7 +104,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
         }
 
         return ChordStringMarker(
-                label = StringLabel(string = stringNumber, label = label),
+                label = StringLabel(string = StringNumber(stringNumber), label = label),
                 markers = markers)
     }
 
