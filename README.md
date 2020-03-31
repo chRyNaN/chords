@@ -241,7 +241,7 @@ textView?.text = text
 textView?.movementMethod = LinkTouchMovementMethod()
 ```
 
-**Using DSL functions to add a `ChordSpan` to a `TextView:**
+**Using DSL functions to add a `ChordSpan` to a `TextView`:**
 ```kotlin
 val textBuilder = buildSpannableString {
         +chordSpan(chord, listener)
