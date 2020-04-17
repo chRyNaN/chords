@@ -1,6 +1,7 @@
 package com.chrynan.sample
 
 import com.chrynan.chords.model.*
+import com.chrynan.chords.util.Color
 import com.chrynan.chords.widget.ChordWidget
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document

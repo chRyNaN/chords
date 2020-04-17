@@ -6,4 +6,7 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
-inline class StringNumber(val number: Int)
+inline class StringNumber(val number: Int) {
+
+    override fun toString(): String = number.toString()
+}

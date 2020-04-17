@@ -5,4 +5,7 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
-inline class FretNumber(val number: Int)
+inline class FretNumber(val number: Int) {
+
+    override fun toString(): String = number.toString()
+}
