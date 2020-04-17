@@ -7,7 +7,7 @@ import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.ColorInt
 import com.chrynan.chords.model.StringLabelState
-import com.chrynan.chords.util.Color
+import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
@@ -33,70 +33,102 @@ import kotlin.math.round
 class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         ChordView {
 
-    override var chord: Chord?
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    override var chord: Chord? = null
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
 
-    override var chart: ChordChart
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    override var chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
 
-    override var fitToHeight: Boolean
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    override var fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
+    override var showFretNumbers = ChordView.DEFAULT_SHOW_FRET_NUMBERS
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
+    override var showFingerNumbers = ChordView.DEFAULT_SHOW_FINGER_NUMBERS
+        set(value) {
+            field = value
+            invalidate()
+        }
+    override var stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE
+        set(value) {
+            field = value
+            requestLayout()
+            invalidate()
+        }
+    override var mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT
+        set(value) {
+            field = value
+            invalidate()
+        }
+    override var openStringText: String = ChordView.DEFAULT_OPEN_TEXT
+        set(value) {
+            field = value
+            invalidate()
+        }
 
-    override var showFretNumbers: Boolean
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var showFingerNumbers: Boolean
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var stringLabelState: StringLabelState
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var mutedStringText: String
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var openStringText: String
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var fretColor: ColorInt
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var fretLabelTextColor: ColorInt
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var stringColor: ColorInt
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var stringLabelTextColor: ColorInt
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var noteColor: ColorInt
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
-    override var noteLabelTextColor: ColorInt
-        get() = TODO("Not yet implemented")
-        set(value) {}
+    override var fretColor = DEFAULT_COLOR
+        set(value) {
+            field = value
+            fretPaint.fillColor = value.toHexColor()
+            invalidate()
+        }
+    override var fretLabelTextColor = DEFAULT_TEXT_COLOR
+        set(value) {
+            field = value
+            fretLabelTextPaint.fillColor = value.toHexColor()
+            invalidate()
+        }
+    override var stringColor = DEFAULT_COLOR
+        set(value) {
+            field = value
+            stringPaint.fillColor = value.toHexColor()
+            invalidate()
+        }
+    override var stringLabelTextColor = DEFAULT_COLOR
+        set(value) {
+            field = value
+            stringLabelTextPaint.fillColor = value.toHexColor()
+            invalidate()
+        }
+    override var noteColor = DEFAULT_COLOR
+        set(value) {
+            field = value
+            notePaint.fillColor = value.toHexColor()
+            barLinePaint.fillColor = value.toHexColor()
+            invalidate()
+        }
+    override var noteLabelTextColor = DEFAULT_TEXT_COLOR
+        set(value) {
+            field = value
+            noteLabelTextPaint.fillColor = value.toHexColor()
+            invalidate()
+        }
 
     private val fretPaint = Paint().apply {
         style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
     }
     private val fretLabelTextPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
     }
     private val stringPaint = Paint().apply {
         style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.BUTT
     }
     private val stringLabelTextPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
@@ -175,7 +207,17 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     }
 
     override fun onDraw(context: CanvasRenderingContext2D) {
+        // First draw the strings and fret markers
+        fretLineRects.forEach { context.drawLine(it, fretPaint) }
+        stringLineRects.forEach { context.drawLine(it, stringPaint) }
 
+        // Next draw the fret numbers and string markers
+        drawFretNumbers(context)
+        drawStringMarkers(context)
+
+        // Finally, draw all the notes and the note text
+        drawBars(context)
+        drawNotes(context)
     }
 
     private fun calculateSize() {
@@ -375,13 +417,53 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     }
 
 
+    private fun drawFretNumbers(canvas: CanvasRenderingContext2D) {
+        // Fret numbers; check if we are showing them or not
+        if (showFretNumbers) {
+            fretNumberPoints.forEachIndexed { index, point ->
+                canvas.drawText((chart.fretStart.number + index).toString(), point.x, point.y, fretLabelTextPaint)
+            }
+        }
+    }
 
+    private fun drawStringMarkers(canvas: CanvasRenderingContext2D) {
+        // Top String markers (open/muted)
+        stringTopMarkerPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
 
+        // Bottom String labels (number/note)
+        stringBottomLabelPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+    }
+
+    private fun drawBars(canvas: CanvasRenderingContext2D) {
+        // Bars
+        barLinePaths.forEach {
+            val cornerRadius = min((it.bottom - it.top), (it.bottom - it.top))
+
+            // Draw Bar
+            canvas.drawRoundRect(it.left, it.top, it.right, it.bottom, cornerRadius, barLinePaint)
+
+            // Text
+            if (showFingerNumbers) {
+                canvas.drawText(it.text, it.textX, it.textY, noteLabelTextPaint)
+            }
+        }
+    }
+
+    private fun drawNotes(canvas: CanvasRenderingContext2D) {
+        //Individual notes
+        notePositions.forEach {
+            canvas.drawCircle(it.circleX, it.circleY, noteSize / 2f, notePaint)
+
+            if (showFingerNumbers) {
+                canvas.drawText(it.text, it.textX, it.textY, noteLabelTextPaint)
+            }
+        }
+    }
 
     companion object {
 
-        val DEFAULT_COLOR = Color.BLACK
-        val DEFAULT_TEXT_COLOR = Color.WHITE
+        val DEFAULT_COLOR: ColorInt = Color.BLACK.colorInt
+        val DEFAULT_TEXT_COLOR: ColorInt = Color.WHITE.colorInt
     }
 
     private data class NotePosition(

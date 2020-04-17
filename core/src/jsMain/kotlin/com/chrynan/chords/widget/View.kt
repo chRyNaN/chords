@@ -35,6 +35,20 @@ abstract class View {
     protected abstract fun onDraw(context: CanvasRenderingContext2D)
 
     /**
+     * This function invokes a layout pass to occur. This will invoke the [onMeasure] and [onDraw] functions.
+     *
+     * Call this function after creating an instance of a [View], when you are ready for the [View] to be rendered.
+     *
+     * Note that this function is invoked on the calling thread and coroutine.
+     *
+     * @author chRyNaN
+     */
+    fun render() {
+        requestLayout()
+        invalidate()
+    }
+
+    /**
      * Forces a layout pass to occur again.
      *
      * @author chRyNaN
