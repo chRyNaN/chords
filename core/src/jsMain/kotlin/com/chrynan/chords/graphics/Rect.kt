@@ -34,10 +34,10 @@ import org.w3c.dom.HTMLCanvasElement
  * @author chRyNaN
  */
 data class Rect(
-        val left: Double,
-        val top: Double,
-        val right: Double,
-        val bottom: Double
+        var left: Double,
+        var top: Double,
+        var right: Double,
+        var bottom: Double
 ) {
 
     companion object {
@@ -106,6 +106,18 @@ data class Rect(
      */
     val centerY: Double
         get() = (top + bottom) * 0.5f
+
+    /**
+     * Sets this [Rect]'s values as the provided values.
+     *
+     * @author chRyNaN
+     */
+    fun set(left: Double, top: Double, right: Double, bottom: Double) {
+        this.left = left
+        this.top = top
+        this.right = right
+        this.bottom = bottom
+    }
 
     /**
      * Returns a new [Rect] by offsetting this [Rect] by adding [dx] to its [left] and [right] coordinates, and

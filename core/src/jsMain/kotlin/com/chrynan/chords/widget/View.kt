@@ -1,6 +1,7 @@
 package com.chrynan.chords.widget
 
 import com.chrynan.chords.exception.InvalidCanvasContextException
+import com.chrynan.chords.graphics.Paint
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 
@@ -13,10 +14,15 @@ abstract class View {
 
     abstract val canvas: HTMLCanvasElement
 
-    private val width: Int
+    var paddingLeft: Double = 0.0
+    var paddingTop: Double = 0.0
+    var paddingRight: Double = 0.0
+    var paddingBottom: Double = 0.0
+
+    val width: Int
         get() = canvas.width
 
-    private val height: Int
+    val height: Int
         get() = canvas.height
 
     private val context: CanvasRenderingContext2D by lazy {
@@ -44,5 +50,20 @@ abstract class View {
      */
     protected fun invalidate() {
         onDraw(context = context)
+    }
+
+    protected fun getVerticalCenterTextPosition(originalYPosition: Double, text: String?, textPaint: Paint): Double {
+        if (text == null) return 0.0
+
+        val currentFont = context.font
+
+        context.font = textPaint.font
+
+        val metrics = context.measureText(text)
+        val actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
+
+        context.font = currentFont
+
+        return originalYPosition + actualHeight / 2
     }
 }
