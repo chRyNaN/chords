@@ -24,6 +24,16 @@ data class Chord(
         val markers: Set<ChordMarker>
 ) {
 
+    companion object {
+
+        /**
+         * A [Chord] that has no [markers] and a null [name].
+         *
+         * @author chRyNaN
+         */
+        val EMPTY = Chord(name = null, markers = emptySet())
+    }
+
     /**
      * A [Set] of [ChordMarker.Note]s that are a part of this [Chord]. This is a convenience
      * property that filters the [markers] for [ChordMarker.Note]s.

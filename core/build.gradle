@@ -5,6 +5,7 @@ version rootProject.libraryVersion
 
 kotlin {
     jvm()
+    js()
 
     sourceSets {
         commonMain {
