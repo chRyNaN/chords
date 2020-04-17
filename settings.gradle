@@ -1,7 +1,8 @@
 rootProject.name = "chords"
 
 include ":core"
-include ':android'
+include ":android"
 include ":sample"
+include ":sample-js"
 
 enableFeaturePreview('GRADLE_METADATA')

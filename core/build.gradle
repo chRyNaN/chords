@@ -5,7 +5,11 @@ version rootProject.libraryVersion
 
 kotlin {
     jvm()
-    js()
+    js {
+        browser {
+
+        }
+    }
 
     sourceSets {
         commonMain {
@@ -40,6 +44,9 @@ publishing {
         }
         jvm {
             artifactId = "chords-core-jvm"
+        }
+        js {
+            artifactId = "chords-core-js"
         }
         metadata {
             artifactId = "chords-core-metadata"
