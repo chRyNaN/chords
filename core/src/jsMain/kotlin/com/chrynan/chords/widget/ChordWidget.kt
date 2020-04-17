@@ -141,11 +141,11 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         style = Paint.Style.FILL
     }
 
-    private var drawingBounds = Rect.EMPTY
-    private var chartBounds = Rect.EMPTY
-    private var stringTopLabelBounds = Rect.EMPTY
-    private var stringBottomLabelBounds = Rect.EMPTY
-    private var fretSideLabelBounds = Rect.EMPTY
+    private var drawingBounds = Rect()
+    private var chartBounds = Rect()
+    private var stringTopLabelBounds = Rect()
+    private var stringBottomLabelBounds = Rect()
+    private var fretSideLabelBounds = Rect()
 
     private val fretCount: Int
         get() = chart.fretEnd.number - chart.fretStart.number + 1
@@ -197,7 +197,7 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         }
 
     override fun onMeasure(width: Int, height: Int) {
-        calculateSize()
+        calculateSize(width = width, height = height)
         calculateBarLinePositions()
         calculateFretNumberPositions()
         calculateFretPositions()
@@ -220,7 +220,7 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         drawNotes(context)
     }
 
-    private fun calculateSize() {
+    private fun calculateSize(width: Int, height: Int) {
         val absoluteWidth = width - (paddingLeft + paddingRight)
         val absoluteHeight = height - (paddingTop + paddingBottom)
         val minSideSize = min(absoluteWidth, absoluteHeight)

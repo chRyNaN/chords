@@ -34,21 +34,11 @@ import org.w3c.dom.HTMLCanvasElement
  * @author chRyNaN
  */
 data class Rect(
-        var left: Double,
-        var top: Double,
-        var right: Double,
-        var bottom: Double
+        var left: Double = 0.0,
+        var top: Double = 0.0,
+        var right: Double = 0.0,
+        var bottom: Double = 0.0
 ) {
-
-    companion object {
-
-        /**
-         * An empty [Rect] containing all values of 0.0 for it's properties.
-         *
-         * @author chRyNaN
-         */
-        val EMPTY: Rect = Rect(left = 0.0, top = 0.0, right = 0.0, bottom = 0.0)
-    }
 
     /**
      * Indicates whether this [Rect] is empty or not. A [Rect] is considered empty if either of it's sides have a size

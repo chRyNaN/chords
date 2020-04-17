@@ -19,10 +19,10 @@ abstract class View {
     var paddingRight: Double = 0.0
     var paddingBottom: Double = 0.0
 
-    val width: Int
+    private val width: Int
         get() = canvas.width
 
-    val height: Int
+    private val height: Int
         get() = canvas.height
 
     private val context: CanvasRenderingContext2D by lazy {
