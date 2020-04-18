@@ -1,7 +1,6 @@
 package com.chrynan.sample
 
 import com.chrynan.chords.model.*
-import com.chrynan.chords.util.Color
 import com.chrynan.chords.widget.ChordWidget
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
@@ -9,11 +8,12 @@ import kotlin.browser.document
 fun main() {
     val canvas = document.getElementById("canvas") as HTMLCanvasElement
 
+    canvas.width = 600
+    canvas.height = 1200
+
     val widget = ChordWidget(canvas)
 
     widget.fitToHeight = true
-
-    widget.render()
 
     val chord = chord {
         +ChordMarker.Muted(string = StringNumber(6))
@@ -24,4 +24,6 @@ fun main() {
     }
 
     widget.chord = chord
+
+    widget.render()
 }

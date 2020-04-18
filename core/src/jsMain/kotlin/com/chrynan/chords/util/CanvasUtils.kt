@@ -94,3 +94,14 @@ fun CanvasRenderingContext2D.drawLine(rect: Rect, paint: Paint) {
         this.stroke()
     }
 }
+
+/**
+ * Clears the canvas.
+ *
+ * Note that this does not take into account transformations that may be applied.
+ *
+ * @author chRyNaN
+ */
+fun CanvasRenderingContext2D.clear() {
+    this.clearRect(0.0, 0.0, this.canvas.width.toDouble(), this.canvas.height.toDouble())
+}

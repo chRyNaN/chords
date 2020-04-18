@@ -2,8 +2,10 @@ package com.chrynan.chords.widget
 
 import com.chrynan.chords.exception.InvalidCanvasContextException
 import com.chrynan.chords.graphics.Paint
+import com.chrynan.chords.util.clear
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
+import kotlin.dom.clear
 
 /**
  * A base Widget View for Javascript, mimicking some of the functionality of an Android View.
@@ -44,6 +46,7 @@ abstract class View {
      * @author chRyNaN
      */
     fun render() {
+        context.clear()
         requestLayout()
         invalidate()
     }
@@ -53,7 +56,7 @@ abstract class View {
      *
      * @author chRyNaN
      */
-    protected fun requestLayout() {
+    private fun requestLayout() {
         onMeasure(width = width, height = height)
     }
 
@@ -62,7 +65,7 @@ abstract class View {
      *
      * @author chRyNaN
      */
-    protected fun invalidate() {
+    private fun invalidate() {
         onDraw(context = context)
     }
 

@@ -323,13 +323,6 @@ class ChordWidget : View,
         val actualWidth = if (fitToHeight) minSideSize * (2f / 3f) else absoluteWidth
         val actualHeight = if (fitToHeight) minSideSize else absoluteHeight
 
-        // Center everything
-        drawingBounds.set(
-                (absoluteWidth - actualWidth) / 2,
-                (absoluteHeight - actualHeight) / 2,
-                (absoluteWidth - actualWidth) / 2 + actualWidth,
-                (absoluteHeight - actualHeight) / 2 + actualHeight)
-
         // Give some space for the labels
         val horizontalExtraCount = if (showFretNumbers) 1 else 0
         val verticalExtraCount = if (showBottomStringLabels) 2 else 1
@@ -348,6 +341,16 @@ class ChordWidget : View,
         fretMarkerSize = stringSize
 
         fretSize = round((actualHeight - (noteSize * verticalExtraCount) - (fretCount + 1) * fretMarkerSize) / fretCount)
+
+        val drawingWidth = noteSize * (chart.stringCount + 1 + horizontalExtraCount)
+        val drawingHeight = (fretSize * fretCount) + (noteSize * (1 + verticalExtraCount))
+
+        // Center everything
+        drawingBounds.set(
+                (absoluteWidth - drawingWidth) / 2,
+                (absoluteHeight - drawingHeight) / 2,
+                (absoluteWidth - drawingWidth) / 2 + drawingWidth,
+                (absoluteHeight - drawingHeight) / 2 + drawingHeight)
 
         // The actual chart bounds
         chartBounds.set(

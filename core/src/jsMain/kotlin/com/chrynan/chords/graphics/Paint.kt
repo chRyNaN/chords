@@ -14,14 +14,14 @@ data class Paint(
         var strokeColor: Color = Color.BLACK,
         var textAlign: Align = Align.CENTER,
         var textSize: Double = 0.0,
-        var fontName: String = "",
+        var fontName: String = DEFAULT_FONT_NAME,
         var fillRule: FillRule = FillRule.EVEN_ODD,
         var strokeWidth: Double = 0.0,
         var strokeCap: Cap = Cap.BUTT
 ) {
 
     val font: String
-        get() = "${textSize}px $fontName"
+        get() = "${textSize.toInt()}px $validFontName"
 
     val isFill: Boolean
         get() = (style == Style.FILL) or (style == Style.FILL_AND_STROKE)
@@ -29,10 +29,18 @@ data class Paint(
     val isStroke: Boolean
         get() = (style == Style.STROKE) or (style == Style.FILL_AND_STROKE)
 
+    private val validFontName: String
+        get() = if (fontName.isBlank()) DEFAULT_FONT_NAME else fontName
+
     enum class Style {
         FILL,
         STROKE,
         FILL_AND_STROKE
+    }
+
+    companion object {
+
+        private const val DEFAULT_FONT_NAME = "arial"
     }
 
     enum class Align(val canvasTextAlign: CanvasTextAlign) {

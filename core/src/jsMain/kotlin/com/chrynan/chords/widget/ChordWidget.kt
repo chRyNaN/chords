@@ -34,89 +34,51 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         ChordView {
 
     override var chord: Chord? = null
-        set(value) {
-            field = value
-            requestLayout()
-            invalidate()
-        }
 
     override var chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART
-        set(value) {
-            field = value
-            requestLayout()
-            invalidate()
-        }
 
     override var fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT
-        set(value) {
-            field = value
-            requestLayout()
-            invalidate()
-        }
+
     override var showFretNumbers = ChordView.DEFAULT_SHOW_FRET_NUMBERS
-        set(value) {
-            field = value
-            requestLayout()
-            invalidate()
-        }
+
     override var showFingerNumbers = ChordView.DEFAULT_SHOW_FINGER_NUMBERS
-        set(value) {
-            field = value
-            invalidate()
-        }
+
     override var stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE
-        set(value) {
-            field = value
-            requestLayout()
-            invalidate()
-        }
+
     override var mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT
-        set(value) {
-            field = value
-            invalidate()
-        }
+
     override var openStringText: String = ChordView.DEFAULT_OPEN_TEXT
-        set(value) {
-            field = value
-            invalidate()
-        }
 
     override var fretColor = DEFAULT_COLOR
         set(value) {
             field = value
             fretPaint.fillColor = value.toHexColor()
-            invalidate()
         }
     override var fretLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
             fretLabelTextPaint.fillColor = value.toHexColor()
-            invalidate()
         }
     override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
             stringPaint.fillColor = value.toHexColor()
-            invalidate()
         }
     override var stringLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
             stringLabelTextPaint.fillColor = value.toHexColor()
-            invalidate()
         }
     override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
             notePaint.fillColor = value.toHexColor()
             barLinePaint.fillColor = value.toHexColor()
-            invalidate()
         }
     override var noteLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
             noteLabelTextPaint.fillColor = value.toHexColor()
-            invalidate()
         }
 
     private val fretPaint = Paint().apply {
@@ -227,13 +189,6 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         val actualWidth = if (fitToHeight) minSideSize * (2f / 3f) else absoluteWidth
         val actualHeight = if (fitToHeight) minSideSize else absoluteHeight
 
-        // Center everything
-        drawingBounds.set(
-                left = (absoluteWidth - actualWidth) / 2,
-                top = (absoluteHeight - actualHeight) / 2,
-                right = (absoluteWidth - actualWidth) / 2 + actualWidth,
-                bottom = (absoluteHeight - actualHeight) / 2 + actualHeight)
-
         // Give some space for the labels
         val horizontalExtraCount = if (showFretNumbers) 1 else 0
         val verticalExtraCount = if (showBottomStringLabels) 2 else 1
@@ -252,6 +207,16 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         fretMarkerSize = stringSize
 
         fretSize = round((actualHeight - (noteSize * verticalExtraCount) - (fretCount + 1) * fretMarkerSize) / fretCount)
+
+        val drawingWidth = noteSize * (chart.stringCount + 1 + horizontalExtraCount)
+        val drawingHeight = (fretSize * fretCount) + (noteSize * (1 + verticalExtraCount))
+
+        // Center everything
+        drawingBounds.set(
+                left = (absoluteWidth - drawingWidth) / 2,
+                top = (absoluteHeight - drawingHeight) / 2,
+                right = (absoluteWidth - drawingWidth) / 2 + drawingWidth,
+                bottom = (absoluteHeight - drawingHeight) / 2 + drawingHeight)
 
         // The actual chart bounds
         chartBounds.set(
