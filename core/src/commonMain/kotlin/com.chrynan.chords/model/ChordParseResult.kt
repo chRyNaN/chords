@@ -8,6 +8,7 @@ import com.chrynan.chords.parser.ChordParser
  * @author chRyNaN
  */
 data class ChordParseResult(
+        val chord: Chord,
         val stringLabels: Set<StringLabel> = emptySet(),
-        val chord: Chord? = null
+        val baseFret: FretNumber? = null
 )
