@@ -370,6 +370,15 @@ val chord = arguments?.getChord(KEY_CHORD)
 val chart = arguments?.getChordChart(KEY_CHART)
 ```
 
+**Intent:**
+```kotlin
+intent.putChord(KEY_CHORD, chord)
+intent.putChordChart(KEY_CHART, chart)
+
+val chord = intent.getChordExtra(KEY_CHORD)
+val chart = intent.getChordChartExtra(KEY_CHART)
+```
+
 There is also a convenience `ChordAndChart` class (with similar Parcelable extension functions) for when both a `Chord` and a `ChordChart` need to be passed between Android components together.
 
 ```kotlin
@@ -382,15 +391,6 @@ arguments?.getChordAndChart(KEY_CHORD_AND_CHART)
 // Intent
 intent.putChordAndChartExtra(KEY_CHORD_AND_CHART, chordAndChart)
 intent.getChordAndChartExtra(KEY_CHORD_AND_CHART)
-```
-
-**Intent:**
-```kotlin
-intent.putChord(KEY_CHORD, chord)
-intent.putChordChart(KEY_CHART, chart)
-
-val chord = intent.getChordExtra(KEY_CHORD)
-val chart = intent.getChordChartExtra(KEY_CHART)
 ```
 
 ### Samples
