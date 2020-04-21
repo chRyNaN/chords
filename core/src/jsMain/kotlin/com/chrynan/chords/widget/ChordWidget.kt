@@ -3,10 +3,7 @@ package com.chrynan.chords.widget
 import com.chrynan.chords.graphics.Paint
 import com.chrynan.chords.graphics.Point
 import com.chrynan.chords.graphics.Rect
-import com.chrynan.chords.model.Chord
-import com.chrynan.chords.model.ChordChart
-import com.chrynan.chords.model.ColorInt
-import com.chrynan.chords.model.StringLabelState
+import com.chrynan.chords.model.*
 import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
 import org.w3c.dom.CanvasRenderingContext2D
@@ -52,33 +49,33 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     override var fretColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretPaint.fillColor = value.toHexColor()
+            fretPaint.fillColor = value.toRgbaColor()
         }
-    override var fretLabelTextColor = DEFAULT_TEXT_COLOR
+    override var fretLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretLabelTextPaint.fillColor = value.toHexColor()
+            fretLabelTextPaint.fillColor = value.toRgbaColor()
         }
     override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringPaint.fillColor = value.toHexColor()
+            stringPaint.fillColor = value.toRgbaColor()
         }
     override var stringLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringLabelTextPaint.fillColor = value.toHexColor()
+            stringLabelTextPaint.fillColor = value.toRgbaColor()
         }
     override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
-            notePaint.fillColor = value.toHexColor()
-            barLinePaint.fillColor = value.toHexColor()
+            notePaint.fillColor = value.toRgbaColor()
+            barLinePaint.fillColor = value.toRgbaColor()
         }
     override var noteLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            noteLabelTextPaint.fillColor = value.toHexColor()
+            noteLabelTextPaint.fillColor = value.toRgbaColor()
         }
 
     private val fretPaint = Paint().apply {
@@ -90,7 +87,7 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     }
     private val stringPaint = Paint().apply {
         style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.BUTT
+        strokeCap = Paint.Cap.ROUND
     }
     private val stringLabelTextPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
@@ -157,6 +154,17 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
             field = value
             noteLabelTextPaint.textSize = value
         }
+
+    init {
+        // This setting of values seems redundant since the values are initialized above but the
+        // setters aren't being called upon first initialization. So this is necessary.
+        noteColor = DEFAULT_COLOR
+        noteLabelTextColor = DEFAULT_TEXT_COLOR
+        stringColor = DEFAULT_COLOR
+        stringLabelTextColor = DEFAULT_COLOR
+        fretColor = DEFAULT_COLOR
+        fretLabelTextColor = DEFAULT_COLOR
+    }
 
     override fun onMeasure(width: Int, height: Int) {
         calculateSize(width = width, height = height)
@@ -252,9 +260,9 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
 
         for (i in 0..fretCount) {
             fretLineRects.add(Rect(
-                    left = chartBounds.left,
+                    left = chartBounds.left - (stringSize / 2),
                     top = chartBounds.top + i * fretSize + i * fretMarkerSize,
-                    right = chartBounds.right - stringSize,
+                    right = chartBounds.right - (stringSize / 2),
                     bottom = chartBounds.top + i * fretSize + i * fretMarkerSize))
         }
     }
@@ -293,12 +301,13 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
                 val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
                         (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
                 val bottom = top + noteSize
+                val text = if (bar.finger === Finger.UNKNOWN) "" else bar.finger.toString()
                 val textX = left + (right - left) / 2
-                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, bar.finger.name, noteLabelTextPaint)
+                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, text, noteLabelTextPaint)
 
                 barLinePaths.add(
                         BarPosition(
-                                text = bar.finger.position.toString(),
+                                text = text,
                                 textX = textX,
                                 textY = textY,
                                 left = left,
@@ -317,14 +326,15 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
                 val relativeFretNumber = note.fret.number - (chart.fretStart.number - 1)
                 val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
                 val startCenterY = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
+                val text = if (note.finger === Finger.UNKNOWN) "" else note.finger.toString()
 
                 notePositions.add(
                         NotePosition(
-                                text = note.finger.toString(),
+                                text = text,
                                 circleX = startCenterX,
                                 circleY = startCenterY,
                                 textX = startCenterX,
-                                textY = getVerticalCenterTextPosition(startCenterY, note.finger.toString(), noteLabelTextPaint)))
+                                textY = getVerticalCenterTextPosition(startCenterY, text, noteLabelTextPaint)))
             }
         }
     }
@@ -402,7 +412,7 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     private fun drawBars(canvas: CanvasRenderingContext2D) {
         // Bars
         barLinePaths.forEach {
-            val cornerRadius = min((it.bottom - it.top), (it.bottom - it.top))
+            val cornerRadius = min((it.right - it.left), (it.bottom - it.top)) / 2
 
             // Draw Bar
             canvas.drawRoundRect(it.left, it.top, it.right, it.bottom, cornerRadius, barLinePaint)

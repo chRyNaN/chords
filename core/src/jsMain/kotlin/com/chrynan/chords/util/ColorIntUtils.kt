@@ -6,8 +6,8 @@ interface Color {
 
     companion object {
 
-        val BLACK = HexColor(colorInt = -0x1000000)
-        val WHITE = HexColor(colorInt = -0x1)
+        val BLACK = rgba(red = 0, green = 0, blue = 0, alpha = 255)
+        val WHITE = rgba(red = 255, green = 255, blue = 255, alpha = 255)
     }
 
     val colorInt: ColorInt
@@ -20,29 +20,78 @@ inline class RgbaColor(override val colorInt: ColorInt) : Color {
     override val value: String
         get() = toString()
 
-    override fun toString(): String = "rgba(${colorInt.red}, ${colorInt.green}, ${colorInt.blue}, ${colorInt.alpha})"
+    private val alpha: Int
+        get() = (colorInt shr 24) and 0xff
+
+    private val red: Int
+        get() = (colorInt shr 16) and 0xff
+
+    private val green: Int
+        get() = (colorInt shr 8) and 0xff
+
+    private val blue: Int
+        get() = colorInt and 0xff
+
+    override fun toString(): String = "rgba($red, $green, $blue, $alpha)"
 }
 
-inline class HexColor(override val colorInt: ColorInt) : Color {
+inline class HexString(val value: String) {
 
-    override val value: String
-        get() = toString()
+    companion object {
 
-    override fun toString(): String = colorInt.toString(16).padStart(6, '0')
+        const val BIT_COUNT = 16
+        const val HEX_CHAR = '#'
+        const val HEX_CHAR_LOCATION = 0
+        const val LENGTH_WITHOUT_ALPHA = 7
+        const val LENGTH_WITH_ALPHA = 9
+        private const val REGEX_PATTERN = "^#?[0-9A-Fa-f]+\$"
+
+        val REGEX = Regex(REGEX_PATTERN)
+    }
+
+    override fun toString(): String = if (value.startsWith(HEX_CHAR)) value else "#$value"
 }
-
-val ColorInt.alpha: Int
-    get() = (this shr 24) and 0xff
-
-val ColorInt.red: Int
-    get() = (this shr 16) and 0xff
-
-val ColorInt.green: Int
-    get() = (this shr 8) and 0xff
-
-val ColorInt.blue: Int
-    get() = this and 0xff
 
 fun ColorInt.toRgbaColor(): RgbaColor = RgbaColor(colorInt = this)
 
-fun ColorInt.toHexColor(): HexColor = HexColor(colorInt = this)
+fun Int.coerceInSRGBColorRange(): Int = this.coerceIn(0, 255)
+
+fun rgba(red: Int, green: Int, blue: Int, alpha: Int = -0x1000000): RgbaColor {
+    val a = alpha.coerceInSRGBColorRange()
+    val r = red.coerceInSRGBColorRange()
+    val g = green.coerceInSRGBColorRange()
+    val b = blue.coerceInSRGBColorRange()
+
+    val colorInt = ((a and 0xff) shl 24) or
+            ((r and 0xff) shl 16) or
+            ((g and 0xff) shl 8) or
+            (b and 0xff)
+
+    return RgbaColor(colorInt)
+}
+
+fun hex(hexString: HexString): RgbaColor {
+    require(HexString.REGEX.matches(hexString.value))
+
+    val hexValue = hexString.value
+
+    val hexStringInt = if (hexValue[HexString.HEX_CHAR_LOCATION] == HexString.HEX_CHAR) {
+        hexValue.subSequence(
+                startIndex = 1,
+                endIndex = hexValue.length
+        ).toString()
+    } else {
+        hexValue
+    }
+
+    var colorInt = hexStringInt.toInt(radix = HexString.BIT_COUNT)
+
+    if (hexStringInt.length == HexString.LENGTH_WITHOUT_ALPHA) {
+        // Set the alpha value
+        colorInt = colorInt or -0x1000000
+    } else if (hexStringInt.length != HexString.LENGTH_WITH_ALPHA) {
+        throw IllegalArgumentException("Unknown color from hex value.")
+    }
+
+    return RgbaColor(colorInt)
+}

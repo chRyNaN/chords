@@ -9,12 +9,12 @@ fun CanvasRenderingContext2D.drawText(text: String, x: Double, y: Double, paint:
     this.textAlign = paint.textAlign.canvasTextAlign
 
     if (paint.isFill) {
-        this.fillStyle = paint.fillColor
+        this.setFillColor(paint.fillColor)
         this.fillText(text, x, y)
     }
 
     if (paint.isStroke) {
-        this.strokeStyle = paint.strokeColor
+        this.setStrokeColor(paint.strokeColor)
         this.lineWidth = paint.strokeWidth
         this.lineCap = paint.strokeCap.canvasLineCap
         this.strokeText(text, x, y)
@@ -24,18 +24,18 @@ fun CanvasRenderingContext2D.drawText(text: String, x: Double, y: Double, paint:
 fun CanvasRenderingContext2D.drawCircle(cx: Double, cy: Double, radius: Double, paint: Paint) {
     if (paint.isFill) {
         this.beginPath()
+        this.setFillColor(paint.fillColor)
         this.arc(cx, cy, radius, 0.0, 2 * kotlin.math.PI)
-        this.fillStyle = paint.fillColor
         this.closePath()
         this.fill(paint.fillRule.canvasFillRule)
     }
 
     if (paint.isStroke) {
         this.beginPath()
-        this.arc(cx, cy, radius, 0.0, 2 * kotlin.math.PI)
-        this.strokeStyle = paint.strokeColor
+        this.setStrokeColor(paint.strokeColor)
         this.lineWidth = paint.strokeWidth
         this.lineCap = paint.strokeCap.canvasLineCap
+        this.arc(cx, cy, radius, 0.0, 2 * kotlin.math.PI)
         this.closePath()
         this.stroke()
     }
@@ -64,12 +64,12 @@ fun CanvasRenderingContext2D.drawRoundRect(left: Double, top: Double, right: Dou
     this.closePath()
 
     if (paint.isFill) {
-        this.fillStyle = paint.fillColor
+        this.setFillColor(paint.fillColor)
         this.fill(paint.fillRule.canvasFillRule)
     }
 
     if (paint.isStroke) {
-        this.strokeStyle = paint.strokeColor
+        this.setStrokeColor(paint.strokeColor)
         this.lineWidth = paint.strokeWidth
         this.lineCap = paint.strokeCap.canvasLineCap
         this.stroke()
@@ -83,12 +83,12 @@ fun CanvasRenderingContext2D.drawLine(rect: Rect, paint: Paint) {
     this.closePath()
 
     if (paint.isFill) {
-        this.fillStyle = paint.fillColor
+        this.setFillColor(paint.fillColor)
         this.fill(paint.fillRule.canvasFillRule)
     }
 
     if (paint.isStroke) {
-        this.strokeStyle = paint.strokeColor
+        this.setStrokeColor(paint.strokeColor)
         this.lineWidth = paint.strokeWidth
         this.lineCap = paint.strokeCap.canvasLineCap
         this.stroke()
@@ -104,4 +104,12 @@ fun CanvasRenderingContext2D.drawLine(rect: Rect, paint: Paint) {
  */
 fun CanvasRenderingContext2D.clear() {
     this.clearRect(0.0, 0.0, this.canvas.width.toDouble(), this.canvas.height.toDouble())
+}
+
+fun CanvasRenderingContext2D.setStrokeColor(color: Color) {
+    this.strokeStyle = color.value
+}
+
+fun CanvasRenderingContext2D.setFillColor(color: Color) {
+    this.fillStyle = color.value
 }

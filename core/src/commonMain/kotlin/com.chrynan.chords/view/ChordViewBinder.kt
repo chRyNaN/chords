@@ -11,7 +11,7 @@ import com.chrynan.chords.model.ChordViewModel
  *
  * @author chRyNaN
  */
-class ChordViewBinder(private val view: ChordView) {
+class ChordViewBinder(val view: ChordView) {
 
     /**
      * Binds the [ChordViewModel] to the associated [ChordView] to this [ChordViewBinder] by

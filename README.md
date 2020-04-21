@@ -1,6 +1,6 @@
 # chords
 
-An easily customizable native Android View to display guitar (and other stringed instruments) chords. 
+An easily customizable Kotlin multi-platform View to display guitar (and other stringed instrument) chords. 
 Simple to use and beautifully designed.
 
 <img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-180759.png" width="300"></img>
@@ -12,9 +12,11 @@ This library has been updated significantly from it's original version and the p
 </a>
 
 ## Building the library
+
 The library is provided through [Bintray](https://bintray.com/). Checkout the [releases](https://github.com/chRyNaN/chords/releases) page to get the latest version.
 
 ### Repository
+
 ```kotlin
 repositories {
     maven {
@@ -24,6 +26,7 @@ repositories {
 ```
 
 ### Dependencies
+
 **Core Kotlin Common:**
 ```kotlin
 implementation("com.chrynan.chords:chords-core:VERSION")
@@ -34,6 +37,11 @@ implementation("com.chrynan.chords:chords-core:VERSION")
 implementation("com.chrynan.chords:chords-core-jvm:VERSION")
 ```
 
+**Core Kotlin JS:**
+```kotlin
+implementation("com.chrynan.chords:chords-core-js:VERSION")
+```
+
 **Android Library:**
 ```kotlin
 implementation("com.chrynan.chords:chords-android:VERSION")
@@ -42,11 +50,13 @@ implementation("com.chrynan.chords:chords-android:VERSION")
 ## Using the library
 There are a few main components to using the library:
 
-* `ChordWidget` is the Android View that displays the chord.
+* `ChordWidget` is the `ChordView` implementation that displays the chord.
 * `ChordChart` is a class that represents information about the chord chart that will be displayed.
 * `Chord` is a class that represents the markers on a chord that will be displayed.
 
-**Defining `ChordWidget` in XML:**
+### Creating an instance of `ChordWidget`
+
+**Android:**
 ```xml
 <!-- Specify an exact size (MATCH_PARENT, MATCH_CONSTRAINTS, DP value). -->
 <com.chrynan.chords.widget.ChordWidget
@@ -55,7 +65,13 @@ There are a few main components to using the library:
     android:layout_height="wrap_content" />
 ```
 
-**Assigning a `ChordChart` to a `ChordWidget`:**
+**Kotlin JS:**
+```kotlin
+val widget = ChordWidget(htmlCanvas)
+```
+
+### Assigning a `ChordChart` to a `ChordWidget`
+
 ```kotlin
 chordWidget?.chart = ChordChart(
                          fretStart = FretNumber(1),
@@ -70,7 +86,8 @@ chordWidget?.chart = ChordChart(
                              StringLabel(string = StringNumber(6), label = "E")))
 ```
 
-**Creating a Chord using the DSL:**
+### Creating a Chord using the DSL
+
 ```kotlin
 val chord = chord("G") {
             +ChordMarker.Note(
@@ -98,7 +115,8 @@ val chord = chord("G") {
         }
 ```
 
-**Assigning a `Chord` to a `ChordWidget`:**
+### Assigning a `Chord` to a `ChordWidget`
+
 ```kotlin
 chordWidget?.chord = chord
 ```
@@ -107,6 +125,7 @@ chordWidget?.chord = chord
 It's important for the user of the library to properly handle coordinating the different components.
 
 ### Parsing Chords from other formats
+
 The `ChordParser` interface takes in an input type and outputs a `ChordParseResult`. This interface can be implemented for different format input types. There are a couple provided `ChordParser` implementations.
 
 **AsciiChordParser:**
@@ -136,6 +155,7 @@ launch {
 ```
 
 ### Customizing the appearance
+
 `ChordWidget` implements the `ChordView` interface which contains properties to alter the appearance of the view.
 
 **ChordView:**
@@ -178,6 +198,8 @@ chordWidget?.noteColor = Color.BLUE
 chordWidget?.openStringText = "o"
 ```
 
+**Note:** That in Kotlin JS, you have to explicitly call the `render()` function after updating properties on the `ChordWidget`.
+
 **Updating properties using a ViewModel and Binder:**
 ```kotlin
 val binder = ChordViewBinder(chordWidget)
@@ -193,7 +215,9 @@ val viewModel = ChordViewModel(
 binder.bind(viewModel)
 ```
 
-**Updating properties in XML:**
+**Note:** That in Kotlin JS, there is a convenience function `ChordViewBinder.bindAndRender()` which will bind the properties from the `ChordViewModel` to the `ChordWidget` and call `render()`.
+
+**Updating properties in Android XML:**
 ```xml
 <com.chrynan.chords.widget.ChordWidget
         android:id="@+id/chordWidget"
@@ -203,7 +227,7 @@ binder.bind(viewModel)
         app:showFretNumbers="false"/>
 ```
 
-**Available XML Attributes:**
+**Available Android XML Attributes:**
 ```xml
 <attr name="fretColor" format="color"/>
 <attr name="fretLabelTextColor" format="color"/>
@@ -226,7 +250,8 @@ binder.bind(viewModel)
 <attr name="stringLabelTypeface" format="reference"/>
 ```
 
-### Selectable Chord names in Text
+### Selectable Chord names in Text using Android Spans
+
 The library comes with a `ChordSpan` which allows the pairing of text with a `Chord`. And when the `ChordSpan` is selected, a listener is alerted with the `Chord`.
 
 **Adding a `ChordSpan` to a `TextView`:**
@@ -290,7 +315,8 @@ These properties can be changed on the span:
 span.textColor = Color.RED
 ```
 
-### Passing Chords between components
+### Passing Chords between Android components
+
 The model classes are not `Parcelable` because they are in a Kotlin multi-platform module and don't have access to Android Framework classes. But the Android library module does have wrapper classes that handle the serialization and de-serialization of the `Chord` and `ChordChart` models.
 
 These classes are `ParcelableChordWrapper` and `ParcelableChartWrapper`. To pass `Chord` and `ChordChart` between components, such as, in a Bundle, just wrap them with their respective wrapper models.
@@ -345,10 +371,12 @@ val chord = intent.getChordExtra(KEY_CHORD)
 val chart = intent.getChordChartExtra(KEY_CHART)
 ```
 
-### Sample
-Checkout the `sample` module for a full example on using the library.
+### Samples
+
+Checkout the sample modules for examples on using the library.
 
 ## License
+
 ```
 Copyright 2020 chRyNaN
 

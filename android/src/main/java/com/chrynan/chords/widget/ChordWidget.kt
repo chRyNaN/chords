@@ -7,6 +7,7 @@ import android.view.View
 import com.chrynan.chords.R
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
+import com.chrynan.chords.model.Finger
 import com.chrynan.chords.model.StringLabelState
 import com.chrynan.chords.util.getTypeface
 import com.chrynan.chords.view.ChordView
@@ -427,12 +428,13 @@ class ChordWidget : View,
                 val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
                         (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
                 val bottom = top + noteSize
+                val text = if (bar.finger === Finger.UNKNOWN) "" else bar.finger.toString()
                 val textX = left + (right - left) / 2
-                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, bar.finger.name, noteLabelTextPaint)
+                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, text, noteLabelTextPaint)
 
                 barLinePaths.add(
                         BarPosition(
-                                text = bar.finger.position.toString(),
+                                text = text,
                                 textX = textX,
                                 textY = textY,
                                 left = left,
@@ -451,14 +453,15 @@ class ChordWidget : View,
                 val relativeFretNumber = note.fret.number - (chart.fretStart.number - 1)
                 val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
                 val startCenterY = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
+                val text = if (note.finger === Finger.UNKNOWN) "" else note.finger.toString()
 
                 notePositions.add(
                         NotePosition(
-                                text = note.finger.toString(),
+                                text = text,
                                 circleX = startCenterX,
                                 circleY = startCenterY,
                                 textX = startCenterX,
-                                textY = getVerticalCenterTextPosition(startCenterY, note.finger.toString(), noteLabelTextPaint)))
+                                textY = getVerticalCenterTextPosition(startCenterY, text, noteLabelTextPaint)))
             }
         }
     }
