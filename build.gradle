@@ -3,8 +3,8 @@ ext {
     libraryGroup = 'com.chrynan.chords'
     libraryOwner = 'chrynan'
     libraryRepo = 'chords'
-    libraryVersion = '2.2.0'
-    libraryVersionCode = 3
+    libraryVersion = '2.3.1'
+    libraryVersionCode = 4
     libraryVersionDescription = 'Second Major Release'
 }
 
