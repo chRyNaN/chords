@@ -130,7 +130,7 @@ class ChordProParser : ChordParser<String> {
     }
 
     private fun getMarkers(frets: List<FretNumber>, fingers: List<Finger>): Set<ChordMarker> =
-            frets.mapIndexed { index, fretNumber ->
+            frets.mapIndexed<FretNumber, ChordMarker> { index, fretNumber ->
                 // Frets are in order starting from the lowest String in tone to the highest. This means it's opposite of
                 // the actual String value.
                 val stringInt = frets.size - index
