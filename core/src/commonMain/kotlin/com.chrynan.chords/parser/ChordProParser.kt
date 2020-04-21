@@ -35,7 +35,7 @@ class ChordProParser : ChordParser<String> {
 
     // This is probably not the most optimized implementation
     override suspend fun parse(input: String): ChordParseResult {
-        val formattedInput = input.removeSurrounding(prefix = "{", suffix = "}").removeSurrounding(prefix = "[", suffix = "]")
+        val formattedInput = input.removeSurrounding(prefix = "{", suffix = "}").removeSurrounding(prefix = "[", suffix = "]").trim()
         val containsDefine = formattedInput.contains(DEFINE, true)
         val containsChord = formattedInput.contains(CHORD, true)
 

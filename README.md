@@ -132,7 +132,7 @@ The `ChordParser` interface takes in an input type and outputs a `ChordParseResu
 
 `AsciiChordParser` parses a `String` input of an ASCII Chord Diagram and outputs a `ChordParseResult` containing a `Chord`.
 
-```
+```kotlin
 val chordDiagram = """
             C
     e |-----0------|
@@ -149,8 +149,30 @@ launch {
     // parse() is a suspending function and needs to be called from another suspending
     // function or a coroutine
     val result = parser.parse(chordDiagram)
-    val chord = result.chord
-    val stringLabels = result.stringLabels
+
+    val chord: Chord = result.chord
+    val stringLabels: Set<StringLabel> = result.stringLabels
+    val baseFret: FretNumber? = result.baseFret
+}
+```
+
+**ChordProParser:**
+
+`ChordProParser` parses a `String` input of a Chord Pro (Chord or Define) Directive and outputs a `ChordParseResult` containing a `Chord`.
+
+```kotlin
+val chordDiagram = "{define: Bes base-fret 1 frets 1 1 3 3 3 1 fingers 1 1 2 3 4 1}"
+
+val parser = ChordProParser()
+
+launch {
+    // parse() is a suspending function and needs to be called from another suspending
+    // function or a coroutine
+    val result = parser.parse(chordDiagram)
+    
+    val chord: Chord = result.chord
+    val stringLabels: Set<StringLabel> = result.stringLabels
+    val baseFret: FretNumber? = result.baseFret
 }
 ```
 
