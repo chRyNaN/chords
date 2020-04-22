@@ -3,10 +3,16 @@ package com.chrynan.chords.compose.widget
 import android.graphics.*
 import android.text.TextPaint
 import androidx.compose.Composable
-import androidx.ui.core.Draw
-import androidx.ui.core.PxSize
+import androidx.ui.core.*
+import androidx.ui.graphics.PaintingStyle
+import androidx.ui.graphics.StrokeCap
+import androidx.ui.layout.Container
 import androidx.ui.tooling.preview.Preview
+import com.chrynan.chords.compose.util.drawCircle
+import com.chrynan.chords.compose.util.drawLine
+import com.chrynan.chords.compose.util.drawRoundRect
 import com.chrynan.chords.model.*
+import com.chrynan.chords.util.fretCount
 import kotlin.math.min
 import kotlin.math.round
 
@@ -45,104 +51,112 @@ fun test() {
 fun ChordWidget(
         chord: Chord,
         chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART,
-        viewModel: ChordViewModel = DEFAULT_CHORD_VIEW_MODEL
+        viewModel: ChordViewModel = DEFAULT_CHORD_VIEW_MODEL,
+        size: Size = Size(width = 300.dp, height = 600.dp)
 ) {
-    val fretPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.ROUND
+    val fretPaint = androidx.ui.graphics.Paint().apply {
+        isAntiAlias = true
+        style = PaintingStyle.stroke
+        strokeCap = StrokeCap.round
     }
     val fretLabelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
-    val stringPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.BUTT
+    val stringPaint = androidx.ui.graphics.Paint().apply {
+        isAntiAlias = true
+        style = PaintingStyle.stroke
+        strokeCap = StrokeCap.butt
     }
     val stringLabelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
-    val notePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val notePaint = androidx.ui.graphics.Paint().apply {
+        isAntiAlias = true
+    }
     val noteLabelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
-    val barLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
+    val barLinePaint = androidx.ui.graphics.Paint().apply {
+        isAntiAlias = true
+        style = PaintingStyle.fill
     }
 
-    Draw { canvas: androidx.ui.graphics.Canvas, parentSize: PxSize ->
-        val size = calculateSize(
-                measuredWidth = parentSize.width.value,
-                measuredHeight = parentSize.height.value,
-                paddingLeft = 0f,
-                paddingTop = 0f,
-                paddingRight = 0f,
-                paddingBottom = 0f,
-                viewModel = viewModel,
-                chart = chart)
+    Container(width = size.width, height = size.height) {
+        Draw { canvas: androidx.ui.graphics.Canvas, parentSize: PxSize ->
+            val chordWidgetSize: ChordWidgetSize = calculateSize(
+                    measuredWidth = parentSize.width.value,
+                    measuredHeight = parentSize.height.value,
+                    paddingLeft = 0f,
+                    paddingTop = 0f,
+                    paddingRight = 0f,
+                    paddingBottom = 0f,
+                    viewModel = viewModel,
+                    chart = chart)
 
-        val barLinePaths = calculateBarLinePositions(
-                chord = chord,
-                chart = chart,
-                size = size,
-                noteLabelTextPaint = noteLabelTextPaint)
-        val fretNumberPoints = calculateFretNumberPositions(
-                chart = chart,
-                size = size,
-                fretLabelTextPaint = fretLabelTextPaint)
-        val fretLineRects = calculateFretPositions(
-                size = size,
-                chart = chart)
-        val notePositions = calculateNotePositions(
-                chord = chord,
-                chart = chart,
-                size = size,
-                noteLabelTextPaint = noteLabelTextPaint)
-        val stringBottomLabelPositions = calculateBottomStringLabels(
-                chart = chart,
-                size = size,
-                stringLabelTextPaint = stringLabelTextPaint,
-                viewModel = viewModel)
-        val stringTopMarkerPositions = calculateTopStringLabels(
-                chord = chord,
-                chart = chart,
-                size = size,
-                stringLabelTextPaint = stringLabelTextPaint,
-                viewModel = viewModel)
-        val stringLineRects = calculateStringPositions(
-                chart = chart,
-                size = size)
+            val barLinePaths: List<BarPosition> = calculateBarLinePositions(
+                    chord = chord,
+                    chart = chart,
+                    size = chordWidgetSize,
+                    noteLabelTextPaint = noteLabelTextPaint)
+            val fretNumberPoints: List<PointF> = calculateFretNumberPositions(
+                    chart = chart,
+                    size = chordWidgetSize,
+                    fretLabelTextPaint = fretLabelTextPaint)
+            val fretLineRects: List<androidx.ui.engine.geometry.Rect> = calculateFretPositions(
+                    size = chordWidgetSize,
+                    chart = chart)
+            val notePositions: List<NotePosition> = calculateNotePositions(
+                    chord = chord,
+                    chart = chart,
+                    size = chordWidgetSize,
+                    noteLabelTextPaint = noteLabelTextPaint)
+            val stringBottomLabelPositions: List<StringPosition> = calculateBottomStringLabels(
+                    chart = chart,
+                    size = chordWidgetSize,
+                    stringLabelTextPaint = stringLabelTextPaint,
+                    viewModel = viewModel)
+            val stringTopMarkerPositions: List<StringPosition> = calculateTopStringLabels(
+                    chord = chord,
+                    chart = chart,
+                    size = chordWidgetSize,
+                    stringLabelTextPaint = stringLabelTextPaint,
+                    viewModel = viewModel)
+            val stringLineRects: List<androidx.ui.engine.geometry.Rect> = calculateStringPositions(
+                    chart = chart,
+                    size = chordWidgetSize)
 
-        // First draw the strings and fret markers
-        fretLineRects.forEach { canvas.nativeCanvas.drawLine(it, fretPaint) }
-        stringLineRects.forEach { canvas.nativeCanvas.drawLine(it, stringPaint) }
+            // First draw the strings and fret markers
+            fretLineRects.forEach { canvas.drawLine(it, fretPaint) }
+            stringLineRects.forEach { canvas.drawLine(it, stringPaint) }
 
-        // Next draw the fret numbers and string markers
-        drawFretNumbers(
-                canvas = canvas,
-                showFretNumbers = viewModel.showFretNumbers,
-                fretNumberPoints = fretNumberPoints,
-                chart = chart,
-                fretLabelTextPaint = fretLabelTextPaint)
-        drawStringMarkers(
-                canvas = canvas,
-                stringTopMarkerPositions = stringTopMarkerPositions,
-                stringBottomLabelPositions = stringBottomLabelPositions,
-                stringLabelTextPaint = stringLabelTextPaint)
+            // Next draw the fret numbers and string markers
+            drawFretNumbers(
+                    canvas = canvas,
+                    showFretNumbers = viewModel.showFretNumbers,
+                    fretNumberPoints = fretNumberPoints,
+                    chart = chart,
+                    fretLabelTextPaint = fretLabelTextPaint)
+            drawStringMarkers(
+                    canvas = canvas,
+                    stringTopMarkerPositions = stringTopMarkerPositions,
+                    stringBottomLabelPositions = stringBottomLabelPositions,
+                    stringLabelTextPaint = stringLabelTextPaint)
 
-        // Finally, draw all the notes and the note text
-        drawBars(
-                canvas = canvas,
-                barLinePaths = barLinePaths,
-                barLinePaint = barLinePaint,
-                showFingerNumbers = viewModel.showFingerNumbers,
-                noteLabelTextPaint = noteLabelTextPaint)
-        drawNotes(
-                canvas = canvas,
-                notePositions = notePositions,
-                showFingerNumbers = viewModel.showFingerNumbers,
-                noteSize = size.noteSize,
-                notePaint = notePaint,
-                noteLabelTextPaint = noteLabelTextPaint)
+            // Finally, draw all the notes and the note text
+            drawBars(
+                    canvas = canvas,
+                    barLinePaths = barLinePaths,
+                    barLinePaint = barLinePaint,
+                    showFingerNumbers = viewModel.showFingerNumbers,
+                    noteLabelTextPaint = noteLabelTextPaint)
+            drawNotes(
+                    canvas = canvas,
+                    notePositions = notePositions,
+                    showFingerNumbers = viewModel.showFingerNumbers,
+                    noteSize = chordWidgetSize.noteSize,
+                    notePaint = notePaint,
+                    noteLabelTextPaint = noteLabelTextPaint)
+        }
     }
 }
 
@@ -227,15 +241,15 @@ internal fun calculateSize(
 internal fun calculateFretPositions(
         chart: ChordChart,
         size: ChordWidgetSize
-): List<RectF> {
-    val fretLineRects = mutableListOf<RectF>()
+): List<androidx.ui.engine.geometry.Rect> {
+    val fretLineRects = mutableListOf<androidx.ui.engine.geometry.Rect>()
 
     for (i in 0..chart.fretCount) {
-        fretLineRects.add(RectF(
-                size.chartBounds.left,
-                size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize,
-                size.chartBounds.right - size.stringSize,
-                size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize))
+        fretLineRects.add(androidx.ui.engine.geometry.Rect(
+                left = size.chartBounds.left,
+                top = size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize,
+                right = size.chartBounds.right - size.stringSize,
+                bottom = size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize))
     }
 
     return fretLineRects
@@ -244,15 +258,15 @@ internal fun calculateFretPositions(
 internal fun calculateStringPositions(
         chart: ChordChart,
         size: ChordWidgetSize
-): List<RectF> {
-    val stringLineRects = mutableListOf<RectF>()
+): List<androidx.ui.engine.geometry.Rect> {
+    val stringLineRects = mutableListOf<androidx.ui.engine.geometry.Rect>()
 
     for (i in 0 until chart.stringCount) {
-        stringLineRects.add(RectF(
-                size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
-                size.chartBounds.top,
-                size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
-                size.chartBounds.top + chart.fretCount * size.fretSize + chart.fretCount * size.fretMarkerSize))
+        stringLineRects.add(androidx.ui.engine.geometry.Rect(
+                left = size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
+                top = size.chartBounds.top,
+                right = size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
+                bottom = size.chartBounds.top + chart.fretCount * size.fretSize + chart.fretCount * size.fretMarkerSize))
     }
 
     return stringLineRects
@@ -404,7 +418,7 @@ internal fun drawFretNumbers(
     // Fret numbers; check if we are showing them or not
     if (showFretNumbers) {
         fretNumberPoints.forEachIndexed { index, point ->
-            canvas.nativeCanvas.drawText((chart.fretStart.number + index).toString(), point.x, point.y, fretLabelTextPaint)
+            //canvas.nativeCanvas.drawText((chart.fretStart.number + index).toString(), point.x, point.y, fretLabelTextPaint)
         }
     }
 }
@@ -416,27 +430,27 @@ internal fun drawStringMarkers(
         stringLabelTextPaint: TextPaint
 ) {
     // Top String markers (open/muted)
-    stringTopMarkerPositions.forEach { canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+    //stringTopMarkerPositions.forEach { canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
 
     // Bottom String labels (number/note)
-    stringBottomLabelPositions.forEach { canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+    //stringBottomLabelPositions.forEach { canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
 }
 
 internal fun drawBars(
         canvas: androidx.ui.graphics.Canvas,
         barLinePaths: List<BarPosition>,
-        barLinePaint: Paint,
+        barLinePaint: androidx.ui.graphics.Paint,
         showFingerNumbers: Boolean,
         noteLabelTextPaint: TextPaint
 ) {
     // Bars
     barLinePaths.forEach {
         // Draw Bar
-        canvas.nativeCanvas.drawRoundRect(it.left, it.top, it.right, it.bottom, (it.bottom - it.top), (it.bottom - it.top), barLinePaint)
+        canvas.drawRoundRect(it.left, it.top, it.right, it.bottom, (it.bottom - it.top), (it.bottom - it.top), barLinePaint)
 
         // Text
         if (showFingerNumbers) {
-            canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, noteLabelTextPaint)
+            //canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, noteLabelTextPaint)
         }
     }
 }
@@ -446,15 +460,15 @@ internal fun drawNotes(
         notePositions: List<NotePosition>,
         showFingerNumbers: Boolean,
         noteSize: Float,
-        notePaint: Paint,
+        notePaint: androidx.ui.graphics.Paint,
         noteLabelTextPaint: TextPaint
 ) {
     //Individual notes
     notePositions.forEach {
-        canvas.nativeCanvas.drawCircle(it.circleX, it.circleY, noteSize / 2f, notePaint)
+        canvas.drawCircle(x = it.circleX, y = it.circleY, radius = noteSize / 2f, paint = notePaint)
 
         if (showFingerNumbers) {
-            canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, noteLabelTextPaint)
+            //canvas.nativeCanvas.drawText(it.text, it.textX, it.textY, noteLabelTextPaint)
         }
     }
 }
@@ -465,12 +479,6 @@ internal fun getVerticalCenterTextPosition(originalYPosition: Float, text: Strin
 
     return originalYPosition + bounds.height() / 2
 }
-
-internal fun Canvas.drawLine(rectF: RectF, paint: Paint) =
-        drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, paint)
-
-internal val ChordChart.fretCount: Int
-    get() = fretEnd.number - fretStart.number
 
 val DEFAULT_CHORD_VIEW_MODEL = ChordViewModel(
         fretColor = Color.BLACK,
