@@ -24,9 +24,13 @@ allprojects {
     repositories {
         google()
         jcenter()
+<<<<<<< HEAD
         maven {
             url = "https://dl.bintray.com/chrynan/chrynan"
         }
+=======
+        mavenCentral()
+>>>>>>> Setup ios
     }
 }
 
