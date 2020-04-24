@@ -24,13 +24,10 @@ allprojects {
     repositories {
         google()
         jcenter()
-<<<<<<< HEAD
+        mavenCentral()
         maven {
             url = "https://dl.bintray.com/chrynan/chrynan"
         }
-=======
-        mavenCentral()
->>>>>>> Setup ios
     }
 }
 
