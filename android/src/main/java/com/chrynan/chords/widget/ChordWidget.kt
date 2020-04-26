@@ -2,14 +2,17 @@ package com.chrynan.chords.widget
 
 import android.content.Context
 import android.graphics.*
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import com.chrynan.chords.R
-import com.chrynan.chords.model.Chord
-import com.chrynan.chords.model.ChordChart
-import com.chrynan.chords.model.Finger
-import com.chrynan.chords.model.StringLabelState
+import com.chrynan.chords.model.*
+import com.chrynan.chords.parcel.ChordChartParceler
+import com.chrynan.chords.parcel.ChordParceler
 import com.chrynan.chords.util.getTypeface
+import com.chrynan.chords.util.writeChord
+import com.chrynan.chords.util.writeChordChart
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FIT_TO_HEIGHT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
@@ -317,6 +320,28 @@ class ChordWidget : View,
         drawNotes(canvas)
     }
 
+    override fun onSaveInstanceState(): Parcelable? {
+        val superState = super.onSaveInstanceState() as Parcelable
+
+        val savedState = SavedState(superState)
+
+        savedState.chart = chart
+        savedState.chord = chord
+
+        return savedState
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+
+            chart = state.chart
+            chord = state.chord
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
     private fun calculateSize() {
         val absoluteWidth = measuredWidth - (paddingLeft + paddingRight).toFloat()
         val absoluteHeight = measuredHeight - (paddingTop + paddingBottom).toFloat()
@@ -573,6 +598,41 @@ class ChordWidget : View,
 
         const val DEFAULT_COLOR = Color.BLACK
         const val DEFAULT_TEXT_COLOR = Color.WHITE
+    }
+
+    private class SavedState : BaseSavedState {
+
+        companion object {
+
+            @Suppress("unused")
+            @JvmField
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+
+                override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
+
+                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
+            }
+        }
+
+        var chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART
+        var chord: Chord? = null
+
+        constructor(parcelable: Parcelable) : super(parcelable)
+
+        constructor(parcel: Parcel) : super(parcel) {
+            chart = ChordChartParceler.create(parcel)
+            chord = try {
+                ChordParceler.create(parcel)
+            } catch (throwable: Throwable) {
+                null
+            }
+        }
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            super.writeToParcel(parcel, flags)
+            parcel.writeChordChart(chart, flags)
+            chord?.let { parcel.writeChord(it, flags) }
+        }
     }
 
     private data class NotePosition(
