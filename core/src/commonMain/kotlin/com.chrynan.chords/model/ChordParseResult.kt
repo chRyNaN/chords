@@ -1,6 +1,5 @@
 package com.chrynan.chords.model
 
-import com.chrynan.chords.model.serializer.FretNumberSerializer
 import com.chrynan.chords.parser.ChordParser
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,5 +13,5 @@ import kotlinx.serialization.Serializable
 data class ChordParseResult(
     @SerialName(value = "chord") val chord: Chord,
     @SerialName(value = "string_labels") val stringLabels: Set<StringLabel> = emptySet(),
-    @SerialName(value = "base_fret") @Serializable(with = FretNumberSerializer::class) val baseFret: FretNumber? = null
+    @SerialName(value = "base_fret") val baseFret: FretNumber? = null
 )

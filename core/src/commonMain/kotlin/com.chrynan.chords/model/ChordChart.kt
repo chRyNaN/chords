@@ -2,7 +2,6 @@
 
 package com.chrynan.chords.model
 
-import com.chrynan.chords.model.serializer.FretNumberSerializer
 import com.chrynan.chords.view.ChordView
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -30,8 +29,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ChordChart(
-    @SerialName(value = "fret_start") @Serializable(with = FretNumberSerializer::class) val fretStart: FretNumber = DEFAULT_FRET_START,
-    @SerialName(value = "fret_end") @Serializable(with = FretNumberSerializer::class) val fretEnd: FretNumber = DEFAULT_FRET_END,
+    @SerialName(value = "fret_start") val fretStart: FretNumber = DEFAULT_FRET_START,
+    @SerialName(value = "fret_end") val fretEnd: FretNumber = DEFAULT_FRET_END,
     @SerialName(value = "string_count") val stringCount: Int = DEFAULT_GUITAR_STRING_COUNT,
     @SerialName(value = "string_labels") val stringLabels: Set<StringLabel> = emptySet()
 ) {

@@ -1,8 +1,6 @@
 package com.chrynan.chords.model
 
 import com.chrynan.chords.model.serializer.ChordMarkerSerializer
-import com.chrynan.chords.model.serializer.FretNumberSerializer
-import com.chrynan.chords.model.serializer.StringNumberSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -38,9 +36,9 @@ sealed class ChordMarker {
      */
     @Serializable
     data class Note(
-        @SerialName(value = "fret") @Serializable(with = FretNumberSerializer::class) override val fret: FretNumber,
+        @SerialName(value = "fret") override val fret: FretNumber,
         @SerialName(value = "finger") override val finger: Finger = Finger.UNKNOWN,
-        @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) override val string: StringNumber
+        @SerialName(value = "string") override val string: StringNumber
     ) : ChordMarker(),
         FretMarker,
         FingerMarker,
@@ -62,10 +60,10 @@ sealed class ChordMarker {
      */
     @Serializable
     data class Bar(
-        @SerialName(value = "fret") @Serializable(with = FretNumberSerializer::class) override val fret: FretNumber,
+        @SerialName(value = "fret") override val fret: FretNumber,
         @SerialName(value = "finger") override val finger: Finger = Finger.UNKNOWN,
-        @SerialName(value = "start_string") @Serializable(with = StringNumberSerializer::class) override val startString: StringNumber,
-        @SerialName(value = "end_string") @Serializable(with = StringNumberSerializer::class) override val endString: StringNumber
+        @SerialName(value = "start_string") override val startString: StringNumber,
+        @SerialName(value = "end_string") override val endString: StringNumber
     ) : ChordMarker(),
         FretMarker,
         FingerMarker,
@@ -86,7 +84,7 @@ sealed class ChordMarker {
      */
     @Serializable
     data class Open(
-        @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) override val string: StringNumber
+        @SerialName(value = "string") override val string: StringNumber
     ) : ChordMarker(),
         FretMarker,
         StringMarker {
@@ -106,7 +104,7 @@ sealed class ChordMarker {
      */
     @Serializable
     data class Muted(
-        @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) override val string: StringNumber
+        @SerialName(value = "string") override val string: StringNumber
     ) : ChordMarker(),
         StringMarker {
 

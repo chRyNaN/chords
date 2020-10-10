@@ -1,6 +1,5 @@
 package com.chrynan.chords.model
 
-import com.chrynan.chords.model.serializer.StringNumberSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,6 +16,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class StringLabel(
-    @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) val string: StringNumber,
+    @SerialName(value = "string") val string: StringNumber,
     @SerialName(value = "label") val label: String? = null
 )
