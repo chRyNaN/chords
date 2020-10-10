@@ -12,6 +12,7 @@ kotlin {
 
         }
     }
+    ios()
 
     sourceSets {
         commonMain {
@@ -55,6 +56,12 @@ publishing {
         }
         js {
             artifactId = "chords-core-js"
+        }
+        iosArm64 {
+            artifactId = "chords-core-ios-arm64"
+        }
+        iosX64 {
+            artifactId = "chords-core-ios-x64"
         }
         metadata {
             artifactId = "chords-core-metadata"

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.util
 
 import com.chrynan.chords.model.*
@@ -11,9 +13,11 @@ import kotlin.math.min
  */
 val ChordMarker.Bar.notes: Set<ChordMarker.Note>
     get() = (startString.number..endString.number).map {
-        ChordMarker.Note(finger = finger,
-                fret = fret,
-                string = StringNumber(number = it))
+        ChordMarker.Note(
+            finger = finger,
+            fret = fret,
+            string = StringNumber(number = it)
+        )
     }.toSet()
 
 /**
@@ -22,15 +26,15 @@ val ChordMarker.Bar.notes: Set<ChordMarker.Note>
  * @author chRyNaN
  */
 fun Chord.getMarkersOnString(string: StringNumber): List<ChordMarker> =
-        markers.filter {
-            when {
-                it is ChordMarker.Note && it.string.number == string.number -> true
-                it is ChordMarker.Bar && (string.number in it.startString.number..it.endString.number) -> true
-                it is ChordMarker.Open && it.string.number == string.number -> true
-                it is ChordMarker.Muted && it.string.number == string.number -> true
-                else -> false
-            }
+    markers.filter {
+        when {
+            it is ChordMarker.Note && it.string.number == string.number -> true
+            it is ChordMarker.Bar && (string.number in it.startString.number..it.endString.number) -> true
+            it is ChordMarker.Open && it.string.number == string.number -> true
+            it is ChordMarker.Muted && it.string.number == string.number -> true
+            else -> false
         }
+    }
 
 /**
  * Retrieves the [ChordMarker]s that are on the provided [FretNumber] within this [Chord].
@@ -38,17 +42,17 @@ fun Chord.getMarkersOnString(string: StringNumber): List<ChordMarker> =
  * @author chRyNaN
  */
 fun Chord.getMarkersOnFret(fret: FretNumber): List<ChordMarker> =
-        markers.filter {
-            when {
-                it is FretMarker && it.fret == fret -> true
-                else -> false
-            }
+    markers.filter {
+        when {
+            it is FretMarker && it.fret == fret -> true
+            else -> false
         }
+    }
 
 /**
  * Retrieves the min fret of this Chord, or -1. If there are no markers, -1 will be returned. If there are all muted
  * notes, -1 will be returned. Otherwise, the minimum fret number will be returned. Note that this is different from
- * [ChordChart.fretStart]. This rretrieves the minimum fret in this [Chord]. [ChordChart.fretStart] retrieves the
+ * [ChordChart.fretStart]. This retrieves the minimum fret in this [Chord]. [ChordChart.fretStart] retrieves the
  * minimum fret that will be displayed in the chart.
  *
  * @see [ChordChart]
@@ -61,7 +65,7 @@ val Chord.minFret: Int
             else -> -1
         }
     }.filter { it > 0 }
-            .min() ?: -1
+        .minOrNull() ?: -1
 
 /**
  * Retrieves the max fret of this chord, or -1. If there are no markers, -1 will be returned. If there are all muted
@@ -78,7 +82,7 @@ val Chord.maxFret: Int
             is FretMarker -> it.fret.number
             else -> -1
         }
-    }.max() ?: -1
+    }.maxOrNull() ?: -1
 
 /**
  * Retrieve the minimum String that is in this [Chord] with a [ChordMarker]. If there are no [ChordMarker]s in this
@@ -97,7 +101,7 @@ val Chord.minString: Int
             is ChordMarker.Open -> it.string.number
             is ChordMarker.Muted -> it.string.number
         }
-    }.min() ?: -1
+    }.minOrNull() ?: -1
 
 /**
  * Retrieves the maximum String that is in this [Chord] with a [ChordMarker]. If there are no [ChordMarker]s in this
@@ -116,4 +120,4 @@ val Chord.maxString: Int
             is ChordMarker.Open -> it.string.number
             is ChordMarker.Muted -> it.string.number
         }
-    }.max() ?: -1
+    }.maxOrNull() ?: -1
