@@ -1,25 +1,27 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'digital.wup.android-maven-publish'
+import com.chrynan.chords.buildSrc.LibraryConstants
 
-group rootProject.libraryGroup
-version rootProject.libraryVersion
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "digital.wup.android-maven-publish"
+
+group LibraryConstants.group
+version LibraryConstants.versionName
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion LibraryConstants.androidCompileSdkVersion
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode rootProject.libraryVersionCode
-        versionName rootProject.libraryVersion
+        minSdkVersion LibraryConstants.androidMinSdkVersion
+        targetSdkVersion LibraryConstants.androidTargetSdkVersion
+        versionCode LibraryConstants.versionCode
+        versionName LibraryConstants.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -40,7 +42,7 @@ dependencies {
 
     implementation "com.android.support:support-annotations:28.0.0"
 
-    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.appcompat:appcompat:1.2.0"
 
     api project(":core")
 }
@@ -49,7 +51,7 @@ publishing {
     publications {
         MavenPub(MavenPublication) {
             from(components.android)
-            artifactId 'chords-android'
+            artifactId "chords-android"
         }
     }
 }

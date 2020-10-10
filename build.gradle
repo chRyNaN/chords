@@ -1,34 +1,21 @@
-ext {
-    bintrayRepo = 'chrynan'
-    libraryGroup = 'com.chrynan.chords'
-    libraryOwner = 'chrynan'
-    libraryRepo = 'chords'
-    libraryVersion = '2.3.1'
-    libraryVersionCode = 4
-    libraryVersionDescription = 'Second Major Release'
-}
+import com.chrynan.chords.buildSrc.LibraryConstants
+import org.gradle.api.publish.maven.internal.artifact.FileBasedMavenArtifact
 
-group libraryGroup
-version libraryVersion
+group LibraryConstants.group
+version LibraryConstants.versionName
 
 buildscript {
-    ext.kotlin_version = '1.3.61'
-
     repositories {
         mavenCentral()
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
-        classpath 'digital.wup:android-maven-publish:3.6.2'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath "com.android.tools.build:gradle:3.5.4"
+        classpath "digital.wup:android-maven-publish:3.6.2"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
     }
 }
 
@@ -36,48 +23,48 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url = "https://dl.bintray.com/chrynan/chrynan"
+        }
     }
 }
 
 subprojects {
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
-    apply plugin: 'org.jetbrains.dokka'
-
-    dokka {
-        outputFormat = 'gfm'
-        outputDirectory = "../docs"
-
-        configuration {
-            includeNonPublic = false
-            skipEmptyPackages = true
-            skipDeprecated = true
-            reportUndocumented = true
-            jdkVersion = 8
-            targets = ["JVM", "COMMON"]
-        }
-    }
+    apply plugin: "maven-publish"
+    apply plugin: "com.jfrog.bintray"
 
     bintray {
-        user = project.findProperty("BINTRAY_USER") ?: System.getenv('BINTRAY_USER')
-        key = project.findProperty("BINTRAY_KEY") ?: System.getenv('BINTRAY_KEY')
+        user = project.findProperty("BINTRAY_USER") ?: System.getenv("BINTRAY_USER")
+        key = project.findProperty("BINTRAY_KEY") ?: System.getenv("BINTRAY_KEY")
+
         pkg {
-            repo = rootProject.bintrayRepo
-            name = rootProject.libraryRepo
-            licenses = ['Apache-2.0']
-            vcsUrl = 'https://github.com/chRyNaN/chords.git'
+            repo = LibraryConstants.bintrayRepo
+            name = LibraryConstants.repoName
+            licenses = [LibraryConstants.license]
+            vcsUrl = LibraryConstants.vcsUrl
+
             version {
-                name = rootProject.libraryVersion
-                desc = rootProject.libraryVersionDescription
+                name = LibraryConstants.versionName
+                desc = LibraryConstants.versionDescription
                 released = new Date()
-                vcsTag = rootProject.libraryVersion
+                vcsTag = LibraryConstants.versionName
             }
         }
     }
 
     bintrayUpload.doFirst {
-        publications = publishing.publications.collect {
-            it.name
+        publications = publishing.publications.collect { publication ->
+            File moduleFile = new File(project.buildDir, "publications/${publication.name}/module.json")
+
+            if (moduleFile.exists()) {
+                publication.artifact(new FileBasedMavenArtifact(moduleFile) {
+                    protected String getDefaultExtension() {
+                        return "module"
+                    }
+                })
+            }
+
+            publication.name
         }
     }
 

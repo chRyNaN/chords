@@ -1,7 +1,9 @@
-apply plugin: 'kotlin-multiplatform'
+import com.chrynan.chords.buildSrc.LibraryConstants
 
-group rootProject.libraryGroup
-version rootProject.libraryVersion
+apply plugin: "kotlin-multiplatform"
+
+group LibraryConstants.group
+version LibraryConstants.versionName
 
 kotlin {
     jvm()
@@ -14,17 +16,23 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
             }
         }
-        jvmMain {
+        commonTest {
             dependencies {
-                implementation kotlin('stdlib-jdk8')
+                implementation "org.jetbrains.kotlin:kotlin-test-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
             }
         }
-        jsMain {
+        jvmTest {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+                implementation "org.jetbrains.kotlin:kotlin-test-junit"
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-js"
             }
         }
         all {
