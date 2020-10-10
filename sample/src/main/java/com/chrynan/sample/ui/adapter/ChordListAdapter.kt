@@ -23,16 +23,14 @@ class ChordListAdapter @Inject constructor(
 
     override fun onHandlesItem(item: Any) = item is ChordListViewModel
 
-    override fun onCreateView(parent: ViewGroup, viewType: ViewType): View =
-            LayoutInflater.from(parent.context).inflate(R.layout.adapter_chord_list, parent, false)
+    override fun onCreateView(parent: ViewGroup, inflater: LayoutInflater, viewType: ViewType): View =
+            inflater.inflate(R.layout.adapter_chord_list, parent, false)
 
-    override fun onBindItem(view: View, item: ChordListViewModel) {
-        view.apply {
+    override fun View.onBindItem(item: ChordListViewModel, position: Int) {
             titleTextView?.text = item.title
             recyclerView?.adapter = adapter
             recyclerView?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             recyclerView?.setRecycledViewPool(viewPool)
             adapter.items = item.items
-        }
     }
 }

@@ -17,16 +17,14 @@ class ChordAdapter @Inject constructor(private val listener: ChordSelectedListen
 
     override fun onHandlesItem(item: Any) = item is ChordViewModel
 
-    override fun onCreateView(parent: ViewGroup, viewType: ViewType): View =
-            LayoutInflater.from(parent.context).inflate(R.layout.adapter_chord, parent, false)
+    override fun onCreateView(parent: ViewGroup, inflater: LayoutInflater, viewType: ViewType): View =
+        inflater.inflate(R.layout.adapter_chord, parent, false)
 
-    override fun onBindItem(view: View, item: ChordViewModel) {
-        view.apply {
-            titleTextView?.text = item.title
-            descriptionTextView?.text = item.description
-            descriptionTextView?.visibility = if (item.description == null) View.GONE else View.VISIBLE
-            setOnClickListener { listener.onChordSelected(item.chord) }
-        }
+    override fun View.onBindItem(item: ChordViewModel, position: Int) {
+        titleTextView?.text = item.title
+        descriptionTextView?.text = item.description
+        descriptionTextView?.visibility = if (item.description == null) View.GONE else View.VISIBLE
+        setOnClickListener { listener.onChordSelected(item.chord) }
     }
 
     interface ChordSelectedListener {
