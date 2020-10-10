@@ -1,5 +1,8 @@
 package com.chrynan.chords.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 /**
  * A representation of a fretted stringed instrument Chord. This model contains the [name] of the
  * Chord and the [markers] which indicate the strings, frets, and fingers used to make up the
@@ -19,9 +22,10 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
+@Serializable
 data class Chord(
-        val name: String? = null,
-        val markers: Set<ChordMarker>
+    @SerialName(value = "name") val name: String? = null,
+    @SerialName(value = "markers") val markers: Set<ChordMarker>
 ) {
 
     companion object {

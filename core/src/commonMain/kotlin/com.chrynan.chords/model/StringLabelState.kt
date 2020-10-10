@@ -1,6 +1,7 @@
 package com.chrynan.chords.model
 
 import com.chrynan.chords.view.ChordView
+import kotlinx.serialization.Serializable
 
 /**
  * An enum class defining the possible string label display states for a chord diagram, or
@@ -11,6 +12,7 @@ import com.chrynan.chords.view.ChordView
  *
  * @author chRyNaN
  */
+@Serializable
 enum class StringLabelState {
 
     SHOW_NUMBER,

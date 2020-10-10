@@ -1,5 +1,9 @@
 package com.chrynan.chords.model
 
+import com.chrynan.chords.model.serializer.StringNumberSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 /**
  * A model containing information about a label for a string in a chord diagram. This model
  * contains the [string] the label should be displayed for and an optional [label] for that string.
@@ -11,7 +15,8 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
+@Serializable
 data class StringLabel(
-        val string: StringNumber,
-        val label: String? = null
+    @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) val string: StringNumber,
+    @SerialName(value = "label") val label: String? = null
 )

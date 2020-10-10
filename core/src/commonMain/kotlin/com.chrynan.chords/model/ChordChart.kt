@@ -1,6 +1,11 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package com.chrynan.chords.model
 
+import com.chrynan.chords.model.serializer.FretNumberSerializer
 import com.chrynan.chords.view.ChordView
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * A representation of a diagram used to display a fretted string instrument Chord. This contains
@@ -23,17 +28,18 @@ import com.chrynan.chords.view.ChordView
  *
  * @author chRyNaN
  */
+@Serializable
 data class ChordChart(
-        val fretStart: FretNumber = DEFAULT_FRET_START,
-        val fretEnd: FretNumber = DEFAULT_FRET_END,
-        val stringCount: Int = DEFAULT_GUITAR_STRING_COUNT,
-        val stringLabels: Set<StringLabel> = emptySet()
+    @SerialName(value = "fret_start") @Serializable(with = FretNumberSerializer::class) val fretStart: FretNumber = DEFAULT_FRET_START,
+    @SerialName(value = "fret_end") @Serializable(with = FretNumberSerializer::class) val fretEnd: FretNumber = DEFAULT_FRET_END,
+    @SerialName(value = "string_count") val stringCount: Int = DEFAULT_GUITAR_STRING_COUNT,
+    @SerialName(value = "string_labels") val stringLabels: Set<StringLabel> = emptySet()
 ) {
 
     companion object {
 
         const val DEFAULT_GUITAR_STRING_COUNT = 6
-        const val DEFAULT_UKELEL_STRING_COUNT = 4
+        const val DEFAULT_UKELELE_STRING_COUNT = 4
         const val DEFAULT_BANJO_STRING_COUNT = 5
 
         val DEFAULT_FRET_START = FretNumber(1)
@@ -46,14 +52,16 @@ data class ChordChart(
          * @author chRyNaN
          */
         val STANDARD_TUNING_GUITAR_CHART = ChordChart(
-                stringCount = DEFAULT_GUITAR_STRING_COUNT,
-                stringLabels = setOf(
-                        StringLabel(string = StringNumber(1), label = "e"),
-                        StringLabel(string = StringNumber(2), label = "B"),
-                        StringLabel(string = StringNumber(3), label = "G"),
-                        StringLabel(string = StringNumber(4), label = "D"),
-                        StringLabel(string = StringNumber(5), label = "A"),
-                        StringLabel(string = StringNumber(6), label = "E")))
+            stringCount = DEFAULT_GUITAR_STRING_COUNT,
+            stringLabels = setOf(
+                StringLabel(string = StringNumber(1), label = "e"),
+                StringLabel(string = StringNumber(2), label = "B"),
+                StringLabel(string = StringNumber(3), label = "G"),
+                StringLabel(string = StringNumber(4), label = "D"),
+                StringLabel(string = StringNumber(5), label = "A"),
+                StringLabel(string = StringNumber(6), label = "E")
+            )
+        )
 
         /**
          * A [ChordChart] representing a four string ukelele in standard tuning (C). This is a
@@ -62,12 +70,14 @@ data class ChordChart(
          * @author chRyNaN
          */
         val STANDARD_TUNING_UKELELE = ChordChart(
-                stringCount = DEFAULT_UKELEL_STRING_COUNT,
-                stringLabels = setOf(
-                        StringLabel(string = StringNumber(1), label = "A"),
-                        StringLabel(string = StringNumber(2), label = "E"),
-                        StringLabel(string = StringNumber(3), label = "C"),
-                        StringLabel(string = StringNumber(4), label = "G")))
+            stringCount = DEFAULT_UKELELE_STRING_COUNT,
+            stringLabels = setOf(
+                StringLabel(string = StringNumber(1), label = "A"),
+                StringLabel(string = StringNumber(2), label = "E"),
+                StringLabel(string = StringNumber(3), label = "C"),
+                StringLabel(string = StringNumber(4), label = "G")
+            )
+        )
 
         /**
          * A [ChordChart] representing a five string banjo in standard tuning (G). This is a
@@ -76,12 +86,14 @@ data class ChordChart(
          * @author chRyNaN
          */
         val STANDARD_TUNING_BANJO = ChordChart(
-                stringCount = DEFAULT_BANJO_STRING_COUNT,
-                stringLabels = setOf(
-                        StringLabel(string = StringNumber(1), label = "d"),
-                        StringLabel(string = StringNumber(2), label = "B"),
-                        StringLabel(string = StringNumber(3), label = "g"),
-                        StringLabel(string = StringNumber(4), label = "D"),
-                        StringLabel(string = StringNumber(5), label = "G")))
+            stringCount = DEFAULT_BANJO_STRING_COUNT,
+            stringLabels = setOf(
+                StringLabel(string = StringNumber(1), label = "d"),
+                StringLabel(string = StringNumber(2), label = "B"),
+                StringLabel(string = StringNumber(3), label = "g"),
+                StringLabel(string = StringNumber(4), label = "D"),
+                StringLabel(string = StringNumber(5), label = "G")
+            )
+        )
     }
 }
