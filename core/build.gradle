@@ -1,6 +1,7 @@
 import com.chrynan.chords.buildSrc.LibraryConstants
 
 apply plugin: "kotlin-multiplatform"
+apply plugin: "kotlinx-serialization"
 
 group LibraryConstants.group
 version LibraryConstants.versionName
@@ -18,6 +19,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
+
+                api "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0"
             }
         }
         commonTest {
