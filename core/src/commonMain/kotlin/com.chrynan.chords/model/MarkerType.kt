@@ -1,4 +1,9 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.model
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * An enum containing the different types of a [ChordMarker]. This is useful for defining the
@@ -9,7 +14,8 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
-enum class MarkerType(val typeName: String) {
+@Serializable
+enum class MarkerType(@SerialName(value = "name") val typeName: String) {
 
     NOTE(typeName = "note"),
     BAR(typeName = "bar"),
@@ -24,6 +30,12 @@ enum class MarkerType(val typeName: String) {
          *
          * @author chRyNaN
          */
-        fun fromTypeName(name: String) = values().firstOrNull { it.typeName == name }
+        fun fromTypeName(name: String, ignoreCase: Boolean = false) = values().firstOrNull {
+            if (ignoreCase) {
+                it.typeName.toLowerCase() == name.toLowerCase()
+            } else {
+                it.typeName == name
+            }
+        }
     }
 }

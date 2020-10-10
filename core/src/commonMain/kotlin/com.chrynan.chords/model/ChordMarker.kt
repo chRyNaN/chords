@@ -1,5 +1,12 @@
 package com.chrynan.chords.model
 
+import com.chrynan.chords.model.serializer.ChordMarkerSerializer
+import com.chrynan.chords.model.serializer.FretNumberSerializer
+import com.chrynan.chords.model.serializer.StringNumberSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+
 /**
  * A sealed class containing all the different markers that can be in a [Chord]. A chord marker is
  * a visual indicator of what note(s) should be played. A set of chord markers makes up a Chord.
@@ -9,6 +16,7 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
+@Serializable(with = ChordMarkerSerializer::class)
 sealed class ChordMarker {
 
     /**
@@ -16,6 +24,7 @@ sealed class ChordMarker {
      *
      * @author chRyNaN
      */
+    @SerialName(value = "type")
     abstract val type: MarkerType
 
     /**
@@ -27,14 +36,15 @@ sealed class ChordMarker {
      *
      * @author chRyNaN
      */
+    @Serializable
     data class Note(
-            override val fret: FretNumber,
-            override val finger: Finger = Finger.UNKNOWN,
-            override val string: StringNumber
+        @SerialName(value = "fret") @Serializable(with = FretNumberSerializer::class) override val fret: FretNumber,
+        @SerialName(value = "finger") override val finger: Finger = Finger.UNKNOWN,
+        @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) override val string: StringNumber
     ) : ChordMarker(),
-            FretMarker,
-            FingerMarker,
-            StringMarker {
+        FretMarker,
+        FingerMarker,
+        StringMarker {
 
         override val type = MarkerType.NOTE
     }
@@ -50,18 +60,20 @@ sealed class ChordMarker {
      *
      * @author chRyNaN
      */
+    @Serializable
     data class Bar(
-            override val fret: FretNumber,
-            override val finger: Finger = Finger.UNKNOWN,
-            override val startString: StringNumber,
-            override val endString: StringNumber
+        @SerialName(value = "fret") @Serializable(with = FretNumberSerializer::class) override val fret: FretNumber,
+        @SerialName(value = "finger") override val finger: Finger = Finger.UNKNOWN,
+        @SerialName(value = "start_string") @Serializable(with = StringNumberSerializer::class) override val startString: StringNumber,
+        @SerialName(value = "end_string") @Serializable(with = StringNumberSerializer::class) override val endString: StringNumber
     ) : ChordMarker(),
-            FretMarker,
-            FingerMarker,
-            StringRangeMarker {
+        FretMarker,
+        FingerMarker,
+        StringRangeMarker {
 
         override val type = MarkerType.BAR
 
+        @Transient
         override val string = startString
     }
 
@@ -72,12 +84,16 @@ sealed class ChordMarker {
      *
      * @author chRyNaN
      */
-    data class Open(override val string: StringNumber) : ChordMarker(),
-            FretMarker,
-            StringMarker {
+    @Serializable
+    data class Open(
+        @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) override val string: StringNumber
+    ) : ChordMarker(),
+        FretMarker,
+        StringMarker {
 
         override val type = MarkerType.OPEN
 
+        @Transient
         override val fret: FretNumber = FretNumber(0)
     }
 
@@ -88,8 +104,11 @@ sealed class ChordMarker {
      *
      * @author chRyNaN
      */
-    data class Muted(override val string: StringNumber) : ChordMarker(),
-            StringMarker {
+    @Serializable
+    data class Muted(
+        @SerialName(value = "string") @Serializable(with = StringNumberSerializer::class) override val string: StringNumber
+    ) : ChordMarker(),
+        StringMarker {
 
         override val type = MarkerType.MUTED
     }

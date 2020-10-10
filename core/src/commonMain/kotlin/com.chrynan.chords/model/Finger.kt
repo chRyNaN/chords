@@ -1,4 +1,9 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.model
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * An enum used to indicate which finger on a hand should be used to play a note.
@@ -7,14 +12,18 @@ package com.chrynan.chords.model
  *
  * @author chRyNaN
  */
-enum class Finger(val position: Int) {
+@Serializable
+enum class Finger(
+    @SerialName(value = "position") val position: Int,
+    @SerialName(value = "name") val fingerName: String? = null
+) {
 
-    UNKNOWN(position = -1),
-    INDEX(position = 1),
-    MIDDLE(position = 2),
-    RING(position = 3),
-    PINKY(position = 4),
-    THUMB(position = 5);
+    UNKNOWN(position = -1, fingerName = null),
+    INDEX(position = 1, fingerName = "index"),
+    MIDDLE(position = 2, fingerName = "middle"),
+    RING(position = 3, fingerName = "ring"),
+    PINKY(position = 4, fingerName = "pinky"),
+    THUMB(position = 5, fingerName = "thumb");
 
     override fun toString() = "$position"
 
@@ -26,6 +35,14 @@ enum class Finger(val position: Int) {
          * @author chRyNaN
          */
         fun fromPosition(position: Int) = values().firstOrNull { it.position == position }
-                ?: UNKNOWN
+            ?: UNKNOWN
+
+        fun fromFingerName(name: String, ignoreCase: Boolean = false) = values().firstOrNull {
+            if (ignoreCase) {
+                it.fingerName?.toLowerCase() == name.toLowerCase()
+            } else {
+                it.fingerName == name
+            }
+        }
     }
 }
