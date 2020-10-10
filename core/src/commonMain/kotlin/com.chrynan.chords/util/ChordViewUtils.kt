@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.util
 
 import com.chrynan.chords.model.Chord
