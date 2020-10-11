@@ -1,6 +1,6 @@
 package com.chrynan.chords.model
 
-import com.chrynan.chords.model.serializer.ChordMarkerSerializer
+import com.chrynan.chords.model.serializer.ChordMarkerJsonSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -14,7 +14,7 @@ import kotlinx.serialization.Transient
  *
  * @author chRyNaN
  */
-@Serializable(with = ChordMarkerSerializer::class)
+@Serializable(with = ChordMarkerJsonSerializer::class)
 sealed class ChordMarker {
 
     /**

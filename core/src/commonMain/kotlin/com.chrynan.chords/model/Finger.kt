@@ -43,6 +43,6 @@ enum class Finger(
             } else {
                 it.fingerName == name
             }
-        }
+        } ?: UNKNOWN
     }
 }
