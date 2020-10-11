@@ -1,6 +1,8 @@
 package com.chrynan.sample.ui.dialog
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import com.chrynan.aaaah.ManagerRecyclerViewAdapter
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.FretNumber
+import com.chrynan.chords.span.RaisedTextSpan
 import com.chrynan.chords.util.*
 import com.chrynan.sample.R
 import com.chrynan.sample.coroutine.AndroidCoroutineDispatchers
@@ -25,7 +28,7 @@ import kotlinx.android.synthetic.main.dialog_chord_bottom_sheet.*
 import kotlin.math.max
 
 class ChordBottomSheetDialogFragment : BottomSheetDialogFragment(),
-        ChordInfoView {
+    ChordInfoView {
 
     companion object {
 
@@ -46,17 +49,18 @@ class ChordBottomSheetDialogFragment : BottomSheetDialogFragment(),
 
     private val dispatchers = AndroidCoroutineDispatchers()
     private val adapter: ManagerRecyclerViewAdapter<AdapterItemViewModel> =
-            ManagerRecyclerViewAdapter(adapters = setOf())
+        ManagerRecyclerViewAdapter(adapters = setOf())
     private val chordRepository = OpenGuitarChordSource()
     private val diffDispatcher = AndroidDiffDispatcher(adapter)
     private val diffProcessor = AndroidDiffProcessor<AdapterItemViewModel>(DiffUtilCalculator())
     private val adapterItemHandler = BaseAdapterItemHandler(
-            coroutineDispatchers = dispatchers,
-            diffDispatcher = diffDispatcher,
-            diffProcessor = diffProcessor)
+        coroutineDispatchers = dispatchers,
+        diffDispatcher = diffDispatcher,
+        diffProcessor = diffProcessor
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.dialog_chord_bottom_sheet, container)
+        inflater.inflate(R.layout.dialog_chord_bottom_sheet, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,10 +70,20 @@ class ChordBottomSheetDialogFragment : BottomSheetDialogFragment(),
         chordTitleTextView?.text = chord.name
         chordWidget?.chord = chord
         chordWidget?.chart = chart
-                ?: defaultChordChart.copy(fretEnd = FretNumber(max(chord.maxFret, defaultChordChart.fretEnd.number)))
+            ?: defaultChordChart.copy(fretEnd = FretNumber(max(chord.maxFret, defaultChordChart.fretEnd.number)))
 
         view.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-            override fun onLayoutChange(v: View?, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+            override fun onLayoutChange(
+                v: View?,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
                 view.removeOnLayoutChangeListener(this)
                 val behavior = (dialog as? BottomSheetDialog)?.behavior
                 behavior?.peekHeight = chordWidget?.bottom ?: DEFAULT_PEEK_HEIGHT
