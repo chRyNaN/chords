@@ -3,6 +3,7 @@ package com.chrynan.chords.widget
 import com.chrynan.chords.graphics.Paint
 import com.chrynan.chords.graphics.Point
 import com.chrynan.chords.graphics.Rect
+import com.chrynan.colors.ColorInt
 import com.chrynan.chords.model.*
 import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
@@ -28,7 +29,7 @@ import kotlin.math.round
  */
 
 class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
-        ChordView {
+    ChordView {
 
     override var chord: Chord? = null
 
@@ -202,7 +203,10 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         val verticalExtraCount = if (showBottomStringLabels) 2 else 1
 
         // We add 1 to make room for two halves of notes displayed on the first and last strings. Otherwise, they'll be cut-off.
-        noteSize = min((actualWidth / (chart.stringCount + 1 + horizontalExtraCount)), (actualHeight / (fretCount + 1 + verticalExtraCount)))
+        noteSize = min(
+            (actualWidth / (chart.stringCount + 1 + horizontalExtraCount)),
+            (actualHeight / (fretCount + 1 + verticalExtraCount))
+        )
 
         val textSize = noteSize * .75f
         fretLabelTextSize = textSize
@@ -214,56 +218,65 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         stringSize = (stringDistance / chart.stringCount).coerceAtLeast(1.0)
         fretMarkerSize = stringSize
 
-        fretSize = round((actualHeight - (noteSize * verticalExtraCount) - (fretCount + 1) * fretMarkerSize) / fretCount)
+        fretSize =
+            round((actualHeight - (noteSize * verticalExtraCount) - (fretCount + 1) * fretMarkerSize) / fretCount)
 
         val drawingWidth = noteSize * (chart.stringCount + 1 + horizontalExtraCount)
         val drawingHeight = (fretSize * fretCount) + (noteSize * (1 + verticalExtraCount))
 
         // Center everything
         drawingBounds.set(
-                left = (absoluteWidth - drawingWidth) / 2,
-                top = (absoluteHeight - drawingHeight) / 2,
-                right = (absoluteWidth - drawingWidth) / 2 + drawingWidth,
-                bottom = (absoluteHeight - drawingHeight) / 2 + drawingHeight)
+            left = (absoluteWidth - drawingWidth) / 2,
+            top = (absoluteHeight - drawingHeight) / 2,
+            right = (absoluteWidth - drawingWidth) / 2 + drawingWidth,
+            bottom = (absoluteHeight - drawingHeight) / 2 + drawingHeight
+        )
 
         // The actual chart bounds
         chartBounds.set(
-                left = drawingBounds.left + (noteSize * horizontalExtraCount) + (noteSize * 0.5),
-                top = drawingBounds.top + noteSize,
-                right = drawingBounds.right - (noteSize * 0.5),
-                bottom = drawingBounds.bottom - (if (showBottomStringLabels) noteSize else 0.0))
+            left = drawingBounds.left + (noteSize * horizontalExtraCount) + (noteSize * 0.5),
+            top = drawingBounds.top + noteSize,
+            right = drawingBounds.right - (noteSize * 0.5),
+            bottom = drawingBounds.bottom - (if (showBottomStringLabels) noteSize else 0.0)
+        )
 
         // The open/closed labels for the String above the chart
         stringTopLabelBounds.set(
-                left = chartBounds.left,
-                top = drawingBounds.top,
-                right = chartBounds.right,
-                bottom = drawingBounds.top + noteSize)
+            left = chartBounds.left,
+            top = drawingBounds.top,
+            right = chartBounds.right,
+            bottom = drawingBounds.top + noteSize
+        )
 
         // The number/note labels for the String below the chart
         stringBottomLabelBounds.set(
-                left = chartBounds.left,
-                top = chartBounds.bottom,
-                right = chartBounds.right,
-                bottom = chartBounds.bottom + noteSize)
+            left = chartBounds.left,
+            top = chartBounds.bottom,
+            right = chartBounds.right,
+            bottom = chartBounds.bottom + noteSize
+        )
 
         // The fret number labels on the side of the chart
         fretSideLabelBounds.set(
-                left = drawingBounds.left,
-                top = chartBounds.top,
-                right = drawingBounds.left + noteSize,
-                bottom = drawingBounds.bottom)
+            left = drawingBounds.left,
+            top = chartBounds.top,
+            right = drawingBounds.left + noteSize,
+            bottom = drawingBounds.bottom
+        )
     }
 
     private fun calculateFretPositions() {
         fretLineRects.clear()
 
         for (i in 0..fretCount) {
-            fretLineRects.add(Rect(
+            fretLineRects.add(
+                Rect(
                     left = chartBounds.left - (stringSize / 2),
                     top = chartBounds.top + i * fretSize + i * fretMarkerSize,
                     right = chartBounds.right - (stringSize / 2),
-                    bottom = chartBounds.top + i * fretSize + i * fretMarkerSize))
+                    bottom = chartBounds.top + i * fretSize + i * fretMarkerSize
+                )
+            )
         }
     }
 
@@ -271,11 +284,14 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         stringLineRects.clear()
 
         for (i in 0 until chart.stringCount) {
-            stringLineRects.add(Rect(
+            stringLineRects.add(
+                Rect(
                     left = chartBounds.left + i * stringDistance + i * stringSize,
                     top = chartBounds.top,
                     right = chartBounds.left + i * stringDistance + i * stringSize,
-                    bottom = chartBounds.top + fretCount * fretSize + fretCount * fretMarkerSize))
+                    bottom = chartBounds.top + fretCount * fretSize + fretCount * fretMarkerSize
+                )
+            )
         }
     }
 
@@ -283,9 +299,16 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         fretNumberPoints.clear()
 
         for (i in 0..(chart.fretEnd.number - chart.fretStart.number)) {
-            fretNumberPoints.add(Point(
+            fretNumberPoints.add(
+                Point(
                     x = drawingBounds.left + fretSideLabelBounds.width / 2,
-                    y = getVerticalCenterTextPosition(stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretLabelTextPaint)))
+                    y = getVerticalCenterTextPosition(
+                        stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2,
+                        (i + 1).toString(),
+                        fretLabelTextPaint
+                    )
+                )
+            )
         }
     }
 
@@ -297,7 +320,8 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
                 val relativeFretNumber = bar.fret.number - (chart.fretStart.number - 1)
                 val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
                         (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
-                val top = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
+                val top =
+                    chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
                 val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
                         (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
                 val bottom = top + noteSize
@@ -306,14 +330,16 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
                 val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, text, noteLabelTextPaint)
 
                 barLinePaths.add(
-                        BarPosition(
-                                text = text,
-                                textX = textX,
-                                textY = textY,
-                                left = left,
-                                top = top,
-                                right = right,
-                                bottom = bottom))
+                    BarPosition(
+                        text = text,
+                        textX = textX,
+                        textY = textY,
+                        left = left,
+                        top = top,
+                        right = right,
+                        bottom = bottom
+                    )
+                )
             }
         }
     }
@@ -324,17 +350,21 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         chord?.notes?.forEach { note ->
             if (note.fret.number in chart.fretStart.number..chart.fretEnd.number && note.string.number < chart.stringCount + 1) {
                 val relativeFretNumber = note.fret.number - (chart.fretStart.number - 1)
-                val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
-                val startCenterY = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
+                val startCenterX =
+                    chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
+                val startCenterY =
+                    chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
                 val text = if (note.finger === Finger.UNKNOWN) "" else note.finger.toString()
 
                 notePositions.add(
-                        NotePosition(
-                                text = text,
-                                circleX = startCenterX,
-                                circleY = startCenterY,
-                                textX = startCenterX,
-                                textY = getVerticalCenterTextPosition(startCenterY, text, noteLabelTextPaint)))
+                    NotePosition(
+                        text = text,
+                        circleX = startCenterX,
+                        circleY = startCenterY,
+                        textX = startCenterX,
+                        textY = getVerticalCenterTextPosition(startCenterY, text, noteLabelTextPaint)
+                    )
+                )
             }
         }
     }
@@ -346,45 +376,67 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         // Top string mute labels
         chord?.mutes?.forEach { muted ->
             if (muted.string.number < chart.stringCount + 1) {
-                val x = chartBounds.left + (chart.stringCount - muted.string.number) * stringDistance + (chart.stringCount - muted.string.number) * stringSize
-                val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height / 2, mutedStringText, stringLabelTextPaint)
+                val x =
+                    chartBounds.left + (chart.stringCount - muted.string.number) * stringDistance + (chart.stringCount - muted.string.number) * stringSize
+                val y = getVerticalCenterTextPosition(
+                    drawingBounds.top + stringTopLabelBounds.height / 2,
+                    mutedStringText,
+                    stringLabelTextPaint
+                )
 
                 stringTopMarkerPositions.add(
-                        StringPosition(
-                                text = mutedStringText,
-                                textX = x,
-                                textY = y))
+                    StringPosition(
+                        text = mutedStringText,
+                        textX = x,
+                        textY = y
+                    )
+                )
             }
         }
 
         // Top string open labels
         chord?.opens?.forEach { open ->
             if (open.string.number < chart.stringCount + 1) {
-                val x = chartBounds.left + (chart.stringCount - open.string.number) * stringDistance + (chart.stringCount - open.string.number) * stringSize
-                val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height / 2, openStringText, stringLabelTextPaint)
+                val x =
+                    chartBounds.left + (chart.stringCount - open.string.number) * stringDistance + (chart.stringCount - open.string.number) * stringSize
+                val y = getVerticalCenterTextPosition(
+                    drawingBounds.top + stringTopLabelBounds.height / 2,
+                    openStringText,
+                    stringLabelTextPaint
+                )
 
                 stringTopMarkerPositions.add(
-                        StringPosition(
-                                text = openStringText,
-                                textX = x,
-                                textY = y))
+                    StringPosition(
+                        text = openStringText,
+                        textX = x,
+                        textY = y
+                    )
+                )
             }
         }
 
         if (showBottomStringLabels) {
             chart.stringLabels.forEach { stringLabel ->
                 if (stringLabel.string.number < chart.stringCount + 1) {
-                    val label = if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
+                    val label =
+                        if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
 
                     if (label != null) {
-                        val x = chartBounds.left + (chart.stringCount - stringLabel.string.number) * stringDistance + (chart.stringCount - stringLabel.string.number) * stringSize
-                        val y = getVerticalCenterTextPosition(chartBounds.bottom + stringBottomLabelBounds.height / 2, label, stringLabelTextPaint)
+                        val x =
+                            chartBounds.left + (chart.stringCount - stringLabel.string.number) * stringDistance + (chart.stringCount - stringLabel.string.number) * stringSize
+                        val y = getVerticalCenterTextPosition(
+                            chartBounds.bottom + stringBottomLabelBounds.height / 2,
+                            label,
+                            stringLabelTextPaint
+                        )
 
                         stringBottomLabelPositions.add(
-                                StringPosition(
-                                        text = label,
-                                        textX = x,
-                                        textY = y))
+                            StringPosition(
+                                text = label,
+                                textX = x,
+                                textY = y
+                            )
+                        )
                     }
                 }
             }
@@ -442,26 +494,26 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     }
 
     private data class NotePosition(
-            val text: String,
-            val circleX: Double,
-            val circleY: Double,
-            val textX: Double,
-            val textY: Double
+        val text: String,
+        val circleX: Double,
+        val circleY: Double,
+        val textX: Double,
+        val textY: Double
     )
 
     private data class StringPosition(
-            val text: String,
-            val textX: Double,
-            val textY: Double
+        val text: String,
+        val textX: Double,
+        val textY: Double
     )
 
     private data class BarPosition(
-            val text: String,
-            val left: Double,
-            val top: Double,
-            val right: Double,
-            val bottom: Double,
-            val textX: Double,
-            val textY: Double
+        val text: String,
+        val left: Double,
+        val top: Double,
+        val right: Double,
+        val bottom: Double,
+        val textX: Double,
+        val textY: Double
     )
 }

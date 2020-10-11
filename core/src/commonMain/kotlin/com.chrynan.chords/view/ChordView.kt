@@ -2,8 +2,8 @@ package com.chrynan.chords.view
 
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
-import com.chrynan.chords.model.ColorInt
 import com.chrynan.chords.model.StringLabelState
+import com.chrynan.colors.ColorInt
 
 /**
  * An interface representing a UI Widget that can display a [ChordChart] for a [Chord].

@@ -1,6 +1,6 @@
 package com.chrynan.chords.util
 
-import com.chrynan.chords.model.ColorInt
+import com.chrynan.colors.ColorInt
 
 interface Color {
 
@@ -77,8 +77,8 @@ fun hex(hexString: HexString): RgbaColor {
 
     val hexStringInt = if (hexValue[HexString.HEX_CHAR_LOCATION] == HexString.HEX_CHAR) {
         hexValue.subSequence(
-                startIndex = 1,
-                endIndex = hexValue.length
+            startIndex = 1,
+            endIndex = hexValue.length
         ).toString()
     } else {
         hexValue

@@ -21,6 +21,8 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
 
                 api "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0"
+
+                api "com.chrynan.colors:colors-core:0.2.5"
             }
         }
         commonTest {

@@ -2,6 +2,7 @@ package com.chrynan.chords.model
 
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordViewBinder
+import com.chrynan.colors.ColorInt
 
 /**
  * A model that represents the visual state of a UI Widget that displays a [ChordChart] for a
@@ -34,16 +35,16 @@ import com.chrynan.chords.view.ChordViewBinder
  * @author chRyNaN
  */
 data class ChordViewModel(
-        val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
-        val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
-        val showFingerNumbers: Boolean = ChordView.DEFAULT_SHOW_FINGER_NUMBERS,
-        val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
-        val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
-        val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-        val fretColor: ColorInt,
-        val fretLabelTextColor: ColorInt,
-        val stringColor: ColorInt,
-        val stringLabelTextColor: ColorInt,
-        val noteColor: ColorInt,
-        val noteLabelTextColor: ColorInt
+    val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
+    val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
+    val showFingerNumbers: Boolean = ChordView.DEFAULT_SHOW_FINGER_NUMBERS,
+    val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
+    val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
+    val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
+    val fretColor: ColorInt,
+    val fretLabelTextColor: ColorInt,
+    val stringColor: ColorInt,
+    val stringLabelTextColor: ColorInt,
+    val noteColor: ColorInt,
+    val noteLabelTextColor: ColorInt
 )
