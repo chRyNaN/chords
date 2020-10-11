@@ -3,6 +3,7 @@ package com.chrynan.chords.model
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordViewBinder
 import com.chrynan.colors.ColorInt
+import kotlinx.serialization.Serializable
 
 /**
  * A model that represents the visual state of a UI Widget that displays a [ChordChart] for a
@@ -34,6 +35,7 @@ import com.chrynan.colors.ColorInt
  *
  * @author chRyNaN
  */
+@Serializable
 data class ChordViewModel(
     val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
     val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
