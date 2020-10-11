@@ -7,6 +7,7 @@ import com.chrynan.colors.ColorInt
 import com.chrynan.chords.model.*
 import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
+import com.chrynan.colors.toRgbaColor
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.math.min
@@ -489,8 +490,8 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
 
     companion object {
 
-        val DEFAULT_COLOR: ColorInt = Color.BLACK.colorInt
-        val DEFAULT_TEXT_COLOR: ColorInt = Color.WHITE.colorInt
+        val DEFAULT_COLOR: ColorInt = com.chrynan.colors.Color.BLACK.colorInt
+        val DEFAULT_TEXT_COLOR: ColorInt = com.chrynan.colors.Color.WHITE.colorInt
     }
 
     private data class NotePosition(

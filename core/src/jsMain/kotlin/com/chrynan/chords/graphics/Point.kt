@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.graphics
 
 import org.w3c.dom.HTMLCanvasElement
@@ -14,8 +16,8 @@ import org.w3c.dom.HTMLCanvasElement
  * @author chRyNaN
  */
 data class Point(
-        val x: Double,
-        val y: Double
+    val x: Double,
+    val y: Double
 ) {
 
     /**

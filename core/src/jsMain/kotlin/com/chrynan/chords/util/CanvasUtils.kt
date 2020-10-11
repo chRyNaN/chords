@@ -2,6 +2,7 @@ package com.chrynan.chords.util
 
 import com.chrynan.chords.graphics.Paint
 import com.chrynan.chords.graphics.Rect
+import com.chrynan.colors.Color
 import org.w3c.dom.CanvasRenderingContext2D
 
 fun CanvasRenderingContext2D.drawText(text: String, x: Double, y: Double, paint: Paint) {
@@ -107,9 +108,9 @@ fun CanvasRenderingContext2D.clear() {
 }
 
 fun CanvasRenderingContext2D.setStrokeColor(color: Color) {
-    this.strokeStyle = color.value
+    this.strokeStyle = color.cssValue
 }
 
 fun CanvasRenderingContext2D.setFillColor(color: Color) {
-    this.fillStyle = color.value
+    this.fillStyle = color.cssValue
 }

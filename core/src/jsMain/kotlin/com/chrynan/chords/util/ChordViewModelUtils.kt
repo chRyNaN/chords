@@ -3,6 +3,7 @@ package com.chrynan.chords.util
 import com.chrynan.chords.model.ChordViewModel
 import com.chrynan.chords.model.StringLabelState
 import com.chrynan.chords.view.ChordView
+import com.chrynan.colors.Color
 
 @Suppress("unused", "FunctionName")
 fun ChordViewModel(

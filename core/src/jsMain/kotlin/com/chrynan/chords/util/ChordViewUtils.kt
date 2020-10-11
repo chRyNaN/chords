@@ -1,6 +1,9 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.util
 
 import com.chrynan.chords.view.ChordView
+import com.chrynan.colors.Color
 
 fun ChordView.setFretColor(color: Color) {
     fretColor = color.colorInt

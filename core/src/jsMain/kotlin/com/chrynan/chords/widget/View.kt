@@ -5,7 +5,6 @@ import com.chrynan.chords.graphics.Paint
 import com.chrynan.chords.util.clear
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
-import kotlin.dom.clear
 
 /**
  * A base Widget View for Javascript, mimicking some of the functionality of an Android View.
@@ -29,7 +28,7 @@ abstract class View {
 
     private val context: CanvasRenderingContext2D by lazy {
         canvas.getContext("2d") as? CanvasRenderingContext2D
-                ?: throw InvalidCanvasContextException("Invalid Canvas Context Name.")
+            ?: throw InvalidCanvasContextException("Invalid Canvas Context Name.")
     }
 
     protected abstract fun onMeasure(width: Int, height: Int)

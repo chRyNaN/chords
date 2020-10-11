@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.util
 
 import com.chrynan.chords.model.ChordViewModel
@@ -13,5 +15,7 @@ import com.chrynan.chords.widget.ChordWidget
 fun ChordViewBinder.bindAndRender(viewModel: ChordViewModel) {
     bind(viewModel = viewModel)
 
-    if (view is ChordWidget) view.render()
+    val v = view
+
+    if (v is ChordWidget) v.render()
 }

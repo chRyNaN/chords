@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package com.chrynan.chords.graphics
 
 import org.w3c.dom.CanvasRenderingContext2D
@@ -34,10 +36,10 @@ import org.w3c.dom.HTMLCanvasElement
  * @author chRyNaN
  */
 data class Rect(
-        var left: Double = 0.0,
-        var top: Double = 0.0,
-        var right: Double = 0.0,
-        var bottom: Double = 0.0
+    var left: Double = 0.0,
+    var top: Double = 0.0,
+    var right: Double = 0.0,
+    var bottom: Double = 0.0
 ) {
 
     /**
@@ -117,11 +119,12 @@ data class Rect(
      * @param [dy] The amount to add to the [Rect]'s [top] and [bottom] coordinates.
      */
     fun offset(dx: Double, dy: Double): Rect =
-            Rect(
-                    left = left + dx,
-                    top = top + dy,
-                    right = right + dx,
-                    bottom = bottom + dy)
+        Rect(
+            left = left + dx,
+            top = top + dy,
+            right = right + dx,
+            bottom = bottom + dy
+        )
 
     /**
      * Returns a new [Rect] by insetting this [Rect] by subtracting [dx] to its [left] and [right] coordinates, and
@@ -130,12 +133,14 @@ data class Rect(
      * @param [dx] The amount to subtract to this [Rect]'s [left] and [right] coordinates.
      * @param [dy] The amount to subtract to the [Rect]'s [top] and [bottom] coordinates.
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     fun inset(dx: Double, dy: Double): Rect =
-            Rect(
-                    left = left - dx,
-                    top = top - dy,
-                    right = right - dx,
-                    bottom = bottom - dy)
+        Rect(
+            left = left - dx,
+            top = top - dy,
+            right = right - dx,
+            bottom = bottom - dy
+        )
 
     /**
      * Retrieves a [Boolean] indicating whether the provided [x] and [y] coordinates are within this [Rect]'s bounds.
@@ -158,9 +163,10 @@ data class Rect(
      * @author chRyNaN
      */
     operator fun plus(other: Rect): Rect =
-            Rect(
-                    left = left + other.left,
-                    top = top + other.top,
-                    right = right + other.right,
-                    bottom = bottom + other.bottom)
+        Rect(
+            left = left + other.left,
+            top = top + other.top,
+            right = right + other.right,
+            bottom = bottom + other.bottom
+        )
 }

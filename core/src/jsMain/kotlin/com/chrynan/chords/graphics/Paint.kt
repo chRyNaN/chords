@@ -1,6 +1,8 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.graphics
 
-import com.chrynan.chords.util.Color
+import com.chrynan.colors.Color
 import org.w3c.dom.*
 
 /**
@@ -9,15 +11,15 @@ import org.w3c.dom.*
  * @author chRyNaN
  */
 data class Paint(
-        var style: Style = Style.FILL,
-        var fillColor: Color = Color.BLACK,
-        var strokeColor: Color = Color.BLACK,
-        var textAlign: Align = Align.CENTER,
-        var textSize: Double = 0.0,
-        var fontName: String = DEFAULT_FONT_NAME,
-        var fillRule: FillRule = FillRule.EVEN_ODD,
-        var strokeWidth: Double = 0.0,
-        var strokeCap: Cap = Cap.BUTT
+    var style: Style = Style.FILL,
+    var fillColor: Color = Color.BLACK,
+    var strokeColor: Color = Color.BLACK,
+    var textAlign: Align = Align.CENTER,
+    var textSize: Double = 0.0,
+    var fontName: String = DEFAULT_FONT_NAME,
+    var fillRule: FillRule = FillRule.EVEN_ODD,
+    var strokeWidth: Double = 0.0,
+    var strokeCap: Cap = Cap.BUTT
 ) {
 
     val font: String
