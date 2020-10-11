@@ -34,15 +34,46 @@ fun chordSpan(
 }
 
 fun chordSpan(
+    text: String,
+    startInclusive: Int,
+    endExclusive: Int,
     chord: Chord,
     viewModel: TouchableSpanViewModel = TouchableSpanViewModel(),
-    listener: (Chord) -> Unit
+    listener: ChordSpan.ChordSelectedListener
+): SpannableString {
+    val spannable = SpannableString(text)
+    val chordSpan = ChordSpan(chord = chord, viewModel = viewModel, listener = listener)
+
+    spannable.setSpan(chordSpan, startInclusive, endExclusive, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+    return spannable
+}
+
+fun chordSpan(
+    text: String,
+    range: IntRange,
+    chord: Chord,
+    viewModel: TouchableSpanViewModel = TouchableSpanViewModel(),
+    listener: ChordSpan.ChordSelectedListener
+): SpannableString {
+    val spannable = SpannableString(text)
+    val chordSpan = ChordSpan(chord = chord, viewModel = viewModel, listener = listener)
+
+    spannable.setSpan(chordSpan, range.first, range.last, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+    return spannable
+}
+
+fun chordSpan(
+    chord: Chord,
+    viewModel: TouchableSpanViewModel = TouchableSpanViewModel(),
+    listener: ((Chord) -> Unit)? = null
 ): SpannableString {
     val spannable = SpannableString(chord.name)
     val chordSpan =
         ChordSpan(chord = chord, viewModel = viewModel, listener = object : ChordSpan.ChordSelectedListener {
             override fun onChordSpanSelected(chord: Chord) {
-                listener.invoke(chord)
+                listener?.invoke(chord)
             }
         })
 
@@ -55,17 +86,58 @@ fun chordSpan(
     text: String,
     chord: Chord,
     viewModel: TouchableSpanViewModel = TouchableSpanViewModel(),
-    listener: (Chord) -> Unit
+    listener: ((Chord) -> Unit)? = null
 ): SpannableString {
     val spannable = SpannableString(text)
     val chordSpan =
         ChordSpan(chord = chord, viewModel = viewModel, listener = object : ChordSpan.ChordSelectedListener {
             override fun onChordSpanSelected(chord: Chord) {
-                listener.invoke(chord)
+                listener?.invoke(chord)
             }
         })
 
     spannable.setSpan(chordSpan, 0, text.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+    return spannable
+}
+
+fun chordSpan(
+    text: String,
+    startInclusive: Int,
+    endExclusive: Int,
+    chord: Chord,
+    viewModel: TouchableSpanViewModel = TouchableSpanViewModel(),
+    listener: ((Chord) -> Unit)? = null
+): SpannableString {
+    val spannable = SpannableString(text)
+    val chordSpan =
+        ChordSpan(chord = chord, viewModel = viewModel, listener = object : ChordSpan.ChordSelectedListener {
+            override fun onChordSpanSelected(chord: Chord) {
+                listener?.invoke(chord)
+            }
+        })
+
+    spannable.setSpan(chordSpan, startInclusive, endExclusive, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+    return spannable
+}
+
+fun chordSpan(
+    text: String,
+    range: IntRange,
+    chord: Chord,
+    viewModel: TouchableSpanViewModel = TouchableSpanViewModel(),
+    listener: ((Chord) -> Unit)? = null
+): SpannableString {
+    val spannable = SpannableString(text)
+    val chordSpan =
+        ChordSpan(chord = chord, viewModel = viewModel, listener = object : ChordSpan.ChordSelectedListener {
+            override fun onChordSpanSelected(chord: Chord) {
+                listener?.invoke(chord)
+            }
+        })
+
+    spannable.setSpan(chordSpan, range.first, range.last, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
 
     return spannable
 }
