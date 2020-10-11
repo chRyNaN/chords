@@ -7,14 +7,7 @@ import android.text.style.UpdateAppearance
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_BACKGROUND_COLOR
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_IS_UNDERLINED
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_SELECTED_BACKGROUND_COLOR
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_SELECTED_IS_UNDERLINED
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_SELECTED_TEXT_COLOR
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_SELECTED_TEXT_TYPEFACE
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_TEXT_COLOR
-import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_TEXT_TYPEFACE
+import com.chrynan.colors.ColorInt
 
 /*
  * Copyright 2016 chRyNaN
@@ -43,8 +36,8 @@ import com.chrynan.chords.span.TouchableSpanView.Companion.DEFAULT_TEXT_TYPEFACE
  * @author chRyNaN
  */
 abstract class TouchableSpan : CharacterStyle(),
-        UpdateAppearance,
-        TouchableSpanView {
+    UpdateAppearance,
+    TouchableSpanView {
 
     /**
      * Indicates whether this [TouchableSpan] is selected or not. A value of true means that this
@@ -55,23 +48,36 @@ abstract class TouchableSpan : CharacterStyle(),
     var isSelected = false
         internal set
 
-    /**
-     * The [DrawStateListener] that is called when the touchable text display state should be
-     * updated. If this is null then the [TouchableSpanView] properties will be used. If this is
-     * not null, then this will be called instead of using the [TouchableSpanView] properties.
-     *
-     * @author chRyNaN
-     */
-    var drawStateListener: DrawStateListener? = null
+    var viewModel: TouchableSpanViewModel = TouchableSpanViewModel()
+        set(value) {
+            field = value
 
-    override var backgroundColor = DEFAULT_BACKGROUND_COLOR
-    override var selectedBackgroundColor = DEFAULT_SELECTED_BACKGROUND_COLOR
-    override var textColor = DEFAULT_TEXT_COLOR
-    override var selectedTextColor = DEFAULT_SELECTED_TEXT_COLOR
-    override var isUnderlined = DEFAULT_IS_UNDERLINED
-    override var isUnderlinedWhenSelected = DEFAULT_SELECTED_IS_UNDERLINED
-    override var textTypeface: Typeface = DEFAULT_TEXT_TYPEFACE
-    override var selectedTextTypeface: Typeface = DEFAULT_SELECTED_TEXT_TYPEFACE
+            backgroundColor = value.backgroundColor
+            selectedBackgroundColor = value.selectedBackgroundColor
+            textColor = value.textColor
+            selectedTextColor = value.selectedTextColor
+            isUnderlined = value.isUnderlined
+            isUnderlinedWhenSelected = value.isUnderlinedWhenSelected
+            textTypeface = value.textTypeface
+            selectedTextTypeface = value.selectedTextTypeface
+        }
+
+    override var backgroundColor: ColorInt = viewModel.backgroundColor
+        internal set
+    override var selectedBackgroundColor: ColorInt = viewModel.selectedBackgroundColor
+        internal set
+    override var textColor: ColorInt = viewModel.textColor
+        internal set
+    override var selectedTextColor: ColorInt = viewModel.selectedTextColor
+        internal set
+    override var isUnderlined: Boolean = viewModel.isUnderlined
+        internal set
+    override var isUnderlinedWhenSelected: Boolean = viewModel.isUnderlinedWhenSelected
+        internal set
+    override var textTypeface: Typeface = viewModel.textTypeface
+        internal set
+    override var selectedTextTypeface: Typeface = viewModel.selectedTextTypeface
+        internal set
 
     /**
      * Performs the touch action associated with this span.
@@ -88,31 +94,11 @@ abstract class TouchableSpan : CharacterStyle(),
      * @author chRyNaN
      */
     override fun updateDrawState(textPaint: TextPaint) {
-        drawStateListener?.updateDrawState(textPaint = textPaint, isSelected = isSelected)
-                ?: textPaint.apply {
-                    color = if (isSelected) selectedTextColor else textColor
-                    bgColor = if (isSelected) selectedBackgroundColor else backgroundColor
-                    isUnderlineText = if (isSelected) isUnderlinedWhenSelected else isUnderlined
-                    typeface = if (isSelected) selectedTextTypeface else textTypeface
-                }
-    }
-
-    /**
-     * A listener that is called when a [TouchableSpan] should update it's draw state. This allows
-     * complete control over the display of the touchable text marked by a [TouchableSpan].
-     *
-     * @author chRyNaN
-     */
-    interface DrawStateListener {
-
-        /**
-         * A function that is called when a [TouchableSpan] should update it's draw state.
-         *
-         * @param [textPaint] The [TextPaint] that is used for the touchable text.
-         * @param [isSelected] Indicates whether the [TouchableSpan] is currently selected.
-         *
-         * @author chRyNaN
-         */
-        fun updateDrawState(textPaint: TextPaint, isSelected: Boolean)
+        textPaint.apply {
+            color = if (isSelected) selectedTextColor else textColor
+            bgColor = if (isSelected) selectedBackgroundColor else backgroundColor
+            isUnderlineText = if (isSelected) isUnderlinedWhenSelected else isUnderlined
+            typeface = if (isSelected) selectedTextTypeface else textTypeface
+        }
     }
 }

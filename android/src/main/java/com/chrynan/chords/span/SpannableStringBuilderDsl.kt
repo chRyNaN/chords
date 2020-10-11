@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.span
 
 import android.text.SpannableString
@@ -16,4 +18,4 @@ class SpannableStringBuilderDsl internal constructor() {
 }
 
 fun buildSpannableString(builderAction: SpannableStringBuilderDsl.() -> Unit): SpannableStringBuilder =
-        SpannableStringBuilderDsl().apply(builderAction).build()
+    SpannableStringBuilderDsl().apply(builderAction).build()

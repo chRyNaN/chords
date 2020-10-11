@@ -18,9 +18,14 @@ import com.chrynan.chords.model.Chord
  * @author chRyNaN
  */
 class ChordSpan(
-        private val chord: Chord,
-        private val listener: ChordSelectedListener
+    private val chord: Chord,
+    private val listener: ChordSelectedListener,
+    viewModel: TouchableSpanViewModel = TouchableSpanViewModel()
 ) : TouchableSpan() {
+
+    init {
+        this.viewModel = viewModel
+    }
 
     override fun onTouch(widget: View, m: MotionEvent): Boolean {
         listener.onChordSpanSelected(chord)

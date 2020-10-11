@@ -1,6 +1,5 @@
 package com.chrynan.chords.span
 
-import android.graphics.Color
 import android.graphics.Typeface
 import com.chrynan.colors.ColorInt
 
@@ -16,67 +15,54 @@ interface TouchableSpanView {
      *
      * @author chRyNaN
      */
-    var backgroundColor: ColorInt
+    val backgroundColor: ColorInt
 
     /**
      * The background [ColorInt] of the touchable text when it is selected.
      *
      * @author chRyNaN
      */
-    var selectedBackgroundColor: ColorInt
+    val selectedBackgroundColor: ColorInt
 
     /**
      * The text [ColorInt] of the touchable text when it is not selected.
      *
      * @author chRyNaN
      */
-    var textColor: ColorInt
+    val textColor: ColorInt
 
     /**
      * The text [ColorInt] of the touchable text when it is selected.
      *
      * @author chRyNaN
      */
-    var selectedTextColor: ColorInt
+    val selectedTextColor: ColorInt
 
     /**
      * Whether the touchable text is underlined when it is not selected.
      *
      * @author chRyNaN
      */
-    var isUnderlined: Boolean
+    val isUnderlined: Boolean
 
     /**
      * Whether the touchable text is underlined when it is selected.
      *
      * @author chRyNaN
      */
-    var isUnderlinedWhenSelected: Boolean
+    val isUnderlinedWhenSelected: Boolean
 
     /**
      * The [Typeface] for the touchable text when it is not selected.
      *
      * @author chRyNaN
      */
-    var textTypeface: Typeface
+    val textTypeface: Typeface
 
     /**
      * The [Typeface] for the touchable text when it is selected.
      *
      * @author chRyNaN
      */
-    var selectedTextTypeface: Typeface
-
-    companion object {
-
-        const val DEFAULT_IS_UNDERLINED = false
-        const val DEFAULT_SELECTED_IS_UNDERLINED = false
-
-        const val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT
-        const val DEFAULT_SELECTED_BACKGROUND_COLOR = Color.TRANSPARENT
-        const val DEFAULT_TEXT_COLOR = Color.BLUE
-        const val DEFAULT_SELECTED_TEXT_COLOR = Color.BLUE
-        val DEFAULT_TEXT_TYPEFACE: Typeface = Typeface.DEFAULT
-        val DEFAULT_SELECTED_TEXT_TYPEFACE: Typeface = Typeface.DEFAULT
-    }
+    val selectedTextTypeface: Typeface
 }
