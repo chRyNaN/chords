@@ -3,7 +3,7 @@
 An easily customizable Kotlin multi-platform View to display guitar (and other stringed instrument) chords. 
 Simple to use and beautifully designed.
 
-Current Version: `2.3.1`
+**Current Version:** ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/chrynan/chords)
 
 <img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-180759.png" width="300"></img>
 <img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-183742.png" width="300"></img>
