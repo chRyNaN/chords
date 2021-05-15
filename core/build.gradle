@@ -2,6 +2,8 @@ import com.chrynan.chords.buildSrc.LibraryConstants
 
 apply plugin: "kotlin-multiplatform"
 apply plugin: "kotlinx-serialization"
+apply plugin: "maven-publish"
+apply plugin: "org.jetbrains.dokka"
 
 group LibraryConstants.group
 version LibraryConstants.versionName
@@ -10,7 +12,6 @@ kotlin {
     jvm()
     js {
         browser {
-
         }
     }
     ios()
@@ -20,7 +21,7 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common"
 
-                api "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
 
                 api "com.chrynan.colors:colors-core:0.2.5"
             }
@@ -52,31 +53,30 @@ configurations {
     compileClasspath
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 publishing {
-    publications {
-        kotlinMultiplatform {
-            artifactId = "chords-core"
-        }
-        jvm {
-            artifactId = "chords-core-jvm"
-        }
-        js {
-            artifactId = "chords-core-js"
-        }
-        iosArm64 {
-            artifactId = "chords-core-ios-arm64"
-        }
-        iosX64 {
-            artifactId = "chords-core-ios-x64"
-        }
-        metadata {
-            artifactId = "chords-core-metadata"
+    repositories {
+        maven {
+            url "https://repo.repsy.io/mvn/chrynan/public"
+
+            credentials {
+                username = project.findProperty("repsyUsername") ?: System.getenv("repsyUsername")
+                password = project.findProperty("repsyToken") ?: System.getenv("repsyToken")
+            }
         }
     }
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
+// Documentation
+tasks.named("dokkaGfm") {
+    dokkaSourceSets {
+        configureEach {
+            includes.from("Module.md")
+        }
     }
 }
