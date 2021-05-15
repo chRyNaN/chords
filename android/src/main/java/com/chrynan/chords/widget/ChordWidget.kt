@@ -1,6 +1,7 @@
 package com.chrynan.chords.widget
 
 import android.content.Context
+import com.chrynan.colors.Color
 import android.graphics.*
 import android.os.Parcel
 import android.os.Parcelable
@@ -8,11 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.chrynan.chords.R
 import com.chrynan.chords.model.*
-import com.chrynan.chords.parcel.ChordChartParceler
-import com.chrynan.chords.parcel.ChordParceler
-import com.chrynan.chords.util.getTypeface
-import com.chrynan.chords.util.writeChord
-import com.chrynan.chords.util.writeChordChart
+import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_FIT_TO_HEIGHT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_MUTED_TEXT
@@ -20,6 +17,7 @@ import com.chrynan.chords.view.ChordView.Companion.DEFAULT_OPEN_TEXT
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
+import com.chrynan.colors.ColorInt
 import kotlin.math.min
 import kotlin.math.round
 
@@ -46,8 +44,9 @@ import kotlin.math.round
  *
  * @author chRyNaN
  */
+@OptIn(ExperimentalUnsignedTypes::class)
 class ChordWidget : View,
-        ChordView {
+    ChordView {
 
     override var chord: Chord? = null
         set(value) {
@@ -100,38 +99,38 @@ class ChordWidget : View,
     override var fretColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretPaint.color = value
+            fretPaint.color = value.value
             invalidate()
         }
     override var fretLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            fretLabelTextPaint.color = value
+            fretLabelTextPaint.color = value.value
             invalidate()
         }
     override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringPaint.color = value
+            stringPaint.color = value.value
             invalidate()
         }
     override var stringLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringLabelTextPaint.color = value
+            stringLabelTextPaint.color = value.value
             invalidate()
         }
     override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
-            notePaint.color = value
-            barLinePaint.color = value
+            notePaint.color = value.value
+            barLinePaint.color = value.value
             invalidate()
         }
     override var noteLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            noteLabelTextPaint.color = value
+            noteLabelTextPaint.color = value.value
             invalidate()
         }
 
@@ -255,38 +254,83 @@ class ChordWidget : View,
 
     constructor(context: Context, attrs: AttributeSet? = null) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         if (!isInEditMode) {
             if (attrs != null) {
-                val a = getContext().theme.obtainStyledAttributes(attrs, R.styleable.ChordWidget, defStyleAttr, 0)
+                val a = getContext().theme.obtainStyledAttributes(
+                    attrs,
+                    R.styleable.ChordWidget,
+                    defStyleAttr,
+                    0
+                )
 
                 try {
-                    fitToHeight = a.getBoolean(R.styleable.ChordWidget_fitToHeight, DEFAULT_FIT_TO_HEIGHT)
+                    fitToHeight =
+                        a.getBoolean(R.styleable.ChordWidget_fitToHeight, DEFAULT_FIT_TO_HEIGHT)
 
-                    fretColor = a.getColor(R.styleable.ChordWidget_fretColor, DEFAULT_COLOR)
-                    stringColor = a.getColor(R.styleable.ChordWidget_stringColor, DEFAULT_COLOR)
-                    fretLabelTextColor = a.getColor(R.styleable.ChordWidget_fretLabelTextColor, DEFAULT_COLOR)
-                    stringLabelTextColor = a.getColor(R.styleable.ChordWidget_stringLabelTextColor, DEFAULT_COLOR)
-                    noteColor = a.getColor(R.styleable.ChordWidget_noteColor, DEFAULT_COLOR)
-                    noteLabelTextColor = a.getColor(R.styleable.ChordWidget_noteLabelTextColor, DEFAULT_TEXT_COLOR)
+                    fretColor =
+                        ColorInt(a.getColor(R.styleable.ChordWidget_fretColor, DEFAULT_COLOR.value))
+                    stringColor = ColorInt(
+                        a.getColor(
+                            R.styleable.ChordWidget_stringColor,
+                            DEFAULT_COLOR.value
+                        )
+                    )
+                    fretLabelTextColor =
+                        ColorInt(
+                            a.getColor(
+                                R.styleable.ChordWidget_fretLabelTextColor,
+                                DEFAULT_COLOR.value
+                            )
+                        )
+                    stringLabelTextColor =
+                        ColorInt(
+                            a.getColor(
+                                R.styleable.ChordWidget_stringLabelTextColor,
+                                DEFAULT_COLOR.value
+                            )
+                        )
+                    noteColor =
+                        ColorInt(a.getColor(R.styleable.ChordWidget_noteColor, DEFAULT_COLOR.value))
+                    noteLabelTextColor =
+                        ColorInt(
+                            a.getColor(
+                                R.styleable.ChordWidget_noteLabelTextColor,
+                                DEFAULT_TEXT_COLOR.value
+                            )
+                        )
 
                     mutedStringText = a.getString(R.styleable.ChordWidget_mutedStringText)
-                            ?: DEFAULT_MUTED_TEXT
+                        ?: DEFAULT_MUTED_TEXT
                     openStringText = a.getString(R.styleable.ChordWidget_openStringText)
-                            ?: DEFAULT_OPEN_TEXT
+                        ?: DEFAULT_OPEN_TEXT
 
-                    stringLabelState = when (a.getInt(R.styleable.ChordWidget_stringLabelState, 0)) {
-                        0 -> StringLabelState.SHOW_NUMBER
-                        1 -> StringLabelState.SHOW_LABEL
-                        else -> StringLabelState.HIDE
-                    }
+                    stringLabelState =
+                        when (a.getInt(R.styleable.ChordWidget_stringLabelState, 0)) {
+                            0 -> StringLabelState.SHOW_NUMBER
+                            1 -> StringLabelState.SHOW_LABEL
+                            else -> StringLabelState.HIDE
+                        }
 
-                    showFingerNumbers = a.getBoolean(R.styleable.ChordWidget_showFingerNumbers, DEFAULT_SHOW_FINGER_NUMBERS)
-                    showFretNumbers = a.getBoolean(R.styleable.ChordWidget_showFretNumbers, DEFAULT_SHOW_FRET_NUMBERS)
+                    showFingerNumbers = a.getBoolean(
+                        R.styleable.ChordWidget_showFingerNumbers,
+                        DEFAULT_SHOW_FINGER_NUMBERS
+                    )
+                    showFretNumbers = a.getBoolean(
+                        R.styleable.ChordWidget_showFretNumbers,
+                        DEFAULT_SHOW_FRET_NUMBERS
+                    )
 
-                    a.getTypeface(context, R.styleable.ChordWidget_fretLabelTypeface)?.let { fretLabelTypeface = it }
-                    a.getTypeface(context, R.styleable.ChordWidget_noteLabelTypeface)?.let { noteLabelTypeface = it }
-                    a.getTypeface(context, R.styleable.ChordWidget_stringLabelTypeface)?.let { stringLabelTypeface = it }
+                    a.getTypeface(context, R.styleable.ChordWidget_fretLabelTypeface)
+                        ?.let { fretLabelTypeface = it }
+                    a.getTypeface(context, R.styleable.ChordWidget_noteLabelTypeface)
+                        ?.let { noteLabelTypeface = it }
+                    a.getTypeface(context, R.styleable.ChordWidget_stringLabelTypeface)
+                        ?.let { stringLabelTypeface = it }
                 } finally {
                     a.recycle()
                 }
@@ -354,7 +398,10 @@ class ChordWidget : View,
         val verticalExtraCount = if (showBottomStringLabels) 2 else 1
 
         // We add 1 to make room for two halves of notes displayed on the first and last strings. Otherwise, they'll be cut-off.
-        noteSize = min((actualWidth / (chart.stringCount + 1 + horizontalExtraCount)), (actualHeight / (fretCount + 1 + verticalExtraCount)))
+        noteSize = min(
+            (actualWidth / (chart.stringCount + 1 + horizontalExtraCount)),
+            (actualHeight / (fretCount + 1 + verticalExtraCount))
+        )
 
         val textSize = noteSize * .75f
         fretLabelTextSize = textSize
@@ -366,56 +413,65 @@ class ChordWidget : View,
         stringSize = (stringDistance / chart.stringCount).coerceAtLeast(1f)
         fretMarkerSize = stringSize
 
-        fretSize = round((actualHeight - (noteSize * verticalExtraCount) - (fretCount + 1) * fretMarkerSize) / fretCount)
+        fretSize =
+            round((actualHeight - (noteSize * verticalExtraCount) - (fretCount + 1) * fretMarkerSize) / fretCount)
 
         val drawingWidth = noteSize * (chart.stringCount + 1 + horizontalExtraCount)
         val drawingHeight = (fretSize * fretCount) + (noteSize * (1 + verticalExtraCount))
 
         // Center everything
         drawingBounds.set(
-                (absoluteWidth - drawingWidth) / 2,
-                (absoluteHeight - drawingHeight) / 2,
-                (absoluteWidth - drawingWidth) / 2 + drawingWidth,
-                (absoluteHeight - drawingHeight) / 2 + drawingHeight)
+            (absoluteWidth - drawingWidth) / 2,
+            (absoluteHeight - drawingHeight) / 2,
+            (absoluteWidth - drawingWidth) / 2 + drawingWidth,
+            (absoluteHeight - drawingHeight) / 2 + drawingHeight
+        )
 
         // The actual chart bounds
         chartBounds.set(
-                drawingBounds.left + (noteSize * horizontalExtraCount) + (noteSize * .5f),
-                drawingBounds.top + noteSize,
-                drawingBounds.right - (noteSize * .5f),
-                drawingBounds.bottom - (if (showBottomStringLabels) noteSize else 0f))
+            drawingBounds.left + (noteSize * horizontalExtraCount) + (noteSize * .5f),
+            drawingBounds.top + noteSize,
+            drawingBounds.right - (noteSize * .5f),
+            drawingBounds.bottom - (if (showBottomStringLabels) noteSize else 0f)
+        )
 
         // The open/closed labels for the String above the chart
         stringTopLabelBounds.set(
-                chartBounds.left,
-                drawingBounds.top,
-                chartBounds.right,
-                drawingBounds.top + noteSize)
+            chartBounds.left,
+            drawingBounds.top,
+            chartBounds.right,
+            drawingBounds.top + noteSize
+        )
 
         // The number/note labels for the String below the chart
         stringBottomLabelBounds.set(
-                chartBounds.left,
-                chartBounds.bottom,
-                chartBounds.right,
-                chartBounds.bottom + noteSize)
+            chartBounds.left,
+            chartBounds.bottom,
+            chartBounds.right,
+            chartBounds.bottom + noteSize
+        )
 
         // The fret number labels on the side of the chart
         fretSideLabelBounds.set(
-                drawingBounds.left,
-                chartBounds.top,
-                drawingBounds.left + noteSize,
-                drawingBounds.bottom)
+            drawingBounds.left,
+            chartBounds.top,
+            drawingBounds.left + noteSize,
+            drawingBounds.bottom
+        )
     }
 
     private fun calculateFretPositions() {
         fretLineRects.clear()
 
         for (i in 0..fretCount) {
-            fretLineRects.add(RectF(
+            fretLineRects.add(
+                RectF(
                     chartBounds.left,
                     chartBounds.top + i * fretSize + i * fretMarkerSize,
                     chartBounds.right - stringSize,
-                    chartBounds.top + i * fretSize + i * fretMarkerSize))
+                    chartBounds.top + i * fretSize + i * fretMarkerSize
+                )
+            )
         }
     }
 
@@ -423,11 +479,14 @@ class ChordWidget : View,
         stringLineRects.clear()
 
         for (i in 0 until chart.stringCount) {
-            stringLineRects.add(RectF(
+            stringLineRects.add(
+                RectF(
                     chartBounds.left + i * stringDistance + i * stringSize,
                     chartBounds.top,
                     chartBounds.left + i * stringDistance + i * stringSize,
-                    chartBounds.top + fretCount * fretSize + fretCount * fretMarkerSize))
+                    chartBounds.top + fretCount * fretSize + fretCount * fretMarkerSize
+                )
+            )
         }
     }
 
@@ -435,9 +494,16 @@ class ChordWidget : View,
         fretNumberPoints.clear()
 
         for (i in 0..(chart.fretEnd.number - chart.fretStart.number)) {
-            fretNumberPoints.add(PointF(
+            fretNumberPoints.add(
+                PointF(
                     drawingBounds.left + fretSideLabelBounds.width() / 2,
-                    getVerticalCenterTextPosition(stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2, (i + 1).toString(), fretLabelTextPaint)))
+                    getVerticalCenterTextPosition(
+                        stringTopLabelBounds.bottom + i * fretMarkerSize + i * fretSize + fretSize / 2,
+                        (i + 1).toString(),
+                        fretLabelTextPaint
+                    )
+                )
+            )
         }
     }
 
@@ -447,25 +513,34 @@ class ChordWidget : View,
         chord?.bars?.forEach { bar ->
             if (bar.fret.number in chart.fretStart.number..chart.fretEnd.number && bar.endString.number < chart.stringCount + 1) {
                 val relativeFretNumber = bar.fret.number - (chart.fretStart.number - 1)
-                val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
-                        (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
-                val top = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
-                val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
-                        (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
+                val left =
+                    (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
+                            (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
+                val top =
+                    chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
+                val right =
+                    (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
+                            (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
                 val bottom = top + noteSize
                 val text = if (bar.finger === Finger.UNKNOWN) "" else bar.finger.toString()
                 val textX = left + (right - left) / 2
-                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, text, noteLabelTextPaint)
+                val textY = getVerticalCenterTextPosition(
+                    top + (bottom - top) / 2,
+                    text,
+                    noteLabelTextPaint
+                )
 
                 barLinePaths.add(
-                        BarPosition(
-                                text = text,
-                                textX = textX,
-                                textY = textY,
-                                left = left,
-                                top = top,
-                                right = right,
-                                bottom = bottom))
+                    BarPosition(
+                        text = text,
+                        textX = textX,
+                        textY = textY,
+                        left = left,
+                        top = top,
+                        right = right,
+                        bottom = bottom
+                    )
+                )
             }
         }
     }
@@ -476,17 +551,25 @@ class ChordWidget : View,
         chord?.notes?.forEach { note ->
             if (note.fret.number in chart.fretStart.number..chart.fretEnd.number && note.string.number < chart.stringCount + 1) {
                 val relativeFretNumber = note.fret.number - (chart.fretStart.number - 1)
-                val startCenterX = chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
-                val startCenterY = chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
+                val startCenterX =
+                    chartBounds.left + (chart.stringCount - note.string.number) * stringDistance + (chart.stringCount - note.string.number) * stringSize
+                val startCenterY =
+                    chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2)
                 val text = if (note.finger === Finger.UNKNOWN) "" else note.finger.toString()
 
                 notePositions.add(
-                        NotePosition(
-                                text = text,
-                                circleX = startCenterX,
-                                circleY = startCenterY,
-                                textX = startCenterX,
-                                textY = getVerticalCenterTextPosition(startCenterY, text, noteLabelTextPaint)))
+                    NotePosition(
+                        text = text,
+                        circleX = startCenterX,
+                        circleY = startCenterY,
+                        textX = startCenterX,
+                        textY = getVerticalCenterTextPosition(
+                            startCenterY,
+                            text,
+                            noteLabelTextPaint
+                        )
+                    )
+                )
             }
         }
     }
@@ -498,45 +581,67 @@ class ChordWidget : View,
         // Top string mute labels
         chord?.mutes?.forEach { muted ->
             if (muted.string.number < chart.stringCount + 1) {
-                val x = chartBounds.left + (chart.stringCount - muted.string.number) * stringDistance + (chart.stringCount - muted.string.number) * stringSize
-                val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height() / 2, mutedStringText, stringLabelTextPaint)
+                val x =
+                    chartBounds.left + (chart.stringCount - muted.string.number) * stringDistance + (chart.stringCount - muted.string.number) * stringSize
+                val y = getVerticalCenterTextPosition(
+                    drawingBounds.top + stringTopLabelBounds.height() / 2,
+                    mutedStringText,
+                    stringLabelTextPaint
+                )
 
                 stringTopMarkerPositions.add(
-                        StringPosition(
-                                text = mutedStringText,
-                                textX = x,
-                                textY = y))
+                    StringPosition(
+                        text = mutedStringText,
+                        textX = x,
+                        textY = y
+                    )
+                )
             }
         }
 
         // Top string open labels
         chord?.opens?.forEach { open ->
             if (open.string.number < chart.stringCount + 1) {
-                val x = chartBounds.left + (chart.stringCount - open.string.number) * stringDistance + (chart.stringCount - open.string.number) * stringSize
-                val y = getVerticalCenterTextPosition(drawingBounds.top + stringTopLabelBounds.height() / 2, openStringText, stringLabelTextPaint)
+                val x =
+                    chartBounds.left + (chart.stringCount - open.string.number) * stringDistance + (chart.stringCount - open.string.number) * stringSize
+                val y = getVerticalCenterTextPosition(
+                    drawingBounds.top + stringTopLabelBounds.height() / 2,
+                    openStringText,
+                    stringLabelTextPaint
+                )
 
                 stringTopMarkerPositions.add(
-                        StringPosition(
-                                text = openStringText,
-                                textX = x,
-                                textY = y))
+                    StringPosition(
+                        text = openStringText,
+                        textX = x,
+                        textY = y
+                    )
+                )
             }
         }
 
         if (showBottomStringLabels) {
             chart.stringLabels.forEach { stringLabel ->
                 if (stringLabel.string.number < chart.stringCount + 1) {
-                    val label = if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
+                    val label =
+                        if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
 
                     if (label != null) {
-                        val x = chartBounds.left + (chart.stringCount - stringLabel.string.number) * stringDistance + (chart.stringCount - stringLabel.string.number) * stringSize
-                        val y = getVerticalCenterTextPosition(chartBounds.bottom + stringBottomLabelBounds.height() / 2, label, stringLabelTextPaint)
+                        val x =
+                            chartBounds.left + (chart.stringCount - stringLabel.string.number) * stringDistance + (chart.stringCount - stringLabel.string.number) * stringSize
+                        val y = getVerticalCenterTextPosition(
+                            chartBounds.bottom + stringBottomLabelBounds.height() / 2,
+                            label,
+                            stringLabelTextPaint
+                        )
 
                         stringBottomLabelPositions.add(
-                                StringPosition(
-                                        text = label,
-                                        textX = x,
-                                        textY = y))
+                            StringPosition(
+                                text = label,
+                                textX = x,
+                                textY = y
+                            )
+                        )
                     }
                 }
             }
@@ -547,24 +652,51 @@ class ChordWidget : View,
         // Fret numbers; check if we are showing them or not
         if (showFretNumbers) {
             fretNumberPoints.forEachIndexed { index, point ->
-                canvas.drawText((chart.fretStart.number + index).toString(), point.x, point.y, fretLabelTextPaint)
+                canvas.drawText(
+                    (chart.fretStart.number + index).toString(),
+                    point.x,
+                    point.y,
+                    fretLabelTextPaint
+                )
             }
         }
     }
 
     private fun drawStringMarkers(canvas: Canvas) {
         // Top String markers (open/muted)
-        stringTopMarkerPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+        stringTopMarkerPositions.forEach {
+            canvas.drawText(
+                it.text,
+                it.textX,
+                it.textY,
+                stringLabelTextPaint
+            )
+        }
 
         // Bottom String labels (number/note)
-        stringBottomLabelPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+        stringBottomLabelPositions.forEach {
+            canvas.drawText(
+                it.text,
+                it.textX,
+                it.textY,
+                stringLabelTextPaint
+            )
+        }
     }
 
     private fun drawBars(canvas: Canvas) {
         // Bars
         barLinePaths.forEach {
             // Draw Bar
-            canvas.drawRoundRect(it.left, it.top, it.right, it.bottom, (it.bottom - it.top), (it.bottom - it.top), barLinePaint)
+            canvas.drawRoundRect(
+                it.left,
+                it.top,
+                it.right,
+                it.bottom,
+                (it.bottom - it.top),
+                (it.bottom - it.top),
+                barLinePaint
+            )
 
             // Text
             if (showFingerNumbers) {
@@ -584,7 +716,11 @@ class ChordWidget : View,
         }
     }
 
-    private fun getVerticalCenterTextPosition(originalYPosition: Float, text: String?, textPaint: Paint): Float {
+    private fun getVerticalCenterTextPosition(
+        originalYPosition: Float,
+        text: String?,
+        textPaint: Paint
+    ): Float {
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text?.length ?: 0, bounds)
 
@@ -592,12 +728,12 @@ class ChordWidget : View,
     }
 
     private fun Canvas.drawLine(rectF: RectF, paint: Paint) =
-            drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, paint)
+        drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, paint)
 
     companion object {
 
-        const val DEFAULT_COLOR = Color.BLACK
-        const val DEFAULT_TEXT_COLOR = Color.WHITE
+        val DEFAULT_COLOR = Color.BLACK.colorInt
+        val DEFAULT_TEXT_COLOR = Color.WHITE.colorInt
     }
 
     private class SavedState : BaseSavedState {
@@ -620,9 +756,9 @@ class ChordWidget : View,
         constructor(parcelable: Parcelable) : super(parcelable)
 
         constructor(parcel: Parcel) : super(parcel) {
-            chart = ChordChartParceler.create(parcel)
+            chart = parcel.readChordChart()
             chord = try {
-                ChordParceler.create(parcel)
+                parcel.readChord()
             } catch (throwable: Throwable) {
                 null
             }
@@ -636,26 +772,26 @@ class ChordWidget : View,
     }
 
     private data class NotePosition(
-            val text: String,
-            val circleX: Float,
-            val circleY: Float,
-            val textX: Float,
-            val textY: Float
+        val text: String,
+        val circleX: Float,
+        val circleY: Float,
+        val textX: Float,
+        val textY: Float
     )
 
     private data class StringPosition(
-            val text: String,
-            val textX: Float,
-            val textY: Float
+        val text: String,
+        val textX: Float,
+        val textY: Float
     )
 
     private data class BarPosition(
-            val text: String,
-            val left: Float,
-            val top: Float,
-            val right: Float,
-            val bottom: Float,
-            val textX: Float,
-            val textY: Float
+        val text: String,
+        val left: Float,
+        val top: Float,
+        val right: Float,
+        val bottom: Float,
+        val textX: Float,
+        val textY: Float
     )
 }

@@ -95,8 +95,8 @@ abstract class TouchableSpan : CharacterStyle(),
      */
     override fun updateDrawState(textPaint: TextPaint) {
         textPaint.apply {
-            color = if (isSelected) selectedTextColor else textColor
-            bgColor = if (isSelected) selectedBackgroundColor else backgroundColor
+            color = if (isSelected) selectedTextColor.value else textColor.value
+            bgColor = if (isSelected) selectedBackgroundColor.value else backgroundColor.value
             isUnderlineText = if (isSelected) isUnderlinedWhenSelected else isUnderlined
             typeface = if (isSelected) selectedTextTypeface else textTypeface
         }

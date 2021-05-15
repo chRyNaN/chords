@@ -10,6 +10,7 @@ import org.w3c.dom.*
  *
  * @author chRyNaN
  */
+@OptIn(ExperimentalUnsignedTypes::class)
 data class Paint(
     var style: Style = Style.FILL,
     var fillColor: Color = Color.BLACK,

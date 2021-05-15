@@ -1,9 +1,10 @@
 package com.chrynan.chords.span
 
-import android.graphics.Color
 import android.graphics.Typeface
+import com.chrynan.colors.Color
 import com.chrynan.colors.ColorInt
 
+@OptIn(ExperimentalUnsignedTypes::class)
 data class TouchableSpanViewModel(
     val backgroundColor: ColorInt = DEFAULT_BACKGROUND_COLOR,
     val selectedBackgroundColor: ColorInt = DEFAULT_SELECTED_BACKGROUND_COLOR,
@@ -20,10 +21,10 @@ data class TouchableSpanViewModel(
         const val DEFAULT_IS_UNDERLINED = false
         const val DEFAULT_SELECTED_IS_UNDERLINED = false
 
-        const val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT
-        const val DEFAULT_SELECTED_BACKGROUND_COLOR = Color.TRANSPARENT
-        const val DEFAULT_TEXT_COLOR = Color.BLUE
-        const val DEFAULT_SELECTED_TEXT_COLOR = Color.BLUE
+        val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT.colorInt
+        val DEFAULT_SELECTED_BACKGROUND_COLOR = Color.TRANSPARENT.colorInt
+        val DEFAULT_TEXT_COLOR = Color(-0xffff01).colorInt
+        val DEFAULT_SELECTED_TEXT_COLOR = Color(-0xffff01).colorInt
         val DEFAULT_TEXT_TYPEFACE: Typeface = Typeface.DEFAULT
         val DEFAULT_SELECTED_TEXT_TYPEFACE: Typeface = Typeface.DEFAULT
     }

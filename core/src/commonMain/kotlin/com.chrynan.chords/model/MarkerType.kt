@@ -31,11 +31,7 @@ enum class MarkerType(@SerialName(value = "name") val typeName: String) {
          * @author chRyNaN
          */
         fun fromTypeName(name: String, ignoreCase: Boolean = false) = values().firstOrNull {
-            if (ignoreCase) {
-                it.typeName.toLowerCase() == name.toLowerCase()
-            } else {
-                it.typeName == name
-            }
+            it.typeName.equals(name, ignoreCase = ignoreCase)
         }
     }
 }

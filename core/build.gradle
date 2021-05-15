@@ -23,23 +23,7 @@ kotlin {
 
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
 
-                api "com.chrynan.colors:colors-core:0.2.5"
-            }
-        }
-        commonTest {
-            dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-common"
-                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
-            }
-        }
-        jvmTest {
-            dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-junit"
-            }
-        }
-        jsTest {
-            dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-js"
+                api "com.chrynan.colors:colors-core:0.3.0"
             }
         }
         all {

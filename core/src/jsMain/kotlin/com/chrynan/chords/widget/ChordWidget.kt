@@ -7,7 +7,7 @@ import com.chrynan.colors.ColorInt
 import com.chrynan.chords.model.*
 import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
-import com.chrynan.colors.toRgbaColor
+import com.chrynan.colors.toColor
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.math.min
@@ -29,6 +29,7 @@ import kotlin.math.round
  * limitations under the License.
  */
 
+@OptIn(ExperimentalUnsignedTypes::class)
 class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     ChordView {
 
@@ -51,33 +52,33 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     override var fretColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretPaint.fillColor = value.toRgbaColor()
+            fretPaint.fillColor = value.toColor()
         }
     override var fretLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretLabelTextPaint.fillColor = value.toRgbaColor()
+            fretLabelTextPaint.fillColor = value.toColor()
         }
     override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringPaint.fillColor = value.toRgbaColor()
+            stringPaint.fillColor = value.toColor()
         }
     override var stringLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringLabelTextPaint.fillColor = value.toRgbaColor()
+            stringLabelTextPaint.fillColor = value.toColor()
         }
     override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
-            notePaint.fillColor = value.toRgbaColor()
-            barLinePaint.fillColor = value.toRgbaColor()
+            notePaint.fillColor = value.toColor()
+            barLinePaint.fillColor = value.toColor()
         }
     override var noteLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            noteLabelTextPaint.fillColor = value.toRgbaColor()
+            noteLabelTextPaint.fillColor = value.toColor()
         }
 
     private val fretPaint = Paint().apply {
@@ -319,16 +320,22 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         chord?.bars?.forEach { bar ->
             if (bar.fret.number in chart.fretStart.number..chart.fretEnd.number && bar.endString.number < chart.stringCount + 1) {
                 val relativeFretNumber = bar.fret.number - (chart.fretStart.number - 1)
-                val left = (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
-                        (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
+                val left =
+                    (chartBounds.left + (chart.stringCount - bar.endString.number) * stringDistance +
+                            (chart.stringCount - bar.endString.number) * stringSize) - noteSize / 2
                 val top =
                     chartBounds.top + (relativeFretNumber * fretSize + relativeFretNumber * fretMarkerSize - fretSize / 2) - (noteSize / 2)
-                val right = (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
-                        (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
+                val right =
+                    (chartBounds.left + (chart.stringCount - bar.startString.number) * stringDistance +
+                            (chart.stringCount - bar.startString.number) * stringSize) + (noteSize / 2)
                 val bottom = top + noteSize
                 val text = if (bar.finger === Finger.UNKNOWN) "" else bar.finger.toString()
                 val textX = left + (right - left) / 2
-                val textY = getVerticalCenterTextPosition(top + (bottom - top) / 2, text, noteLabelTextPaint)
+                val textY = getVerticalCenterTextPosition(
+                    top + (bottom - top) / 2,
+                    text,
+                    noteLabelTextPaint
+                )
 
                 barLinePaths.add(
                     BarPosition(
@@ -363,7 +370,11 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
                         circleX = startCenterX,
                         circleY = startCenterY,
                         textX = startCenterX,
-                        textY = getVerticalCenterTextPosition(startCenterY, text, noteLabelTextPaint)
+                        textY = getVerticalCenterTextPosition(
+                            startCenterY,
+                            text,
+                            noteLabelTextPaint
+                        )
                     )
                 )
             }
@@ -449,17 +460,36 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
         // Fret numbers; check if we are showing them or not
         if (showFretNumbers) {
             fretNumberPoints.forEachIndexed { index, point ->
-                canvas.drawText((chart.fretStart.number + index).toString(), point.x, point.y, fretLabelTextPaint)
+                canvas.drawText(
+                    (chart.fretStart.number + index).toString(),
+                    point.x,
+                    point.y,
+                    fretLabelTextPaint
+                )
             }
         }
     }
 
     private fun drawStringMarkers(canvas: CanvasRenderingContext2D) {
         // Top String markers (open/muted)
-        stringTopMarkerPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+        stringTopMarkerPositions.forEach {
+            canvas.drawText(
+                it.text,
+                it.textX,
+                it.textY,
+                stringLabelTextPaint
+            )
+        }
 
         // Bottom String labels (number/note)
-        stringBottomLabelPositions.forEach { canvas.drawText(it.text, it.textX, it.textY, stringLabelTextPaint) }
+        stringBottomLabelPositions.forEach {
+            canvas.drawText(
+                it.text,
+                it.textX,
+                it.textY,
+                stringLabelTextPaint
+            )
+        }
     }
 
     private fun drawBars(canvas: CanvasRenderingContext2D) {

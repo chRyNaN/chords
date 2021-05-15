@@ -1,51 +1,83 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.util
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcel
 import com.chrynan.chords.model.*
-import com.chrynan.chords.parcel.ChordAndChartParceler
-import com.chrynan.chords.parcel.ChordChartParceler
-import com.chrynan.chords.parcel.ChordParceler
+import com.chrynan.parcelable.core.Parcelable
+import com.chrynan.parcelable.android.putParcelable
+import com.chrynan.parcelable.android.getParcelable
+import com.chrynan.parcelable.android.putExtra
+import com.chrynan.parcelable.android.getParcelableExtra
+import com.chrynan.parcelable.android.encodeToParcel
+import com.chrynan.parcelable.android.decodeFromParcel
+import kotlinx.serialization.ExperimentalSerializationApi
+
+@OptIn(ExperimentalSerializationApi::class)
+internal val parcelable: Parcelable = Parcelable {}
 
 // Bundle
 
-fun Bundle.putChord(key: String, chord: Chord) = putParcelable(key, ParcelableChordWrapper(chord))
+@ExperimentalSerializationApi
+fun Bundle.putChord(key: String, chord: Chord) = putParcelable(key, chord, parcelable)
 
-fun Bundle.putChordChart(key: String, chart: ChordChart) = putParcelable(key, ParcelableChartWrapper(chart))
+@ExperimentalSerializationApi
+fun Bundle.putChordChart(key: String, chart: ChordChart) =
+    putParcelable(key, chart, parcelable)
 
-fun Bundle.putChordAndChart(key: String, chordAndChart: ChordAndChart) = putParcelable(key, ParcelableChordAndChartWrapper(chordAndChart))
+@ExperimentalSerializationApi
+fun Bundle.putChordAndChart(key: String, chordAndChart: ChordAndChart) =
+    putParcelable(key, chordAndChart, parcelable)
 
-fun Bundle.getChord(key: String) = getParcelable<ParcelableChordWrapper>(key)?.chord
+@ExperimentalSerializationApi
+fun Bundle.getChord(key: String) = getParcelable<Chord>(key, parcelable)
 
-fun Bundle.getChordChart(key: String) = getParcelable<ParcelableChartWrapper>(key)?.chart
+@ExperimentalSerializationApi
+fun Bundle.getChordChart(key: String) = getParcelable<ChordChart>(key, parcelable)
 
-fun Bundle.getChordAndChart(key: String) = getParcelable<ParcelableChordAndChartWrapper>(key)?.chordAndChart
+@ExperimentalSerializationApi
+fun Bundle.getChordAndChart(key: String) = getParcelable<ChordAndChart>(key, parcelable)
 
 // Intent
 
-fun Intent.putChordExtra(key: String, chord: Chord) = putExtra(key, ParcelableChordWrapper(chord))
+@ExperimentalSerializationApi
+fun Intent.putChordExtra(key: String, chord: Chord) = putExtra(key, chord, parcelable)
 
-fun Intent.putChordChartExtra(key: String, chart: ChordChart) = putExtra(key, ParcelableChartWrapper(chart))
+@ExperimentalSerializationApi
+fun Intent.putChordChartExtra(key: String, chart: ChordChart) = putExtra(key, chart, parcelable)
 
-fun Intent.putChordAndChartExtra(key: String, chordAndChart: ChordAndChart) = putExtra(key, ParcelableChordAndChartWrapper(chordAndChart))
+@ExperimentalSerializationApi
+fun Intent.putChordAndChartExtra(key: String, chordAndChart: ChordAndChart) =
+    putExtra(key, chordAndChart, parcelable)
 
-fun Intent.getChordExtra(key: String) = getParcelableExtra<ParcelableChordWrapper>(key)?.chord
+@ExperimentalSerializationApi
+fun Intent.getChordExtra(key: String) = getParcelableExtra<Chord>(key, parcelable)
 
-fun Intent.getChordChartExtra(key: String) = getParcelableExtra<ParcelableChartWrapper>(key)?.chart
+@ExperimentalSerializationApi
+fun Intent.getChordChartExtra(key: String) = getParcelableExtra<ChordChart>(key, parcelable)
 
-fun Intent.getChordAndChartExtra(key: String) = getParcelableExtra<ParcelableChordAndChartWrapper>(key)?.chordAndChart
+@ExperimentalSerializationApi
+fun Intent.getChordAndChartExtra(key: String) = getParcelableExtra<ChordAndChart>(key, parcelable)
 
 // Parcel
 
-fun Parcel.writeChord(chord: Chord, flags: Int) = ChordParceler.apply { chord.write(this@writeChord, flags) }
+@ExperimentalSerializationApi
+fun Parcel.writeChord(chord: Chord, flags: Int) = parcelable.encodeToParcel(this, chord)
 
-fun Parcel.writeChordChart(chart: ChordChart, flags: Int) = ChordChartParceler.apply { chart.write(this@writeChordChart, flags) }
+@ExperimentalSerializationApi
+fun Parcel.writeChordChart(chart: ChordChart, flags: Int) = parcelable.encodeToParcel(this, chart)
 
-fun Parcel.writeChordAndChart(chordAndChart: ChordAndChart, flags: Int) = ChordAndChartParceler.apply { chordAndChart.write(this@writeChordAndChart, flags) }
+@ExperimentalSerializationApi
+fun Parcel.writeChordAndChart(chordAndChart: ChordAndChart, flags: Int) =
+    parcelable.encodeToParcel(this, chordAndChart)
 
-fun Parcel.readChord(): Chord = ChordParceler.create(this)
+@ExperimentalSerializationApi
+fun Parcel.readChord(): Chord = parcelable.decodeFromParcel(this)
 
-fun Parcel.readChordChart(): ChordChart = ChordChartParceler.create(this)
+@ExperimentalSerializationApi
+fun Parcel.readChordChart(): ChordChart = parcelable.decodeFromParcel(this)
 
-fun Parcel.readChordAndChart(): ChordAndChart = ChordAndChartParceler.create(this)
+@ExperimentalSerializationApi
+fun Parcel.readChordAndChart(): ChordAndChart = parcelable.decodeFromParcel(this)

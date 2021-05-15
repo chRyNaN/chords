@@ -3,6 +3,7 @@ package com.chrynan.chords.model
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordViewBinder
 import com.chrynan.colors.ColorInt
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 /**
@@ -43,10 +44,10 @@ data class ChordViewModel(
     val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
     val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
     val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-    val fretColor: ColorInt,
-    val fretLabelTextColor: ColorInt,
-    val stringColor: ColorInt,
-    val stringLabelTextColor: ColorInt,
-    val noteColor: ColorInt,
-    val noteLabelTextColor: ColorInt
+    val fretColor: @Contextual ColorInt,
+    val fretLabelTextColor: @Contextual ColorInt,
+    val stringColor: @Contextual ColorInt,
+    val stringLabelTextColor: @Contextual ColorInt,
+    val noteColor: @Contextual ColorInt,
+    val noteLabelTextColor: @Contextual ColorInt
 )

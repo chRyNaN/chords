@@ -38,11 +38,7 @@ enum class Finger(
             ?: UNKNOWN
 
         fun fromFingerName(name: String, ignoreCase: Boolean = false) = values().firstOrNull {
-            if (ignoreCase) {
-                it.fingerName?.toLowerCase() == name.toLowerCase()
-            } else {
-                it.fingerName == name
-            }
+            it.fingerName.equals(name, ignoreCase = ignoreCase)
         } ?: UNKNOWN
     }
 }
