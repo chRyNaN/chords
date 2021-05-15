@@ -4,13 +4,12 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
 
-    implementation project(":core")
+    implementation project(":chords-core")
 }
 
 kotlin.target.browser {}

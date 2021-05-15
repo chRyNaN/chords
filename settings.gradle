@@ -1,8 +1,8 @@
 rootProject.name = "chords"
 
-include ":core"
-include ":android"
-include ":android-compose"
+include ":chords-core"
+include ":chords-android"
+include ":chords-android-compose"
 // include ":sample"
 include ":sample-js"
 

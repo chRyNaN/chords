@@ -48,7 +48,7 @@ dependencies {
     implementation "com.chrynan.parcelable:parcelable-core:0.3.1"
     implementation "com.chrynan.parcelable:parcelable-android:0.3.1"
 
-    api project(":core")
+    api project(":chords-core")
 }
 
 afterEvaluate {
