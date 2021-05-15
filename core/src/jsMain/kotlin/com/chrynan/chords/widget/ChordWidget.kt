@@ -3,11 +3,10 @@ package com.chrynan.chords.widget
 import com.chrynan.chords.graphics.Paint
 import com.chrynan.chords.graphics.Point
 import com.chrynan.chords.graphics.Rect
-import com.chrynan.colors.ColorInt
 import com.chrynan.chords.model.*
 import com.chrynan.chords.util.*
 import com.chrynan.chords.view.ChordView
-import com.chrynan.colors.toColor
+import com.chrynan.colors.Color
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.math.min
@@ -52,33 +51,33 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
     override var fretColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretPaint.fillColor = value.toColor()
+            fretPaint.fillColor = value
         }
     override var fretLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretLabelTextPaint.fillColor = value.toColor()
+            fretLabelTextPaint.fillColor = value
         }
     override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringPaint.fillColor = value.toColor()
+            stringPaint.fillColor = value
         }
     override var stringLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringLabelTextPaint.fillColor = value.toColor()
+            stringLabelTextPaint.fillColor = value
         }
     override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
-            notePaint.fillColor = value.toColor()
-            barLinePaint.fillColor = value.toColor()
+            notePaint.fillColor = value
+            barLinePaint.fillColor = value
         }
     override var noteLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            noteLabelTextPaint.fillColor = value.toColor()
+            noteLabelTextPaint.fillColor = value
         }
 
     private val fretPaint = Paint().apply {
@@ -520,8 +519,8 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
 
     companion object {
 
-        val DEFAULT_COLOR: ColorInt = com.chrynan.colors.Color.BLACK.colorInt
-        val DEFAULT_TEXT_COLOR: ColorInt = com.chrynan.colors.Color.WHITE.colorInt
+        val DEFAULT_COLOR: Color = Color.BLACK
+        val DEFAULT_TEXT_COLOR: Color = Color.WHITE
     }
 
     private data class NotePosition(

@@ -18,6 +18,7 @@ import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FINGER_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_SHOW_FRET_NUMBERS
 import com.chrynan.chords.view.ChordView.Companion.DEFAULT_STRING_LABEL_STATE
 import com.chrynan.colors.ColorInt
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlin.math.min
 import kotlin.math.round
 
@@ -99,38 +100,38 @@ class ChordWidget : View,
     override var fretColor = DEFAULT_COLOR
         set(value) {
             field = value
-            fretPaint.color = value.value
+            fretPaint.color = value.colorInt.value
             invalidate()
         }
     override var fretLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            fretLabelTextPaint.color = value.value
+            fretLabelTextPaint.color = value.colorInt.value
             invalidate()
         }
     override var stringColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringPaint.color = value.value
+            stringPaint.color = value.colorInt.value
             invalidate()
         }
     override var stringLabelTextColor = DEFAULT_COLOR
         set(value) {
             field = value
-            stringLabelTextPaint.color = value.value
+            stringLabelTextPaint.color = value.colorInt.value
             invalidate()
         }
     override var noteColor = DEFAULT_COLOR
         set(value) {
             field = value
-            notePaint.color = value.value
-            barLinePaint.color = value.value
+            notePaint.color = value.colorInt.value
+            barLinePaint.color = value.colorInt.value
             invalidate()
         }
     override var noteLabelTextColor = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
-            noteLabelTextPaint.color = value.value
+            noteLabelTextPaint.color = value.colorInt.value
             invalidate()
         }
 
@@ -273,34 +274,44 @@ class ChordWidget : View,
                         a.getBoolean(R.styleable.ChordWidget_fitToHeight, DEFAULT_FIT_TO_HEIGHT)
 
                     fretColor =
-                        ColorInt(a.getColor(R.styleable.ChordWidget_fretColor, DEFAULT_COLOR.value))
-                    stringColor = ColorInt(
+                        Color(
+                            a.getColor(
+                                R.styleable.ChordWidget_fretColor,
+                                DEFAULT_COLOR.colorInt.value
+                            )
+                        )
+                    stringColor = Color(
                         a.getColor(
                             R.styleable.ChordWidget_stringColor,
-                            DEFAULT_COLOR.value
+                            DEFAULT_COLOR.colorInt.value
                         )
                     )
                     fretLabelTextColor =
-                        ColorInt(
+                        Color(
                             a.getColor(
                                 R.styleable.ChordWidget_fretLabelTextColor,
-                                DEFAULT_COLOR.value
+                                DEFAULT_COLOR.colorInt.value
                             )
                         )
                     stringLabelTextColor =
-                        ColorInt(
+                        Color(
                             a.getColor(
                                 R.styleable.ChordWidget_stringLabelTextColor,
-                                DEFAULT_COLOR.value
+                                DEFAULT_COLOR.colorInt.value
                             )
                         )
                     noteColor =
-                        ColorInt(a.getColor(R.styleable.ChordWidget_noteColor, DEFAULT_COLOR.value))
+                        Color(
+                            a.getColor(
+                                R.styleable.ChordWidget_noteColor,
+                                DEFAULT_COLOR.colorInt.value
+                            )
+                        )
                     noteLabelTextColor =
-                        ColorInt(
+                        Color(
                             a.getColor(
                                 R.styleable.ChordWidget_noteLabelTextColor,
-                                DEFAULT_TEXT_COLOR.value
+                                DEFAULT_TEXT_COLOR.colorInt.value
                             )
                         )
 
@@ -732,10 +743,11 @@ class ChordWidget : View,
 
     companion object {
 
-        val DEFAULT_COLOR = Color.BLACK.colorInt
-        val DEFAULT_TEXT_COLOR = Color.WHITE.colorInt
+        val DEFAULT_COLOR = Color.BLACK
+        val DEFAULT_TEXT_COLOR = Color.WHITE
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     private class SavedState : BaseSavedState {
 
         companion object {

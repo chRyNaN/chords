@@ -3,7 +3,7 @@ package com.chrynan.chords.view
 import com.chrynan.chords.model.Chord
 import com.chrynan.chords.model.ChordChart
 import com.chrynan.chords.model.StringLabelState
-import com.chrynan.colors.ColorInt
+import com.chrynan.colors.Color
 
 /**
  * An interface representing a UI Widget that can display a [ChordChart] for a [Chord].
@@ -28,17 +28,17 @@ interface ChordView {
 
     var openStringText: String
 
-    var fretColor: ColorInt
+    var fretColor: Color
 
-    var fretLabelTextColor: ColorInt
+    var fretLabelTextColor: Color
 
-    var stringColor: ColorInt
+    var stringColor: Color
 
-    var stringLabelTextColor: ColorInt
+    var stringLabelTextColor: Color
 
-    var noteColor: ColorInt
+    var noteColor: Color
 
-    var noteLabelTextColor: ColorInt
+    var noteLabelTextColor: Color
 
     companion object {
 

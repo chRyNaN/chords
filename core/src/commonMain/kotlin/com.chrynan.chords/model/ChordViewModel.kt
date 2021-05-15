@@ -2,8 +2,10 @@ package com.chrynan.chords.model
 
 import com.chrynan.chords.view.ChordView
 import com.chrynan.chords.view.ChordViewBinder
+import com.chrynan.colors.Color
 import com.chrynan.colors.ColorInt
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -38,18 +40,18 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ChordViewModel(
-    val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
-    val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
-    val showFingerNumbers: Boolean = ChordView.DEFAULT_SHOW_FINGER_NUMBERS,
-    val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
-    val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
-    val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-    val fretColor: @Contextual ColorInt,
-    val fretLabelTextColor: @Contextual ColorInt,
-    val stringColor: @Contextual ColorInt,
-    val stringLabelTextColor: @Contextual ColorInt,
-    val noteColor: @Contextual ColorInt,
-    val noteLabelTextColor: @Contextual ColorInt
+    @SerialName(value = "fit_to_height") val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
+    @SerialName(value = "show_fret_numbers") val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
+    @SerialName(value = "show_finger_numbers") val showFingerNumbers: Boolean = ChordView.DEFAULT_SHOW_FINGER_NUMBERS,
+    @SerialName(value = "string_label_state") val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
+    @SerialName(value = "muted_string_text") val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
+    @SerialName(value = "open_string_text") val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
+    @SerialName(value = "fret_color") val fretColor: @Contextual Color,
+    @SerialName(value = "fret_label_text_color") val fretLabelTextColor: @Contextual Color,
+    @SerialName(value = "string_color") val stringColor: @Contextual Color,
+    @SerialName(value = "string_label_text_color") val stringLabelTextColor: @Contextual Color,
+    @SerialName(value = "note_color") val noteColor: @Contextual Color,
+    @SerialName(value = "note_label_text_color") val noteLabelTextColor: @Contextual Color
 ) {
 
     companion object

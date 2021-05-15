@@ -38,7 +38,8 @@ import com.chrynan.chords.util.isDigit
  *
  * @author chRyNaN
  */
-class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) : ChordParser<String> {
+class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
+    ChordParser<String> {
 
     override suspend fun parse(input: String): ChordParseResult {
         if (tabDelimiters.isEmpty()) throw AsciiChordParseException(message = "Tab delimiters must not be empty for ${AsciiChordParser::class.simpleName}.")
@@ -57,22 +58,28 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
         val linesToParse = if (firstLineContainsDelimiters) lines else lines.subList(1, lines.size)
 
         val chordStringMarkers =
-                linesToParse.asSequence()
-                        .mapIndexed { index, line ->
-                            line.parseLineAsString(stringNumber = index + 1, tabDelimiters = tabDelimiters)
-                        }
+            linesToParse.asSequence()
+                .mapIndexed { index, line ->
+                    line.parseLineAsString(stringNumber = index + 1, tabDelimiters = tabDelimiters)
+                }
 
         val markers = chordStringMarkers.map { it.markers }
-                .flatten()
-                .toSet()
+            .flatten()
+            .toSet()
 
         val labels = chordStringMarkers.map { it.label }
-                .toSet()
+            .toSet()
 
-        return ChordParseResult(chord = Chord(name = name, markers = markers), stringLabels = labels)
+        return ChordParseResult(
+            chord = Chord(name = name, markers = markers),
+            stringLabels = labels
+        )
     }
 
-    private fun String.parseLineAsString(stringNumber: Int, tabDelimiters: Set<Char>): ChordStringMarker {
+    private fun String.parseLineAsString(
+        stringNumber: Int,
+        tabDelimiters: Set<Char>
+    ): ChordStringMarker {
         val labelStringBuilder = StringBuilder()
         val fretStringBuilder = StringBuilder()
         val frets = mutableSetOf<Int>()
@@ -104,12 +111,13 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
         }
 
         return ChordStringMarker(
-                label = StringLabel(string = StringNumber(stringNumber), label = label),
-                markers = markers)
+            label = StringLabel(string = StringNumber(stringNumber), label = label),
+            markers = markers
+        )
     }
 
     private data class ChordStringMarker(
-            val label: StringLabel,
-            val markers: List<ChordMarker>
+        val label: StringLabel,
+        val markers: List<ChordMarker>
     )
 }
