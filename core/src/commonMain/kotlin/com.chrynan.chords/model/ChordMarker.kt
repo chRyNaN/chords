@@ -110,4 +110,6 @@ sealed class ChordMarker {
 
         override val type = MarkerType.MUTED
     }
+
+    companion object
 }

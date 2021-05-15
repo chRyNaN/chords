@@ -10,7 +10,9 @@ import kotlinx.serialization.Serializable
  * @author chRyNaN
  */
 @Serializable
-data class StringNumber(@SerialName(value = "number") val number: Int) {
+inline class StringNumber(@SerialName(value = "number") val number: Int) {
 
     override fun toString(): String = number.toString()
+
+    companion object
 }

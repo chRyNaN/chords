@@ -1,6 +1,9 @@
+@file:Suppress("unused")
+
 package com.chrynan.chords.model
 
 import com.chrynan.chords.view.ChordView
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -13,9 +16,20 @@ import kotlinx.serialization.Serializable
  * @author chRyNaN
  */
 @Serializable
-enum class StringLabelState {
+enum class StringLabelState(val typeName: String) {
 
-    SHOW_NUMBER,
-    SHOW_LABEL,
-    HIDE
+    @SerialName(value = "show_number")
+    SHOW_NUMBER(typeName = "show_number"),
+
+    @SerialName(value = "show_label")
+    SHOW_LABEL(typeName = "show_label"),
+
+    @SerialName(value = "hide")
+    HIDE(typeName = "hide");
+
+    companion object {
+
+        fun fromTypeName(typeName: String, ignoreCase: Boolean = false): StringLabelState? =
+            values().firstOrNull { it.typeName.equals(typeName, ignoreCase) }
+    }
 }

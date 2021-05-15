@@ -18,4 +18,7 @@ import kotlinx.serialization.Serializable
 data class StringLabel(
     @SerialName(value = "string") val string: StringNumber,
     @SerialName(value = "label") val label: String? = null
-)
+) {
+
+    companion object
+}

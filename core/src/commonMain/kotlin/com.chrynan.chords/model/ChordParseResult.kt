@@ -14,4 +14,7 @@ data class ChordParseResult(
     @SerialName(value = "chord") val chord: Chord,
     @SerialName(value = "string_labels") val stringLabels: Set<StringLabel> = emptySet(),
     @SerialName(value = "base_fret") val baseFret: FretNumber? = null
-)
+) {
+
+    companion object
+}

@@ -14,4 +14,6 @@ interface StringRangeMarker : StringMarker {
     val startString: StringNumber
 
     val endString: StringNumber
+
+    companion object
 }

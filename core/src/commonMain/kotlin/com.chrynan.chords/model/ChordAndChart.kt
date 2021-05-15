@@ -16,4 +16,7 @@ import kotlinx.serialization.Serializable
 data class ChordAndChart(
     @SerialName(value = "chord") val chord: Chord,
     @SerialName(value = "chart") val chart: ChordChart
-)
+) {
+
+    companion object
+}

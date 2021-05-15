@@ -17,9 +17,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class MarkerType(@SerialName(value = "name") val typeName: String) {
 
+    @SerialName(value = "note")
     NOTE(typeName = "note"),
+
+    @SerialName(value = "bar")
     BAR(typeName = "bar"),
+
+    @SerialName(value = "open")
     OPEN(typeName = "open"),
+
+    @SerialName(value = "muted")
     MUTED(typeName = "muted");
 
     companion object {

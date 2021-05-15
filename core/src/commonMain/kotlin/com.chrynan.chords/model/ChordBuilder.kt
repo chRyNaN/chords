@@ -18,9 +18,16 @@ class ChordBuilder internal constructor(private val name: String? = null) {
         markers.add(this)
     }
 
+    fun add(marker: ChordMarker) {
+        markers.add(marker)
+    }
+
     internal fun build(): Chord = Chord(
-            name = name,
-            markers = markers)
+        name = name,
+        markers = markers
+    )
+
+    companion object
 }
 
 /**

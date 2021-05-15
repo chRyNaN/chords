@@ -18,11 +18,22 @@ enum class Finger(
     @SerialName(value = "name") val fingerName: String? = null
 ) {
 
+    @SerialName(value = "unknown")
     UNKNOWN(position = -1, fingerName = null),
+
+    @SerialName(value = "index")
     INDEX(position = 1, fingerName = "index"),
+
+    @SerialName(value = "middle")
     MIDDLE(position = 2, fingerName = "middle"),
+
+    @SerialName(value = "ring")
     RING(position = 3, fingerName = "ring"),
+
+    @SerialName(value = "pinky")
     PINKY(position = 4, fingerName = "pinky"),
+
+    @SerialName(value = "thumb")
     THUMB(position = 5, fingerName = "thumb");
 
     override fun toString() = "$position"

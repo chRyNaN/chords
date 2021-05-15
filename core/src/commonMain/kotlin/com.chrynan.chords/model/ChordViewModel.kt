@@ -50,4 +50,7 @@ data class ChordViewModel(
     val stringLabelTextColor: @Contextual ColorInt,
     val noteColor: @Contextual ColorInt,
     val noteLabelTextColor: @Contextual ColorInt
-)
+) {
+
+    companion object
+}

@@ -28,23 +28,15 @@ data class Chord(
     @SerialName(value = "markers") val markers: Set<ChordMarker>
 ) {
 
-    companion object {
-
-        /**
-         * A [Chord] that has no [markers] and a null [name].
-         *
-         * @author chRyNaN
-         */
-        val EMPTY = Chord(name = null, markers = emptySet())
-    }
-
     /**
      * A [Set] of [ChordMarker.Note]s that are a part of this [Chord]. This is a convenience
      * property that filters the [markers] for [ChordMarker.Note]s.
      *
      * @author chRyNaN
      */
-    val notes: Set<ChordMarker.Note> by lazy { markers.filterIsInstance<ChordMarker.Note>().toSet() }
+    val notes: Set<ChordMarker.Note> by lazy {
+        markers.filterIsInstance<ChordMarker.Note>().toSet()
+    }
 
     /**
      * A [Set] of [ChordMarker.Bar]s that are a part of this [Chord]. This is a convenience
@@ -60,7 +52,9 @@ data class Chord(
      *
      * @author chRyNaN
      */
-    val opens: Set<ChordMarker.Open> by lazy { markers.filterIsInstance<ChordMarker.Open>().toSet() }
+    val opens: Set<ChordMarker.Open> by lazy {
+        markers.filterIsInstance<ChordMarker.Open>().toSet()
+    }
 
     /**
      * A [Set] of [ChordMarker.Muted]s that are a part of this [Chord]. This is a convenience
@@ -68,7 +62,9 @@ data class Chord(
      *
      * @author chRyNaN
      */
-    val mutes: Set<ChordMarker.Muted> by lazy { markers.filterIsInstance<ChordMarker.Muted>().toSet() }
+    val mutes: Set<ChordMarker.Muted> by lazy {
+        markers.filterIsInstance<ChordMarker.Muted>().toSet()
+    }
 
     /**
      * An overloaded operator function that determines whether this [Chord] contains the provided
@@ -77,4 +73,14 @@ data class Chord(
      * @author chRyNaN
      */
     operator fun contains(marker: ChordMarker) = markers.contains(marker)
+
+    companion object {
+
+        /**
+         * A [Chord] that has no [markers] and a null [name].
+         *
+         * @author chRyNaN
+         */
+        val EMPTY = Chord(name = null, markers = emptySet())
+    }
 }
