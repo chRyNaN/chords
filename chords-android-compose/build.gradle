@@ -36,6 +36,10 @@ android {
         // Opt-in to experimental compose APIs
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
         freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
+        freeCompilerArgs += [
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+        ]
     }
 
     buildFeatures {
@@ -45,6 +49,11 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion "1.0.0-beta06"
         kotlinCompilerVersion "1.4.31"
+    }
+
+    lintOptions {
+        warningsAsErrors false
+        abortOnError true
     }
 }
 

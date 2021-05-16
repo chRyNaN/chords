@@ -11,6 +11,7 @@ import com.chrynan.chords.model.ChordViewModel
  *
  * @author chRyNaN
  */
+@ExperimentalUnsignedTypes
 class ChordViewBinder(val view: ChordView) {
 
     /**

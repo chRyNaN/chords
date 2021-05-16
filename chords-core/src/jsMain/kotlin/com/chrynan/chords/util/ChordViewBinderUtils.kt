@@ -12,6 +12,7 @@ import com.chrynan.chords.widget.ChordWidget
  *
  * @author chRyNaN
  */
+@ExperimentalUnsignedTypes
 fun ChordViewBinder.bindAndRender(viewModel: ChordViewModel) {
     bind(viewModel = viewModel)
 
