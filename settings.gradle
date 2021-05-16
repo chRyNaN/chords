@@ -5,5 +5,3 @@ include ":chords-android"
 include ":chords-android-compose"
 // include ":sample"
 include ":sample-js"
-
-enableFeaturePreview("GRADLE_METADATA")

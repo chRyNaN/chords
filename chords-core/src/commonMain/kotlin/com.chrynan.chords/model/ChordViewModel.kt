@@ -39,6 +39,7 @@ import kotlinx.serialization.Serializable
  * @author chRyNaN
  */
 @Serializable
+@ExperimentalUnsignedTypes
 data class ChordViewModel(
     @SerialName(value = "fit_to_height") val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
     @SerialName(value = "show_fret_numbers") val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
@@ -46,12 +47,12 @@ data class ChordViewModel(
     @SerialName(value = "string_label_state") val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
     @SerialName(value = "muted_string_text") val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
     @SerialName(value = "open_string_text") val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-    @SerialName(value = "fret_color") val fretColor: @Contextual Color,
-    @SerialName(value = "fret_label_text_color") val fretLabelTextColor: @Contextual Color,
-    @SerialName(value = "string_color") val stringColor: @Contextual Color,
-    @SerialName(value = "string_label_text_color") val stringLabelTextColor: @Contextual Color,
-    @SerialName(value = "note_color") val noteColor: @Contextual Color,
-    @SerialName(value = "note_label_text_color") val noteLabelTextColor: @Contextual Color
+    @SerialName(value = "fret_color") val fretColor: @Contextual Color = Color.BLACK,
+    @SerialName(value = "fret_label_text_color") val fretLabelTextColor: @Contextual Color = Color.BLACK,
+    @SerialName(value = "string_color") val stringColor: @Contextual Color = Color.BLACK,
+    @SerialName(value = "string_label_text_color") val stringLabelTextColor: @Contextual Color = Color.BLACK,
+    @SerialName(value = "note_color") val noteColor: @Contextual Color = Color.BLACK,
+    @SerialName(value = "note_label_text_color") val noteLabelTextColor: @Contextual Color = Color.WHITE
 ) {
 
     companion object
