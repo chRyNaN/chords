@@ -1,0 +1,11 @@
+//[chords-core](../../../index.md)/[com.chrynan.chords.widget](../index.md)/[ChordWidget](index.md)/[canvas](canvas.md)
+
+
+
+# canvas  
+[js]  
+Content  
+open override val [canvas](canvas.md): [HTMLCanvasElement](https://kotlinlang.org/api/latest/jvm/stdlib/org.w3c.dom/-h-t-m-l-canvas-element/index.html)  
+
+
+
