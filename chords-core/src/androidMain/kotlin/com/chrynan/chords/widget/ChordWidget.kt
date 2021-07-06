@@ -366,12 +366,36 @@ class ChordWidget : View,
         stringLineRects.forEach { canvas.drawLine(it, stringPaint) }
 
         // Next draw the fret numbers and string markers
-        drawFretNumbers(canvas)
-        drawStringMarkers(canvas)
+        drawFretNumbers(
+            canvas = canvas,
+            fretNumberPoints = fretNumberPoints,
+            chart = chart,
+            fretLabelTextPaint = fretLabelTextPaint,
+            showFretNumbers = showFretNumbers
+        )
+        drawStringMarkers(
+            canvas = canvas,
+            stringTopMarkerPositions = stringTopMarkerPositions,
+            stringBottomLabelPositions = stringBottomLabelPositions,
+            stringLabelTextPaint = stringLabelTextPaint
+        )
 
         // Finally, draw all the notes and the note text
-        drawBars(canvas)
-        drawNotes(canvas)
+        drawBars(
+            canvas = canvas,
+            barLinePaths = barLinePaths,
+            barLinePaint = barLinePaint,
+            noteLabelTextPaint = noteLabelTextPaint,
+            showFingerNumbers = showFingerNumbers
+        )
+        drawNotes(
+            canvas = canvas,
+            notePositions = notePositions,
+            noteSize = noteSize,
+            notePaint = notePaint,
+            noteLabelTextPaint = noteLabelTextPaint,
+            showFingerNumbers = showFingerNumbers
+        )
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -658,7 +682,13 @@ class ChordWidget : View,
         }
     }
 
-    private fun drawFretNumbers(canvas: Canvas) {
+    private fun drawFretNumbers(
+        canvas: Canvas,
+        fretNumberPoints: List<PointF>,
+        chart: ChordChart,
+        fretLabelTextPaint: Paint,
+        showFretNumbers: Boolean
+    ) {
         // Fret numbers; check if we are showing them or not
         if (showFretNumbers) {
             fretNumberPoints.forEachIndexed { index, point ->
@@ -672,7 +702,12 @@ class ChordWidget : View,
         }
     }
 
-    private fun drawStringMarkers(canvas: Canvas) {
+    private fun drawStringMarkers(
+        canvas: Canvas,
+        stringTopMarkerPositions: List<StringPosition>,
+        stringBottomLabelPositions: List<StringPosition>,
+        stringLabelTextPaint: Paint
+    ) {
         // Top String markers (open/muted)
         stringTopMarkerPositions.forEach {
             canvas.drawText(
@@ -694,7 +729,13 @@ class ChordWidget : View,
         }
     }
 
-    private fun drawBars(canvas: Canvas) {
+    private fun drawBars(
+        canvas: Canvas,
+        barLinePaths: List<BarPosition>,
+        barLinePaint: Paint,
+        noteLabelTextPaint: Paint,
+        showFingerNumbers: Boolean
+    ) {
         // Bars
         barLinePaths.forEach {
             // Draw Bar
@@ -715,8 +756,15 @@ class ChordWidget : View,
         }
     }
 
-    private fun drawNotes(canvas: Canvas) {
-        //Individual notes
+    private fun drawNotes(
+        canvas: Canvas,
+        notePositions: List<NotePosition>,
+        noteSize: Float,
+        notePaint: Paint,
+        noteLabelTextPaint: Paint,
+        showFingerNumbers: Boolean
+    ) {
+        // Individual notes
         notePositions.forEach {
             canvas.drawCircle(it.circleX, it.circleY, noteSize / 2f, notePaint)
 
