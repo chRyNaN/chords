@@ -1,12 +1,38 @@
 import com.chrynan.chords.buildSrc.LibraryConstants
 
+apply plugin: "kotlin-multiplatform"
 apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
 apply plugin: "maven-publish"
 apply plugin: "org.jetbrains.dokka"
+apply plugin: "org.jetbrains.compose"
 
 group LibraryConstants.group
 version LibraryConstants.versionName
+
+kotlin {
+    targets {
+        android()
+        jvm()
+    }
+    sourceSets {
+        all {
+            languageSettings {
+                languageSettings.enableLanguageFeature("InlineClasses")
+            }
+        }
+        commonMain {
+            dependencies {
+                api project(":chords-core")
+
+                implementation(compose.runtime)
+                implementation(compose.ui)
+                implementation(compose.material)
+
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
+            }
+        }
+    }
+}
 
 android {
     compileSdkVersion LibraryConstants.Android.compileSdkVersion
@@ -14,8 +40,6 @@ android {
     defaultConfig {
         minSdkVersion LibraryConstants.Android.minSdkVersion
         targetSdkVersion LibraryConstants.Android.targetSdkVersion
-        versionCode LibraryConstants.versionCode
-        versionName LibraryConstants.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,10 +60,6 @@ android {
         // Opt-in to experimental compose APIs
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
         freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
-        freeCompilerArgs += [
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
-        ]
     }
 
     buildFeatures {
@@ -47,26 +67,32 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.0.0-beta06"
-        kotlinCompilerVersion "1.4.31"
+        kotlinCompilerExtensionVersion "1.0.0-beta02"
     }
 
-    lintOptions {
-        warningsAsErrors false
-        abortOnError true
+    configurations {
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile "src/androidMain/AndroidManifest.xml"
+            java.srcDirs = ["src/androidMain/kotlin"]
+            res.srcDirs = ["src/androidMain/res"]
+        }
+        test {
+            java.srcDirs = ["src/androidTest/kotlin"]
+            res.srcDirs = ["src/androidTest/res"]
+        }
     }
 }
 
+tasks.withType(org.gradle.jvm.tasks.Jar).all { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-
-    implementation "androidx.compose.compiler:compiler:1.0.0-beta06"
-    implementation "androidx.compose.runtime:runtime:1.0.0-beta06"
-    implementation "androidx.compose.ui:ui:1.0.0-beta06"
-
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
-
-    api project(":chords-android")
 }
 
 afterEvaluate {
@@ -86,7 +112,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId LibraryConstants.group
-                artifactId "chords-android-compose"
+                artifactId "chords-compose"
                 version LibraryConstants.versionName
             }
         }
