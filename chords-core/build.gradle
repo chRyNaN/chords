@@ -1,6 +1,7 @@
 import com.chrynan.chords.buildSrc.LibraryConstants
 
 apply plugin: "kotlin-multiplatform"
+apply plugin: "com.android.library"
 apply plugin: "kotlinx-serialization"
 apply plugin: "maven-publish"
 apply plugin: "org.jetbrains.dokka"
@@ -9,10 +10,11 @@ group LibraryConstants.group
 version LibraryConstants.versionName
 
 kotlin {
+    android()
     jvm()
-    js {
-        browser {
-        }
+    js(BOTH) {
+        browser()
+        nodejs()
     }
     ios()
 
@@ -23,12 +25,52 @@ kotlin {
 
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
 
-                api "com.chrynan.colors:colors-core:0.3.0"
+                api "com.chrynan.colors:colors-core:0.3.2"
             }
         }
         all {
             languageSettings.enableLanguageFeature("InlineClasses")
             languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
+    }
+}
+
+android {
+    compileSdkVersion LibraryConstants.Android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion LibraryConstants.Android.minSdkVersion
+        targetSdkVersion LibraryConstants.Android.targetSdkVersion
+        versionCode LibraryConstants.versionCode
+        versionName LibraryConstants.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile "src/androidMain/AndroidManifest.xml"
+            java.srcDirs = ["src/androidMain/kotlin"]
+            res.srcDirs = ["src/androidMain/res"]
+        }
+        test {
+            java.srcDirs = ["src/androidTest/kotlin"]
+            res.srcDirs = ["src/androidTest/res"]
         }
     }
 }
@@ -43,14 +85,25 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            url "https://repo.repsy.io/mvn/chrynan/public"
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                url "https://repo.repsy.io/mvn/chrynan/public"
 
-            credentials {
-                username = project.findProperty("repsyUsername") ?: System.getenv("repsyUsername")
-                password = project.findProperty("repsyToken") ?: System.getenv("repsyToken")
+                credentials {
+                    username = project.findProperty("repsyUsername") ?: System.getenv("repsyUsername")
+                    password = project.findProperty("repsyToken") ?: System.getenv("repsyToken")
+                }
+            }
+        }
+
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId LibraryConstants.group
+                artifactId "chords-core"
+                version LibraryConstants.versionName
             }
         }
     }

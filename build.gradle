@@ -7,15 +7,14 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-        jcenter()
         maven { url = "https://repo.repsy.io/mvn/chrynan/public" }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.0-alpha15"
+        classpath "com.android.tools.build:gradle:7.1.0-alpha02"
         classpath "digital.wup:android-maven-publish:3.6.2"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.30"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:1.5.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:1.5.10"
     }
 }
 
@@ -25,7 +24,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven { url = "https://repo.repsy.io/mvn/chrynan/public" }
     }
 }
