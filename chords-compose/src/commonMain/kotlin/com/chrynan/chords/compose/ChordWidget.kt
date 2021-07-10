@@ -12,9 +12,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import com.chrynan.chords.model.Chord
-import com.chrynan.chords.model.ChordChart
-import com.chrynan.chords.model.ChordViewModel
+import com.chrynan.chords.model.*
 import kotlin.math.min
 import kotlin.math.round
 
@@ -135,6 +133,226 @@ private fun BoxWithConstraintsScope.calculateSize(
         stringBottomLabelBounds = stringBottomLabelBounds,
         fretSideLabelBounds = fretSideLabelBounds
     )
+}
+
+private fun calculateFretPositions(
+    fretCount: Int,
+    size: ChordWidgetSizeConstraints
+): List<Rect> {
+    val fretLineRects = mutableListOf<Rect>()
+
+    for (i in 0..fretCount) {
+        fretLineRects.add(
+            Rect(
+                left = size.chartBounds.left,
+                top = size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize,
+                right = size.chartBounds.right - size.stringSize,
+                bottom = size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize
+            )
+        )
+    }
+
+    return fretLineRects
+}
+
+private fun calculateStringPositions(
+    stringCount: Int,
+    fretCount: Int,
+    size: ChordWidgetSizeConstraints
+): List<Rect> {
+    val stringLineRects = mutableListOf<Rect>()
+
+    for (i in 0 until stringCount) {
+        stringLineRects.add(
+            Rect(
+                left = size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
+                top = size.chartBounds.top,
+                right = size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
+                bottom = size.chartBounds.top + fretCount * size.fretSize + fretCount * size.fretMarkerSize
+            )
+        )
+    }
+
+    return stringLineRects
+}
+
+private fun calculateFretNumberPositions(
+    fretStart: Int,
+    fretEnd: Int,
+    size: ChordWidgetSizeConstraints
+): List<Offset> {
+    val fretNumberPoints = mutableListOf<Offset>()
+
+    for (i in 0..(fretEnd - fretStart)) {
+        fretNumberPoints.add(
+            Offset(
+                x = size.drawingBounds.left + size.fretSideLabelBounds.width / 2,
+                y = (size.stringTopLabelBounds.bottom + i * size.fretMarkerSize + i * size.fretSize + size.fretSize / 2) + (size.fretLabelTextSize / 2)
+            )
+        )
+    }
+
+    return fretNumberPoints
+}
+
+private fun calculateBarLinePositions(
+    bars: List<ChordMarker.Bar>,
+    fretStart: Int,
+    fretEnd: Int,
+    stringCount: Int,
+    size: ChordWidgetSizeConstraints
+): List<BarPosition> {
+    val barPositions = mutableListOf<BarPosition>()
+
+    bars.forEach { bar ->
+        if (bar.fret.number in fretStart..fretEnd && bar.endString.number < stringCount + 1) {
+            val relativeFretNumber = bar.fret.number - (fretStart - 1)
+            val left =
+                (size.chartBounds.left + (stringCount - bar.endString.number) * size.stringDistance +
+                        (stringCount - bar.endString.number) * size.stringSize) - size.noteSize / 2
+            val top =
+                size.chartBounds.top + (relativeFretNumber * size.fretSize + relativeFretNumber * size.fretMarkerSize - size.fretSize / 2) - (size.noteSize / 2)
+            val right =
+                (size.chartBounds.left + (stringCount - bar.startString.number) * size.stringDistance +
+                        (stringCount - bar.startString.number) * size.stringSize) + (size.noteSize / 2)
+            val bottom = top + size.noteSize
+            val text = if (bar.finger === Finger.UNKNOWN) "" else bar.finger.toString()
+            val textX = left + (right - left) / 2
+            val textY = top + (bottom - top) / 2 + (size.noteLabelTextSize / 2)
+
+            barPositions.add(
+                BarPosition(
+                    text = text,
+                    textX = textX,
+                    textY = textY,
+                    left = left,
+                    top = top,
+                    right = right,
+                    bottom = bottom
+                )
+            )
+        }
+    }
+
+    return barPositions
+}
+
+private fun calculateNotePositions(
+    notes: List<ChordMarker.Note>,
+    fretStart: Int,
+    fretEnd: Int,
+    stringCount: Int,
+    size: ChordWidgetSizeConstraints
+): List<NotePosition> {
+    val notePositions = mutableListOf<NotePosition>()
+
+    notes.forEach { note ->
+        if (note.fret.number in fretStart..fretEnd && note.string.number < stringCount + 1) {
+            val relativeFretNumber = note.fret.number - (fretStart - 1)
+            val startCenterX =
+                size.chartBounds.left + (stringCount - note.string.number) * size.stringDistance + (stringCount - note.string.number) * size.stringSize
+            val startCenterY =
+                size.chartBounds.top + (relativeFretNumber * size.fretSize + relativeFretNumber * size.fretMarkerSize - size.fretSize / 2)
+            val text = if (note.finger === Finger.UNKNOWN) "" else note.finger.toString()
+
+            notePositions.add(
+                NotePosition(
+                    text = text,
+                    circleX = startCenterX,
+                    circleY = startCenterY,
+                    textX = startCenterX,
+                    textY = startCenterY + (size.noteLabelTextSize / 2)
+                )
+            )
+        }
+    }
+
+    return notePositions
+}
+
+private fun calculateStringTopMarkerPositions(
+    mutes: List<ChordMarker.Muted>,
+    opens: List<ChordMarker.Open>,
+    stringCount: Int,
+    size: ChordWidgetSizeConstraints,
+    mutedStringText: String,
+    openStringText: String
+): List<StringPosition> {
+    val stringTopMarkerPositions = mutableListOf<StringPosition>()
+
+    // Top string mute labels
+    mutes.forEach { muted ->
+        if (muted.string.number < stringCount + 1) {
+            val x =
+                size.chartBounds.left + (stringCount - muted.string.number) * size.stringDistance + (stringCount - muted.string.number) * size.stringSize
+            val y =
+                (size.drawingBounds.top + size.stringTopLabelBounds.height / 2) + (size.stringLabelTextSize / 2)
+
+            stringTopMarkerPositions.add(
+                StringPosition(
+                    text = mutedStringText,
+                    textX = x,
+                    textY = y
+                )
+            )
+        }
+    }
+
+    // Top string open labels
+    opens.forEach { open ->
+        if (open.string.number < stringCount + 1) {
+            val x =
+                size.chartBounds.left + (stringCount - open.string.number) * size.stringDistance + (stringCount - open.string.number) * size.stringSize
+            val y =
+                (size.drawingBounds.top + size.stringTopLabelBounds.height / 2) + (size.stringLabelTextSize / 2)
+
+            stringTopMarkerPositions.add(
+                StringPosition(
+                    text = openStringText,
+                    textX = x,
+                    textY = y
+                )
+            )
+        }
+    }
+
+    return stringTopMarkerPositions
+}
+
+private fun calculateStringBottomLabelPositions(
+    stringLabels: List<StringLabel>,
+    showBottomStringLabels: Boolean,
+    stringLabelState: StringLabelState,
+    stringCount: Int,
+    size: ChordWidgetSizeConstraints
+): List<StringPosition> {
+    val stringBottomLabelPositions = mutableListOf<StringPosition>()
+
+    if (showBottomStringLabels) {
+        stringLabels.forEach { stringLabel ->
+            if (stringLabel.string.number < stringCount + 1) {
+                val label =
+                    if (stringLabelState == StringLabelState.SHOW_NUMBER) stringLabel.string.toString() else stringLabel.label
+
+                if (label != null) {
+                    val x =
+                        size.chartBounds.left + (stringCount - stringLabel.string.number) * size.stringDistance + (stringCount - stringLabel.string.number) * size.stringSize
+                    val y =
+                        (size.chartBounds.bottom + size.stringBottomLabelBounds.height / 2) + (size.stringLabelTextSize / 2)
+
+                    stringBottomLabelPositions.add(
+                        StringPosition(
+                            text = label,
+                            textX = x,
+                            textY = y
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    return stringBottomLabelPositions
 }
 
 @Composable
