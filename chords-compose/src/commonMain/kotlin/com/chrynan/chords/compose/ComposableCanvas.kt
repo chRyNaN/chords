@@ -93,7 +93,10 @@ internal class ComposableDrawScopeSource(
 }
 
 @Composable
-fun ComposableCanvas(modifier: Modifier = Modifier, onDraw: ComposableDrawScope.() -> Unit) {
+fun ComposableCanvas(
+    modifier: Modifier = Modifier,
+    onDraw: @Composable ComposableDrawScope.() -> Unit
+) {
     PositionalLayout(modifier = modifier) {
         val positionalLayoutScope = this
 

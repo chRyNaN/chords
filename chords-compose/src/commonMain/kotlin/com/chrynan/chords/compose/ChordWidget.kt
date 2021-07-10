@@ -3,8 +3,11 @@
 package com.chrynan.chords.compose
 
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import com.chrynan.chords.model.*
 
 @ExperimentalUnsignedTypes
@@ -72,5 +75,35 @@ fun ChordWidget(
             fretCount = chart.fretCount,
             size = size
         )
+
+        ComposableCanvas(modifier = Modifier.fillMaxSize()) {
+            // First draw the strings and fret markers
+            // TODO fretPositions.forEach { drawLine(it, fretPaint) }
+            // TODO stringPositions.forEach { drawLine(it, stringPaint) }
+
+            drawFretNumbers(
+                fretNumberPoints = fretNumberPositions,
+                chart = chart,
+                showFretNumbers = viewModel.showFretNumbers
+            )
+
+            drawStringMarkers(
+                stringTopMarkerPositions = topMarkerPositions,
+                stringBottomLabelPositions = bottomLabelPositions
+            )
+
+            drawBars(
+                barLinePaths = barLinePositions,
+                barLineBrush = SolidColor(Color.Black), // TODO SolidColor(viewModel.noteColor),
+                showFingerNumbers = viewModel.showFingerNumbers
+            )
+
+            drawNotes(
+                notePositions = notePositions,
+                noteSize = size.noteSize,
+                noteBrush = SolidColor(Color.Companion.Black), // TODO SolidColor(viewModel.noteColor),
+                showFingerNumbers = viewModel.showFingerNumbers
+            )
+        }
     }
 }

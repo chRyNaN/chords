@@ -29,6 +29,8 @@ kotlin {
                 implementation(compose.material)
 
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
+
+                implementation "com.chrynan.colors:colors-jetpack-compose:0.3.2"
             }
         }
     }
