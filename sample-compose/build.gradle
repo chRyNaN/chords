@@ -1,0 +1,97 @@
+import com.chrynan.chords.buildSrc.LibraryConstants
+
+apply plugin: "kotlin-multiplatform"
+apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.compose"
+
+group LibraryConstants.group
+version LibraryConstants.versionName
+
+kotlin {
+    targets {
+        android()
+        jvm()
+    }
+    sourceSets {
+        all {
+            languageSettings {
+                languageSettings.enableLanguageFeature("InlineClasses")
+            }
+        }
+        commonMain {
+            dependencies {
+                api project(":chords-compose")
+
+                implementation(compose.runtime)
+                implementation(compose.ui)
+                implementation(compose.material)
+            }
+        }
+    }
+}
+
+android {
+    compileSdkVersion LibraryConstants.Android.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.chrynan.chords.sample.compose"
+        minSdkVersion LibraryConstants.Android.minSdkVersion
+        targetSdkVersion LibraryConstants.Android.targetSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        // Opt-in to experimental compose APIs
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs += "-Xallow-jvm-ir-dependencies"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.0.0-beta02"
+    }
+
+    configurations {
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile "src/androidMain/AndroidManifest.xml"
+            java.srcDirs = ["src/androidMain/kotlin"]
+            res.srcDirs = ["src/androidMain/res"]
+        }
+        test {
+            java.srcDirs = ["src/androidTest/kotlin"]
+            res.srcDirs = ["src/androidTest/res"]
+        }
+    }
+}
+
+tasks.withType(org.gradle.jvm.tasks.Jar).all { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.appcompat:appcompat:1.3.0"
+    implementation "com.google.android.material:material:1.4.0"
+
+    implementation "androidx.activity:activity-compose:1.3.0-beta02"
+}
