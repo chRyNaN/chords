@@ -77,7 +77,8 @@ internal fun ConstraintScope.DrawBarText(
         barLinePositions.forEach {
             Text(
                 modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-                text = it.text
+                text = it.text,
+                textAlign = TextAlign.Start
             )
         }
     }
@@ -110,7 +111,8 @@ internal fun ConstraintScope.DrawFretNumbers(
         fretNumberPoints.forEachIndexed { index, point ->
             Text(
                 modifier = Modifier.offset(x = point.x.toDp(), y = point.y.toDp()),
-                text = (chart.fretStart.number + index).toString()
+                text = (chart.fretStart.number + index).toString(),
+                textAlign = TextAlign.Start
             )
         }
     }
@@ -125,7 +127,8 @@ internal fun ConstraintScope.DrawStringMarkers(
     stringTopMarkerPositions.forEach {
         Text(
             modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-            text = it.text
+            text = it.text,
+            textAlign = TextAlign.Start
         )
     }
 
@@ -133,7 +136,8 @@ internal fun ConstraintScope.DrawStringMarkers(
     stringBottomLabelPositions.forEach {
         Text(
             modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-            text = it.text
+            text = it.text,
+            textAlign = TextAlign.Start
         )
     }
 }
