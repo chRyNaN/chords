@@ -6,57 +6,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import com.chrynan.chords.model.ChordChart
 
-internal fun ComposableDrawScope.drawFretNumbers(
-    fretNumberPoints: List<Offset>,
-    chart: ChordChart,
-    showFretNumbers: Boolean
+internal fun ComposableDrawScope.drawFrets(
+    fretPositions: List<Rect>
 ) {
-    // Fret numbers; check if we are showing them or not
-    if (showFretNumbers) {
-        fretNumberPoints.forEachIndexed { index, point ->
-            drawComposable {
-                Text(
-                    modifier = Modifier.offset(x = point.x.toDp(), y = point.y.toDp()),
-                    text = (chart.fretStart.number + index).toString()
-                )
-            }
-        }
+    fretPositions.forEach {
+        drawLine(
+            start = Offset(x = it.left, y = it.top),
+            end = Offset(x = it.right, y = it.bottom),
+            color = Color.Black // TODO update color
+        )
     }
 }
 
-internal fun ComposableDrawScope.drawStringMarkers(
-    stringTopMarkerPositions: List<StringPosition>,
-    stringBottomLabelPositions: List<StringPosition>,
+internal fun ComposableDrawScope.drawStrings(
+    stringPositions: List<Rect>
 ) {
-    // Top String markers (open/muted)
-    stringTopMarkerPositions.forEach {
-        drawComposable {
-            Text(
-                modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-                text = it.text
-            )
-        }
-    }
-
-    // Bottom String labels (number/note)
-    stringBottomLabelPositions.forEach {
-        drawComposable {
-            Text(
-                modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-                text = it.text
-            )
-        }
+    stringPositions.forEach {
+        drawLine(
+            start = Offset(x = it.left, y = it.top),
+            end = Offset(x = it.right, y = it.bottom),
+            color = Color.Black // TODO update color
+        )
     }
 }
 
 internal fun ComposableDrawScope.drawBars(
     barLinePaths: List<BarPosition>,
-    barLineBrush: Brush,
-    showFingerNumbers: Boolean
+    barLineBrush: Brush
 ) {
     // Bars
     barLinePaths.forEach {
@@ -67,24 +50,13 @@ internal fun ComposableDrawScope.drawBars(
             cornerRadius = CornerRadius(x = (it.bottom - it.top), y = (it.bottom - it.top)),
             brush = barLineBrush
         )
-
-        // Text
-        if (showFingerNumbers) {
-            drawComposable {
-                Text(
-                    modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-                    text = it.text
-                )
-            }
-        }
     }
 }
 
 internal fun ComposableDrawScope.drawNotes(
     notePositions: List<NotePosition>,
     noteSize: Float,
-    noteBrush: Brush,
-    showFingerNumbers: Boolean
+    noteBrush: Brush
 ) {
     // Individual notes
     notePositions.forEach {
@@ -93,14 +65,75 @@ internal fun ComposableDrawScope.drawNotes(
             radius = noteSize / 2f,
             center = Offset(x = it.circleX, y = it.circleY)
         )
+    }
+}
 
-        if (showFingerNumbers) {
-            drawComposable {
-                Text(
-                    modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
-                    text = it.text
-                )
-            }
+@Composable
+internal fun ConstraintScope.DrawBarText(
+    showFingerNumbers: Boolean,
+    barLinePositions: List<BarPosition>
+) {
+    if (showFingerNumbers) {
+        barLinePositions.forEach {
+            Text(
+                modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
+                text = it.text
+            )
         }
+    }
+}
+
+@Composable
+internal fun ConstraintScope.DrawNoteText(
+    showFingerNumbers: Boolean,
+    notePositions: List<NotePosition>
+) {
+    if (showFingerNumbers) {
+        notePositions.forEach {
+            Text(
+                modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
+                text = it.text,
+                textAlign = TextAlign.Start
+            )
+        }
+    }
+}
+
+@Composable
+internal fun ConstraintScope.DrawFretNumbers(
+    fretNumberPoints: List<Offset>,
+    chart: ChordChart,
+    showFretNumbers: Boolean
+) {
+    // Fret numbers; check if we are showing them or not
+    if (showFretNumbers) {
+        fretNumberPoints.forEachIndexed { index, point ->
+            Text(
+                modifier = Modifier.offset(x = point.x.toDp(), y = point.y.toDp()),
+                text = (chart.fretStart.number + index).toString()
+            )
+        }
+    }
+}
+
+@Composable
+internal fun ConstraintScope.DrawStringMarkers(
+    stringTopMarkerPositions: List<StringPosition>,
+    stringBottomLabelPositions: List<StringPosition>,
+) {
+    // Top String markers (open/muted)
+    stringTopMarkerPositions.forEach {
+        Text(
+            modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
+            text = it.text
+        )
+    }
+
+    // Bottom String labels (number/note)
+    stringBottomLabelPositions.forEach {
+        Text(
+            modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
+            text = it.text
+        )
     }
 }
