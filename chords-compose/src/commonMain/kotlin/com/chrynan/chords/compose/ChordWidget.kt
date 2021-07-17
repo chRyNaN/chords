@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import com.chrynan.chords.model.*
 
@@ -19,12 +20,16 @@ fun ChordWidget(
     chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART,
     viewModel: ChordViewModel = ChordViewModel()
 ) {
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.onSizeChanged {
+
+    }) {
         val density = LocalDensity.current
         val scope = ConstraintScopeSource(boxWithConstraintsScope = this, density = density)
 
         scope.apply {
             val constraints = calculateChordConstraints(
+                maxWidth = constraints.maxWidth.toFloat(),
+                maxHeight = constraints.maxHeight.toFloat(),
                 chord = chord,
                 chart = chart,
                 viewModel = viewModel

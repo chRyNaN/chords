@@ -1,6 +1,5 @@
 package com.chrynan.chords.compose
 
-import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import com.chrynan.chords.model.*
@@ -15,18 +14,18 @@ internal fun showBottomStringLabels(
     stringLabels: Collection<StringLabel>
 ): Boolean = stringLabelState != StringLabelState.HIDE && stringLabels.isNotEmpty()
 
-internal fun BoxWithConstraintsScope.calculateSize(
+internal fun calculateSize(
+    maxWidth: Float,
+    maxHeight: Float,
     fitToHeight: Boolean = false,
     showFretNumbers: Boolean = false,
     showBottomStringLabels: Boolean = false,
     stringCount: Int,
     fretCount: Int
 ): ChordWidgetSizeConstraints {
-    val absoluteWidth = constraints.maxWidth.toFloat()
-    val absoluteHeight = constraints.maxHeight.toFloat()
-    val minSideSize = min(absoluteWidth, absoluteHeight)
-    val actualWidth = if (fitToHeight) minSideSize * (2f / 3f) else absoluteWidth
-    val actualHeight = if (fitToHeight) minSideSize else absoluteHeight
+    val minSideSize = min(maxWidth, maxHeight)
+    val actualWidth = if (fitToHeight) minSideSize * (2f / 3f) else maxWidth
+    val actualHeight = if (fitToHeight) minSideSize else maxHeight
 
     // Give some space for the labels
     val horizontalExtraCount = if (showFretNumbers) 1 else 0
@@ -50,10 +49,10 @@ internal fun BoxWithConstraintsScope.calculateSize(
 
     // Center everything
     val drawingBounds = Rect(
-        left = (absoluteWidth - drawingWidth) / 2,
-        top = (absoluteHeight - drawingHeight) / 2,
-        right = (absoluteWidth - drawingWidth) / 2 + drawingWidth,
-        bottom = (absoluteHeight - drawingHeight) / 2 + drawingHeight
+        left = (maxWidth - drawingWidth) / 2,
+        top = (maxHeight - drawingHeight) / 2,
+        right = (maxWidth - drawingWidth) / 2 + drawingWidth,
+        bottom = (maxHeight - drawingHeight) / 2 + drawingHeight
     )
 
     // The actual chart bounds
@@ -326,12 +325,16 @@ internal fun calculateStringBottomLabelPositions(
 }
 
 @ExperimentalUnsignedTypes
-internal fun BoxWithConstraintsScope.calculateChordConstraints(
+internal fun calculateChordConstraints(
     chord: Chord?,
     chart: ChordChart,
-    viewModel: ChordViewModel
+    viewModel: ChordViewModel,
+    maxWidth: Float,
+    maxHeight: Float
 ): ChordWidgetConstraints {
     val size = calculateSize(
+        maxWidth = maxWidth,
+        maxHeight = maxHeight,
         fitToHeight = viewModel.fitToHeight,
         showFretNumbers = viewModel.showFretNumbers,
         showBottomStringLabels = showBottomStringLabels(
