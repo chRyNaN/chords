@@ -5,6 +5,8 @@ package com.chrynan.chords.compose
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -20,10 +22,10 @@ fun ChordWidget(
     chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART,
     viewModel: ChordViewModel = ChordViewModel()
 ) {
-    var constraints: ChordWidgetConstraints? = null
+    val constraintState = remember { mutableStateOf<ChordWidgetConstraints?>(null) }
 
     BoxWithConstraints(modifier = modifier.onSizeChanged {
-        constraints = calculateChordConstraints(
+        constraintState.value = calculateChordConstraints(
             maxWidth = it.width.toFloat(),
             maxHeight = it.height.toFloat(),
             chord = chord,
@@ -35,7 +37,7 @@ fun ChordWidget(
         val scope = ConstraintScopeSource(boxWithConstraintsScope = this, density = density)
 
         scope.apply {
-            constraints?.let { constraints ->
+            constraintState.value?.let { constraints ->
                 ComposableCanvas(modifier = Modifier.fillMaxSize()) {
                     // First draw the strings and fret markers
                     drawFrets(fretPositions = constraints.fretPositions)
