@@ -2,12 +2,10 @@ package com.chrynan.sample.di.module.activity
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chrynan.aaaah.*
 import com.chrynan.sample.di.scope.ActivityScope
 import com.chrynan.sample.viewmodel.AdapterItemViewModel
 import com.chrynan.sample.ui.activity.MainActivity
-import com.chrynan.sample.ui.adapter.ChordAdapter
-import com.chrynan.sample.ui.adapter.ChordListAdapter
+import com.chrynan.sample.ui.adapter.*
 import com.chrynan.sample.ui.adapter.core.AdapterItemHandler
 import com.chrynan.sample.ui.adapter.core.BaseAdapterItemHandler
 import com.chrynan.sample.util.ActivityContext
@@ -31,28 +29,33 @@ internal abstract class MainActivityModule {
         @ActivityScope
         @Provides
         @JvmStatic
-        fun provideAndroidDiffDispatcher(listener: ItemListUpdater<AdapterItemViewModel>): DiffDispatcher<AdapterItemViewModel> = AndroidDiffDispatcher(listener)
+        fun provideAndroidDiffDispatcher(listener: ItemListUpdater<AdapterItemViewModel>): DiffDispatcher<AdapterItemViewModel> =
+            AndroidDiffDispatcher(listener)
 
         @ActivityScope
         @Provides
         @JvmStatic
-        fun provideAndroidDiffProcessor(calculator: DiffUtilCalculator<AdapterItemViewModel>): DiffProcessor<AdapterItemViewModel> = AndroidDiffProcessor(calculator)
+        fun provideAndroidDiffProcessor(calculator: DiffUtilCalculator<AdapterItemViewModel>): DiffProcessor<AdapterItemViewModel> =
+            AndroidDiffProcessor(calculator)
 
         @ActivityScope
         @Provides
         @JvmStatic
-        fun provideManagerAdapter(chordListAdapter: ChordListAdapter): ManagerRecyclerViewAdapter<AdapterItemViewModel> = anotherAdapterManager(chordListAdapter)
+        fun provideManagerAdapter(chordListAdapter: ChordListAdapter): ManagerRecyclerViewAdapter<AdapterItemViewModel> =
+            anotherAdapterManager(chordListAdapter)
 
         @ActivityScope
         @Provides
         @JvmStatic
-        fun provideLayoutManager(context: MainActivity) = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        fun provideLayoutManager(context: MainActivity) =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         @ActivityScope
         @Provides
         @JvmStatic
         @Named("NestedChordListAdapter")
-        fun provideChordManagerAdapter(chordAdapter: ChordAdapter): ManagerRecyclerViewAdapter<AdapterItemViewModel> = anotherAdapterManager(chordAdapter)
+        fun provideChordManagerAdapter(chordAdapter: ChordAdapter): ManagerRecyclerViewAdapter<AdapterItemViewModel> =
+            anotherAdapterManager(chordAdapter)
 
         @Provides
         @JvmStatic
