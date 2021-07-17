@@ -20,58 +20,60 @@ fun ChordWidget(
     chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART,
     viewModel: ChordViewModel = ChordViewModel()
 ) {
-    BoxWithConstraints(modifier = modifier.onSizeChanged {
+    var constraints: ChordWidgetConstraints? = null
 
+    BoxWithConstraints(modifier = modifier.onSizeChanged {
+        constraints = calculateChordConstraints(
+            maxWidth = it.width.toFloat(),
+            maxHeight = it.height.toFloat(),
+            chord = chord,
+            chart = chart,
+            viewModel = viewModel
+        )
     }) {
         val density = LocalDensity.current
         val scope = ConstraintScopeSource(boxWithConstraintsScope = this, density = density)
 
         scope.apply {
-            val constraints = calculateChordConstraints(
-                maxWidth = constraints.maxWidth.toFloat(),
-                maxHeight = constraints.maxHeight.toFloat(),
-                chord = chord,
-                chart = chart,
-                viewModel = viewModel
-            )
+            constraints?.let { constraints ->
+                ComposableCanvas(modifier = Modifier.fillMaxSize()) {
+                    // First draw the strings and fret markers
+                    drawFrets(fretPositions = constraints.fretPositions)
+                    drawStrings(stringPositions = constraints.stringPositions)
 
-            ComposableCanvas(modifier = Modifier.fillMaxSize()) {
-                // First draw the strings and fret markers
-                drawFrets(fretPositions = constraints.fretPositions)
-                drawStrings(stringPositions = constraints.stringPositions)
+                    drawBars(
+                        barLinePaths = constraints.barPositions,
+                        barLineBrush = SolidColor(Color.Black) // TODO SolidColor(viewModel.noteColor),
+                    )
 
-                drawBars(
-                    barLinePaths = constraints.barPositions,
-                    barLineBrush = SolidColor(Color.Black) // TODO SolidColor(viewModel.noteColor),
+                    drawNotes(
+                        notePositions = constraints.notePositions,
+                        noteSize = constraints.size.noteSize,
+                        noteBrush = SolidColor(Color.Companion.Black) // TODO SolidColor(viewModel.noteColor),
+                    )
+                }
+
+                DrawFretNumbers(
+                    fretNumberPoints = constraints.fretNumberPositions,
+                    chart = chart,
+                    showFretNumbers = viewModel.showFretNumbers
                 )
 
-                drawNotes(
-                    notePositions = constraints.notePositions,
-                    noteSize = constraints.size.noteSize,
-                    noteBrush = SolidColor(Color.Companion.Black) // TODO SolidColor(viewModel.noteColor),
+                DrawStringMarkers(
+                    stringTopMarkerPositions = constraints.topMarkerPositions,
+                    stringBottomLabelPositions = constraints.bottomLabelPositions
+                )
+
+                DrawBarText(
+                    showFingerNumbers = viewModel.showFingerNumbers,
+                    barLinePositions = constraints.barPositions
+                )
+
+                DrawNoteText(
+                    showFingerNumbers = viewModel.showFingerNumbers,
+                    notePositions = constraints.notePositions
                 )
             }
-
-            DrawFretNumbers(
-                fretNumberPoints = constraints.fretNumberPositions,
-                chart = chart,
-                showFretNumbers = viewModel.showFretNumbers
-            )
-
-            DrawStringMarkers(
-                stringTopMarkerPositions = constraints.topMarkerPositions,
-                stringBottomLabelPositions = constraints.bottomLabelPositions
-            )
-
-            DrawBarText(
-                showFingerNumbers = viewModel.showFingerNumbers,
-                barLinePositions = constraints.barPositions
-            )
-
-            DrawNoteText(
-                showFingerNumbers = viewModel.showFingerNumbers,
-                notePositions = constraints.notePositions
-            )
         }
     }
 }
