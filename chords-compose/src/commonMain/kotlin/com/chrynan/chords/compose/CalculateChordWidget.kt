@@ -7,22 +7,6 @@ import com.chrynan.chords.model.*
 import kotlin.math.min
 import kotlin.math.round
 
-internal data class ChordWidgetSizeConstraints(
-    val noteSize: Float,
-    val fretLabelTextSize: Float,
-    val stringLabelTextSize: Float,
-    val noteLabelTextSize: Float,
-    val stringDistance: Float,
-    val stringSize: Float,
-    val fretMarkerSize: Float,
-    val fretSize: Float,
-    val drawingBounds: Rect,
-    val chartBounds: Rect,
-    val stringTopLabelBounds: Rect,
-    val stringBottomLabelBounds: Rect,
-    val fretSideLabelBounds: Rect
-)
-
 internal val ChordChart.fretCount: Int
     get() = fretEnd.number - fretStart.number + 1
 
@@ -339,4 +323,79 @@ internal fun calculateStringBottomLabelPositions(
     }
 
     return stringBottomLabelPositions
+}
+
+@ExperimentalUnsignedTypes
+internal fun BoxWithConstraintsScope.calculateChordConstraints(
+    chord: Chord?,
+    chart: ChordChart,
+    viewModel: ChordViewModel
+): ChordWidgetConstraints {
+    val size = calculateSize(
+        fitToHeight = viewModel.fitToHeight,
+        showFretNumbers = viewModel.showFretNumbers,
+        showBottomStringLabels = showBottomStringLabels(
+            stringLabelState = viewModel.stringLabelState,
+            stringLabels = chart.stringLabels
+        ),
+        stringCount = chart.stringCount,
+        fretCount = chart.fretCount
+    )
+    val barPositions = calculateBarLinePositions(
+        bars = chord?.bars ?: emptySet(),
+        fretStart = chart.fretStart.number,
+        fretEnd = chart.fretEnd.number,
+        stringCount = chart.stringCount,
+        size = size
+    )
+    val fretNumberPositions = calculateFretNumberPositions(
+        fretStart = chart.fretStart.number,
+        fretEnd = chart.fretEnd.number,
+        size = size
+    )
+    val fretPositions = calculateFretPositions(
+        fretCount = chart.fretCount,
+        size = size
+    )
+    val notePositions = calculateNotePositions(
+        notes = chord?.notes ?: emptySet(),
+        fretStart = chart.fretStart.number,
+        fretEnd = chart.fretEnd.number,
+        stringCount = chart.stringCount,
+        size = size
+    )
+    val topMarkerPositions = calculateStringTopMarkerPositions(
+        mutes = chord?.mutes ?: emptySet(),
+        opens = chord?.opens ?: emptySet(),
+        stringCount = chart.stringCount,
+        size = size,
+        mutedStringText = viewModel.mutedStringText,
+        openStringText = viewModel.openStringText
+    )
+    val bottomLabelPositions = calculateStringBottomLabelPositions(
+        stringLabels = chart.stringLabels,
+        showBottomStringLabels = showBottomStringLabels(
+            stringLabelState = viewModel.stringLabelState,
+            stringLabels = chart.stringLabels
+        ),
+        stringLabelState = viewModel.stringLabelState,
+        stringCount = chart.stringCount,
+        size = size
+    )
+    val stringPositions = calculateStringPositions(
+        stringCount = chart.stringCount,
+        fretCount = chart.fretCount,
+        size = size
+    )
+
+    return ChordWidgetConstraints(
+        size = size,
+        barPositions = barPositions,
+        fretNumberPositions = fretNumberPositions,
+        fretPositions = fretPositions,
+        notePositions = notePositions,
+        topMarkerPositions = topMarkerPositions,
+        bottomLabelPositions = bottomLabelPositions,
+        stringPositions = stringPositions
+    )
 }
