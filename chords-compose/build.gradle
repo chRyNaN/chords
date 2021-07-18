@@ -30,7 +30,7 @@ kotlin {
 
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
 
-                implementation "com.chrynan.colors:colors-jetpack-compose:0.3.2"
+                implementation "com.chrynan.colors:colors-jetpack-compose:0.3.5"
             }
         }
     }
@@ -46,9 +46,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            matchingFallbacks = ["release"]
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            matchingFallbacks = ["release"]
         }
     }
 
