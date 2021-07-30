@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -40,40 +39,50 @@ fun ChordWidget(
             constraintState.value?.let { constraints ->
                 ComposableCanvas(modifier = Modifier.fillMaxSize()) {
                     // First draw the strings and fret markers
-                    drawFrets(fretPositions = constraints.fretPositions)
-                    drawStrings(stringPositions = constraints.stringPositions)
+                    drawFrets(
+                        fretPositions = constraints.fretPositions,
+                        color = viewModel.fretColor.toJetpackComposeColor()
+                    )
+                    drawStrings(
+                        stringPositions = constraints.stringPositions,
+                        color = viewModel.stringColor.toJetpackComposeColor()
+                    )
 
                     drawBars(
                         barLinePaths = constraints.barPositions,
-                        barLineBrush = SolidColor(Color.Black) // TODO SolidColor(viewModel.noteColor),
+                        barLineBrush = SolidColor(viewModel.noteColor.toJetpackComposeColor())
                     )
 
                     drawNotes(
                         notePositions = constraints.notePositions,
                         noteSize = constraints.size.noteSize,
-                        noteBrush = SolidColor(Color.Companion.Black) // TODO SolidColor(viewModel.noteColor),
+                        noteBrush = SolidColor(viewModel.noteColor.toJetpackComposeColor())
                     )
                 }
 
                 DrawFretNumbers(
                     fretNumberPoints = constraints.fretNumberPositions,
                     chart = chart,
-                    showFretNumbers = viewModel.showFretNumbers
+                    showFretNumbers = viewModel.showFretNumbers,
+                    color = viewModel.fretLabelTextColor.toJetpackComposeColor()
                 )
 
                 DrawStringMarkers(
                     stringTopMarkerPositions = constraints.topMarkerPositions,
-                    stringBottomLabelPositions = constraints.bottomLabelPositions
+                    stringBottomLabelPositions = constraints.bottomLabelPositions,
+                    color = viewModel.stringLabelTextColor.toJetpackComposeColor()
                 )
 
                 DrawBarText(
                     showFingerNumbers = viewModel.showFingerNumbers,
-                    barLinePositions = constraints.barPositions
+                    barLinePositions = constraints.barPositions,
+                    color = viewModel.noteLabelTextColor.toJetpackComposeColor()
                 )
 
                 DrawNoteText(
                     showFingerNumbers = viewModel.showFingerNumbers,
-                    notePositions = constraints.notePositions
+                    notePositions = constraints.notePositions,
+                    color = viewModel.noteLabelTextColor.toJetpackComposeColor()
                 )
             }
         }

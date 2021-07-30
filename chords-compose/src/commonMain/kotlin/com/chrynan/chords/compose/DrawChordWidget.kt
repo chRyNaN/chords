@@ -14,25 +14,27 @@ import androidx.compose.ui.text.style.TextAlign
 import com.chrynan.chords.model.ChordChart
 
 internal fun ComposableDrawScope.drawFrets(
-    fretPositions: List<Rect>
+    fretPositions: List<Rect>,
+    color: Color
 ) {
     fretPositions.forEach {
         drawLine(
             start = Offset(x = it.left, y = it.top),
             end = Offset(x = it.right, y = it.bottom),
-            color = Color.Black // TODO update color
+            color = color
         )
     }
 }
 
 internal fun ComposableDrawScope.drawStrings(
-    stringPositions: List<Rect>
+    stringPositions: List<Rect>,
+    color: Color
 ) {
     stringPositions.forEach {
         drawLine(
             start = Offset(x = it.left, y = it.top),
             end = Offset(x = it.right, y = it.bottom),
-            color = Color.Black // TODO update color
+            color = color
         )
     }
 }
@@ -71,14 +73,16 @@ internal fun ComposableDrawScope.drawNotes(
 @Composable
 internal fun ConstraintScope.DrawBarText(
     showFingerNumbers: Boolean,
-    barLinePositions: List<BarPosition>
+    barLinePositions: List<BarPosition>,
+    color: Color
 ) {
     if (showFingerNumbers) {
         barLinePositions.forEach {
             Text(
                 modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
                 text = it.text,
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+                color = color
             )
         }
     }
@@ -87,14 +91,16 @@ internal fun ConstraintScope.DrawBarText(
 @Composable
 internal fun ConstraintScope.DrawNoteText(
     showFingerNumbers: Boolean,
-    notePositions: List<NotePosition>
+    notePositions: List<NotePosition>,
+    color: Color
 ) {
     if (showFingerNumbers) {
         notePositions.forEach {
             Text(
                 modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
                 text = it.text,
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+                color = color
             )
         }
     }
@@ -104,7 +110,8 @@ internal fun ConstraintScope.DrawNoteText(
 internal fun ConstraintScope.DrawFretNumbers(
     fretNumberPoints: List<Offset>,
     chart: ChordChart,
-    showFretNumbers: Boolean
+    showFretNumbers: Boolean,
+    color: Color
 ) {
     // Fret numbers; check if we are showing them or not
     if (showFretNumbers) {
@@ -112,7 +119,8 @@ internal fun ConstraintScope.DrawFretNumbers(
             Text(
                 modifier = Modifier.offset(x = point.x.toDp(), y = point.y.toDp()),
                 text = (chart.fretStart.number + index).toString(),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Start,
+                color = color
             )
         }
     }
@@ -122,13 +130,15 @@ internal fun ConstraintScope.DrawFretNumbers(
 internal fun ConstraintScope.DrawStringMarkers(
     stringTopMarkerPositions: List<StringPosition>,
     stringBottomLabelPositions: List<StringPosition>,
+    color: Color
 ) {
     // Top String markers (open/muted)
     stringTopMarkerPositions.forEach {
         Text(
             modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
             text = it.text,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            color = color
         )
     }
 
@@ -137,7 +147,8 @@ internal fun ConstraintScope.DrawStringMarkers(
         Text(
             modifier = Modifier.offset(x = it.textX.toDp(), y = it.textY.toDp()),
             text = it.text,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            color = color
         )
     }
 }
