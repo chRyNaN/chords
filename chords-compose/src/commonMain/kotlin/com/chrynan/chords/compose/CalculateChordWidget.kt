@@ -155,7 +155,7 @@ internal fun calculateFretNumberPositions(
     for (i in 0..(fretEnd - fretStart)) {
         fretNumberPoints.add(
             Offset(
-                x = size.drawingBounds.left + size.fretSideLabelBounds.width / 2,
+                x = (size.drawingBounds.left + size.fretSideLabelBounds.width / 2) - size.stringSize,
                 y = (size.stringTopLabelBounds.bottom + i * size.fretMarkerSize + i * size.fretSize + size.fretSize / 2) - (size.fretLabelTextSize / 2)
             )
         )
@@ -192,7 +192,7 @@ internal fun calculateBarLinePositions(
             barPositions.add(
                 BarPosition(
                     text = text,
-                    textX = textX,
+                    textX = textX - size.stringSize,
                     textY = textY,
                     left = left,
                     top = top,
@@ -229,7 +229,7 @@ internal fun calculateNotePositions(
                     text = text,
                     circleX = startCenterX,
                     circleY = startCenterY,
-                    textX = startCenterX,
+                    textX = startCenterX - size.stringSize,
                     textY = startCenterY - (size.noteLabelTextSize / 2)
                 )
             )
@@ -253,7 +253,7 @@ internal fun calculateStringTopMarkerPositions(
     mutes.forEach { muted ->
         if (muted.string.number < stringCount + 1) {
             val x =
-                size.chartBounds.left + (stringCount - muted.string.number) * size.stringDistance + (stringCount - muted.string.number) * size.stringSize
+                (size.chartBounds.left + (stringCount - muted.string.number) * size.stringDistance + (stringCount - muted.string.number) * size.stringSize) - size.stringSize
             val y =
                 (size.drawingBounds.top + size.stringTopLabelBounds.height / 2) - (size.stringLabelTextSize / 2)
 
@@ -271,7 +271,7 @@ internal fun calculateStringTopMarkerPositions(
     opens.forEach { open ->
         if (open.string.number < stringCount + 1) {
             val x =
-                size.chartBounds.left + (stringCount - open.string.number) * size.stringDistance + (stringCount - open.string.number) * size.stringSize
+                (size.chartBounds.left + (stringCount - open.string.number) * size.stringDistance + (stringCount - open.string.number) * size.stringSize) - size.stringSize
             val y =
                 (size.drawingBounds.top + size.stringTopLabelBounds.height / 2) - (size.stringLabelTextSize / 2)
 
@@ -305,7 +305,7 @@ internal fun calculateStringBottomLabelPositions(
 
                 if (label != null) {
                     val x =
-                        size.chartBounds.left + (stringCount - stringLabel.string.number) * size.stringDistance + (stringCount - stringLabel.string.number) * size.stringSize
+                        (size.chartBounds.left + (stringCount - stringLabel.string.number) * size.stringDistance + (stringCount - stringLabel.string.number) * size.stringSize) - size.stringSize
                     val y =
                         (size.chartBounds.bottom + size.stringBottomLabelBounds.height / 2) - (size.stringLabelTextSize / 2)
 
