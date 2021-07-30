@@ -72,6 +72,19 @@ There are a few main components to using the library:
 val widget = ChordWidget(htmlCanvas)
 ```
 
+**Jetpack Compose:**
+```kotlin
+@Composable
+fun MyLayout(chord: Chord, chart: ChordChart, viewModel: ChordViewModel) {
+    ChordWidget(
+        modifier = Modifier.size(width = 200.dp, height = 200.dp),
+        chord = chord,
+        chart = chart,
+        viewModel = viewModel
+    )
+}
+```
+
 ### Assigning a `ChordChart` to a `ChordWidget`
 
 ```kotlin
