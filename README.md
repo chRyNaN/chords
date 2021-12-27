@@ -8,22 +8,21 @@ Simple to use and beautifully designed.
 <img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-180759.png" width="300"></img>
 <img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-183742.png" width="300"></img>
 
-This library has been updated significantly from it's original version and the process is detailed in this [blog post](https://chrynan.codes/converting-an-old-java-library-to-kotlin/) which was featured in Android Weekly issue #398.
+This library has been updated significantly from its original version and the process is detailed in this [blog post](https://chrynan.codes/converting-an-old-java-library-to-kotlin/) which was featured in Android Weekly issue #398.
 <a href="https://androidweekly.net/issues/issue-398" title="Android Weekly Issue 398">
 <img alt="Badge" src="https://androidweekly.net/issues/issue-398/badge" height="20px"></img>
 </a>
 
 ## Building the library
 
-The library is provided through [Bintray](https://bintray.com/). Checkout the [releases](https://github.com/chRyNaN/chords/releases) page to get the latest version.
+The library is provided through [Repsy.io](https://repsy.io). Checkout the [releases page](https://github.com/chRyNaN/chords/releases) to get the latest version. <br />
+<img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/chRyNaN/chords">
 
 ### Repository
 
-```kotlin
+```groovy
 repositories {
-    maven {
-        url = uri("https://dl.bintray.com/chrynan/chrynan")
-    }
+    maven { url = "https://repo.repsy.io/mvn/chrynan/public" }
 }
 ```
 
