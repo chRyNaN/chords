@@ -26,6 +26,7 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
 
                 api "com.chrynan.colors:colors-core:0.3.7"
+                api "com.chrynan.colors:colors-core:0.7.0"
             }
         }
         all {
