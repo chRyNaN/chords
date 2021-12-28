@@ -70,12 +70,6 @@ android {
         kotlinCompilerExtensionVersion "1.0.0-beta02"
     }
 
-    configurations {
-        create("testApi")
-        create("testDebugApi")
-        create("testReleaseApi")
-    }
-
     sourceSets {
         main {
             manifest.srcFile "src/androidMain/AndroidManifest.xml"
