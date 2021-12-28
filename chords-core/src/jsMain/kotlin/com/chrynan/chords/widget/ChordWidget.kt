@@ -519,8 +519,8 @@ class ChordWidget(override val canvas: HTMLCanvasElement) : View(),
 
     companion object {
 
-        val DEFAULT_COLOR: Color = Color.BLACK
-        val DEFAULT_TEXT_COLOR: Color = Color.WHITE
+        val DEFAULT_COLOR: Color = Color.Black
+        val DEFAULT_TEXT_COLOR: Color = Color.White
     }
 
     private data class NotePosition(

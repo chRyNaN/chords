@@ -13,8 +13,8 @@ import org.w3c.dom.*
 @OptIn(ExperimentalUnsignedTypes::class)
 data class Paint(
     var style: Style = Style.FILL,
-    var fillColor: Color = Color.BLACK,
-    var strokeColor: Color = Color.BLACK,
+    var fillColor: Color = Color.Black,
+    var strokeColor: Color = Color.Black,
     var textAlign: Align = Align.CENTER,
     var textSize: Double = 0.0,
     var fontName: String = DEFAULT_FONT_NAME,

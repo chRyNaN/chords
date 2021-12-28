@@ -47,12 +47,12 @@ data class ChordViewModel(
     @SerialName(value = "string_label_state") val stringLabelState: StringLabelState = ChordView.DEFAULT_STRING_LABEL_STATE,
     @SerialName(value = "muted_string_text") val mutedStringText: String = ChordView.DEFAULT_MUTED_TEXT,
     @SerialName(value = "open_string_text") val openStringText: String = ChordView.DEFAULT_OPEN_TEXT,
-    @SerialName(value = "fret_color") val fretColor: @Contextual Color = Color.BLACK,
-    @SerialName(value = "fret_label_text_color") val fretLabelTextColor: @Contextual Color = Color.BLACK,
-    @SerialName(value = "string_color") val stringColor: @Contextual Color = Color.BLACK,
-    @SerialName(value = "string_label_text_color") val stringLabelTextColor: @Contextual Color = Color.BLACK,
-    @SerialName(value = "note_color") val noteColor: @Contextual Color = Color.BLACK,
-    @SerialName(value = "note_label_text_color") val noteLabelTextColor: @Contextual Color = Color.WHITE
+    @SerialName(value = "fret_color") val fretColor: @Contextual Color = Color.Black,
+    @SerialName(value = "fret_label_text_color") val fretLabelTextColor: @Contextual Color = Color.Black,
+    @SerialName(value = "string_color") val stringColor: @Contextual Color = Color.Black,
+    @SerialName(value = "string_label_text_color") val stringLabelTextColor: @Contextual Color = Color.Black,
+    @SerialName(value = "note_color") val noteColor: @Contextual Color = Color.Black,
+    @SerialName(value = "note_label_text_color") val noteLabelTextColor: @Contextual Color = Color.White
 ) {
 
     companion object

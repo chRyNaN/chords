@@ -37,7 +37,7 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
-                implementation("com.chrynan.colors:colors-jetpack-compose:0.7.0")
+                implementation("com.chrynan.colors:colors-compose:0.7.0")
             }
         }
     }

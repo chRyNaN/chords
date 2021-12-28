@@ -21,8 +21,8 @@ data class TouchableSpanViewModel(
         const val DEFAULT_IS_UNDERLINED = false
         const val DEFAULT_SELECTED_IS_UNDERLINED = false
 
-        val DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT.colorInt
-        val DEFAULT_SELECTED_BACKGROUND_COLOR = Color.TRANSPARENT.colorInt
+        val DEFAULT_BACKGROUND_COLOR = Color.Transparent.colorInt
+        val DEFAULT_SELECTED_BACKGROUND_COLOR = Color.Transparent.colorInt
         val DEFAULT_TEXT_COLOR = Color(-0xffff01).colorInt
         val DEFAULT_SELECTED_TEXT_COLOR = Color(-0xffff01).colorInt
         val DEFAULT_TEXT_TYPEFACE: Typeface = Typeface.DEFAULT

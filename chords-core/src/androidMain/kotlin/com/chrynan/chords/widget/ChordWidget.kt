@@ -96,13 +96,13 @@ class ChordWidget : View,
             invalidate()
         }
 
-    override var fretColor = DEFAULT_COLOR
+    override var fretColor: Color = DEFAULT_COLOR
         set(value) {
             field = value
             fretPaint.color = value.colorInt.value
             invalidate()
         }
-    override var fretLabelTextColor = DEFAULT_TEXT_COLOR
+    override var fretLabelTextColor: Color = DEFAULT_TEXT_COLOR
         set(value) {
             field = value
             fretLabelTextPaint.color = value.colorInt.value
@@ -790,8 +790,8 @@ class ChordWidget : View,
 
     companion object {
 
-        val DEFAULT_COLOR = Color.BLACK
-        val DEFAULT_TEXT_COLOR = Color.WHITE
+        val DEFAULT_COLOR = Color.Black
+        val DEFAULT_TEXT_COLOR = Color.White
     }
 
     @OptIn(ExperimentalSerializationApi::class)
