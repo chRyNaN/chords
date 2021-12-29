@@ -1,8 +1,10 @@
 package com.chrynan.chords.model
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * A sealed class containing all the different markers that can be in a [Chord]. A chord marker is
@@ -14,6 +16,8 @@ import kotlinx.serialization.Transient
  * @author chRyNaN
  */
 @Serializable
+@JsonClassDiscriminator("typeName")
+@OptIn(ExperimentalSerializationApi::class)
 sealed class ChordMarker {
 
     /**
