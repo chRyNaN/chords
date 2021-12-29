@@ -52,7 +52,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
 
         val firstLineContainsDelimiters = tabDelimiters.any { it in firstLine }
 
-        val name = if (firstLineContainsDelimiters) null else firstLine
+        val name = if (firstLineContainsDelimiters) null else firstLine.trim()
 
         val linesToParse = if (firstLineContainsDelimiters) lines else lines.subList(1, lines.size)
 
@@ -91,7 +91,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
             when {
                 !reachedFirstTabDelimiter and !isTabDelimiter -> labelStringBuilder.append(char)
                 !reachedFirstTabDelimiter and isTabDelimiter -> reachedFirstTabDelimiter = true
-                reachedFirstTabDelimiter and fretStringBuilder.isNotBlank() and !char.isDigit() -> {
+                reachedFirstTabDelimiter and fretStringBuilder.isNotBlank() and !char.isDigit() -> { // This will only work for frets less than 100. In most cases, this is fine.
                     frets.add(fretStringBuilder.toString().toInt())
                     fretStringBuilder.clear()
                 }
@@ -99,7 +99,7 @@ class AsciiChordParser(private val tabDelimiters: Set<Char> = setOf('|', '-')) :
             }
         }
 
-        val label = if (labelStringBuilder.isBlank()) null else labelStringBuilder.toString()
+        val label = if (labelStringBuilder.isBlank()) null else labelStringBuilder.toString().trim()
 
         val markers: List<ChordMarker> = when {
             frets.isEmpty() -> listOf(ChordMarker.Muted(StringNumber(stringNumber)))
