@@ -19,7 +19,7 @@ fun ChordWidget(
     modifier: Modifier = Modifier,
     chord: Chord? = null,
     chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART,
-    viewModel: ChordViewModel = ChordViewModel()
+    viewModel: ChordViewData = ChordViewData()
 ) {
     val constraintState = remember { mutableStateOf<ChordWidgetConstraints?>(null) }
 

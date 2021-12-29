@@ -2,7 +2,7 @@
 
 package com.chrynan.chords.util
 
-import com.chrynan.chords.model.ChordViewModel
+import com.chrynan.chords.model.ChordViewData
 import com.chrynan.chords.view.ChordViewBinder
 import com.chrynan.chords.widget.ChordWidget
 
@@ -13,7 +13,7 @@ import com.chrynan.chords.widget.ChordWidget
  * @author chRyNaN
  */
 @ExperimentalUnsignedTypes
-fun ChordViewBinder.bindAndRender(viewModel: ChordViewModel) {
+fun ChordViewBinder.bindAndRender(viewModel: ChordViewData) {
     bind(viewModel = viewModel)
 
     val v = view

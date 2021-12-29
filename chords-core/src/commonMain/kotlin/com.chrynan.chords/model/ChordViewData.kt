@@ -40,7 +40,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @ExperimentalUnsignedTypes
-data class ChordViewModel(
+data class ChordViewData(
     @SerialName(value = "fit_to_height") val fitToHeight: Boolean = ChordView.DEFAULT_FIT_TO_HEIGHT,
     @SerialName(value = "show_fret_numbers") val showFretNumbers: Boolean = ChordView.DEFAULT_SHOW_FRET_NUMBERS,
     @SerialName(value = "show_finger_numbers") val showFingerNumbers: Boolean = ChordView.DEFAULT_SHOW_FINGER_NUMBERS,

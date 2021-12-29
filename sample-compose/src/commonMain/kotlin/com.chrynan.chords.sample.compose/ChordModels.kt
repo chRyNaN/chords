@@ -26,7 +26,7 @@ val chord = chord(name = "D Major") {
 val chordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART
 
 @OptIn(ExperimentalUnsignedTypes::class)
-val chordViewModel = ChordViewModel(
+val chordViewData = ChordViewData(
     showFingerNumbers = true,
     showFretNumbers = true,
     stringLabelState = StringLabelState.SHOW_LABEL

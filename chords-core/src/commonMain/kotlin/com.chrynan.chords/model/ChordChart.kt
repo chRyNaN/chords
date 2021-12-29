@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
  * ends of the strings in the diagram, if they are to be drawn.
  *
  * Note that this does not contain information about the View, such as colors and text. For that
- * information, refer to the [ChordViewModel] and [ChordView] classes.
+ * information, refer to the [ChordViewData] and [ChordView] classes.
  *
  * @property [fretStart] The starting [FretNumber] of this diagram.
  * @property [fretEnd] The ending [FretNumber] of this diagram.

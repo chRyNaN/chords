@@ -328,7 +328,7 @@ internal fun calculateStringBottomLabelPositions(
 internal fun calculateChordConstraints(
     chord: Chord?,
     chart: ChordChart,
-    viewModel: ChordViewModel,
+    viewModel: ChordViewData,
     maxWidth: Float,
     maxHeight: Float
 ): ChordWidgetConstraints {
