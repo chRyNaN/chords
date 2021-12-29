@@ -139,6 +139,7 @@ class ChordWidget : View,
      *
      * @author chRyNaN
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     var fretLabelTypeface: Typeface = Typeface.DEFAULT
         set(value) {
             field = value
@@ -152,6 +153,7 @@ class ChordWidget : View,
      *
      * @author chRyNaN
      */
+    @Suppress("MemberVisibilityCanBePrivate", "MemberVisibilityCanBePrivate")
     var noteLabelTypeface: Typeface = Typeface.DEFAULT
         set(value) {
             field = value
@@ -165,6 +167,7 @@ class ChordWidget : View,
      *
      * @author chRyNaN
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     var stringLabelTypeface: Typeface = Typeface.DEFAULT
         set(value) {
             field = value
@@ -398,7 +401,7 @@ class ChordWidget : View,
         )
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState() as Parcelable
 
         val savedState = SavedState(superState)

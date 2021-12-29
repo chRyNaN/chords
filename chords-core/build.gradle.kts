@@ -89,8 +89,8 @@ dependencies {
 
     implementation("androidx.appcompat:appcompat:1.4.0")
 
-    implementation("com.chrynan.parcelable:parcelable-core:0.3.1")
-    implementation("com.chrynan.parcelable:parcelable-android:0.3.1")
+    api("com.chrynan.parcelable:parcelable-core:0.3.1")
+    api("com.chrynan.parcelable:parcelable-android:0.3.1")
 }
 
 afterEvaluate {
