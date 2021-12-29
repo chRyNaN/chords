@@ -1,6 +1,5 @@
 package com.chrynan.chords.model
 
-import com.chrynan.chords.model.serializer.ChordMarkerJsonSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -14,7 +13,7 @@ import kotlinx.serialization.Transient
  *
  * @author chRyNaN
  */
-@Serializable(with = ChordMarkerJsonSerializer::class)
+@Serializable
 sealed class ChordMarker {
 
     /**
@@ -35,6 +34,7 @@ sealed class ChordMarker {
      * @author chRyNaN
      */
     @Serializable
+    @SerialName(value = "note")
     data class Note(
         @SerialName(value = "fret") override val fret: FretNumber,
         @SerialName(value = "finger") override val finger: Finger = Finger.UNKNOWN,
@@ -59,6 +59,7 @@ sealed class ChordMarker {
      * @author chRyNaN
      */
     @Serializable
+    @SerialName(value = "bar")
     data class Bar(
         @SerialName(value = "fret") override val fret: FretNumber,
         @SerialName(value = "finger") override val finger: Finger = Finger.UNKNOWN,
@@ -83,6 +84,7 @@ sealed class ChordMarker {
      * @author chRyNaN
      */
     @Serializable
+    @SerialName(value = "open")
     data class Open(
         @SerialName(value = "string") override val string: StringNumber
     ) : ChordMarker(),
@@ -103,6 +105,7 @@ sealed class ChordMarker {
      * @author chRyNaN
      */
     @Serializable
+    @SerialName(value = "muted")
     data class Muted(
         @SerialName(value = "string") override val string: StringNumber
     ) : ChordMarker(),
