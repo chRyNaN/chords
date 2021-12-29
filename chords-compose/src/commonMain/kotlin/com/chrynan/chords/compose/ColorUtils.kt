@@ -8,10 +8,3 @@ import com.chrynan.colors.*
 @ExperimentalUnsignedTypes
 fun Color.toJetpackComposeColor(): androidx.compose.ui.graphics.Color =
     androidx.compose.ui.graphics.Color(colorLong.value.toULong())
-
-/**
- * Converts this [androidx.compose.ui.graphics.Color] to a Kotlin Multiplatform compatible [Color].
- */
-@ExperimentalUnsignedTypes
-fun androidx.compose.ui.graphics.Color.toMultiplatformColor(): Color =
-    Color(colorLong = ColorLong(value = value))

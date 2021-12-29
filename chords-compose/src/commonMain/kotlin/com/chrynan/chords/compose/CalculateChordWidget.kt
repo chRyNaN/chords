@@ -116,7 +116,7 @@ internal fun calculateFretPositions(
                 left = size.chartBounds.left,
                 top = size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize,
                 right = size.chartBounds.right - size.stringSize,
-                bottom = size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize
+                bottom = (size.chartBounds.top + i * size.fretSize + i * size.fretMarkerSize) + size.fretMarkerSize
             )
         )
     }
@@ -136,7 +136,7 @@ internal fun calculateStringPositions(
             Rect(
                 left = size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
                 top = size.chartBounds.top,
-                right = size.chartBounds.left + i * size.stringDistance + i * size.stringSize,
+                right = (size.chartBounds.left + i * size.stringDistance + i * size.stringSize) + size.stringSize,
                 bottom = size.chartBounds.top + fretCount * size.fretSize + fretCount * size.fretMarkerSize
             )
         )
@@ -156,7 +156,7 @@ internal fun calculateFretNumberPositions(
         fretNumberPoints.add(
             Offset(
                 x = (size.drawingBounds.left + size.fretSideLabelBounds.width / 2) - size.stringSize,
-                y = (size.stringTopLabelBounds.bottom + i * size.fretMarkerSize + i * size.fretSize + size.fretSize / 2) - (size.fretLabelTextSize / 2) - size.stringSize
+                y = (size.stringTopLabelBounds.bottom + i * size.fretMarkerSize + i * size.fretSize + size.fretSize / 2) - (size.fretLabelTextSize / 2)
             )
         )
     }
@@ -229,7 +229,7 @@ internal fun calculateNotePositions(
                     text = text,
                     circleX = startCenterX,
                     circleY = startCenterY,
-                    textX = startCenterX - size.stringSize,
+                    textX = startCenterX - (size.noteLabelTextSize / 2) + size.stringSize,
                     textY = startCenterY - (size.noteLabelTextSize / 2) - size.stringSize
                 )
             )

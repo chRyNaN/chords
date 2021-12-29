@@ -19,7 +19,7 @@ fun ChordWidget(
     modifier: Modifier = Modifier,
     chord: Chord? = null,
     chart: ChordChart = ChordChart.STANDARD_TUNING_GUITAR_CHART,
-    viewModel: ChordViewData = ChordViewData()
+    viewData: ChordViewData = ChordViewData()
 ) {
     val constraintState = remember { mutableStateOf<ChordWidgetConstraints?>(null) }
 
@@ -29,7 +29,7 @@ fun ChordWidget(
             maxHeight = it.height.toFloat(),
             chord = chord,
             chart = chart,
-            viewModel = viewModel
+            viewModel = viewData
         )
     }) {
         val density = LocalDensity.current
@@ -41,48 +41,48 @@ fun ChordWidget(
                     // First draw the strings and fret markers
                     drawFrets(
                         fretPositions = constraints.fretPositions,
-                        color = viewModel.fretColor.toJetpackComposeColor()
+                        color = viewData.fretColor.toJetpackComposeColor()
                     )
                     drawStrings(
                         stringPositions = constraints.stringPositions,
-                        color = viewModel.stringColor.toJetpackComposeColor()
+                        color = viewData.stringColor.toJetpackComposeColor()
                     )
 
                     drawBars(
                         barLinePaths = constraints.barPositions,
-                        barLineBrush = SolidColor(viewModel.noteColor.toJetpackComposeColor())
+                        barLineBrush = SolidColor(viewData.noteColor.toJetpackComposeColor())
                     )
 
                     drawNotes(
                         notePositions = constraints.notePositions,
                         noteSize = constraints.size.noteSize,
-                        noteBrush = SolidColor(viewModel.noteColor.toJetpackComposeColor())
+                        noteBrush = SolidColor(viewData.noteColor.toJetpackComposeColor())
                     )
                 }
 
                 DrawFretNumbers(
                     fretNumberPoints = constraints.fretNumberPositions,
                     chart = chart,
-                    showFretNumbers = viewModel.showFretNumbers,
-                    color = viewModel.fretLabelTextColor.toJetpackComposeColor()
+                    showFretNumbers = viewData.showFretNumbers,
+                    color = viewData.fretLabelTextColor.toJetpackComposeColor()
                 )
 
                 DrawStringMarkers(
                     stringTopMarkerPositions = constraints.topMarkerPositions,
                     stringBottomLabelPositions = constraints.bottomLabelPositions,
-                    color = viewModel.stringLabelTextColor.toJetpackComposeColor()
+                    color = viewData.stringLabelTextColor.toJetpackComposeColor()
                 )
 
                 DrawBarText(
-                    showFingerNumbers = viewModel.showFingerNumbers,
+                    showFingerNumbers = viewData.showFingerNumbers,
                     barLinePositions = constraints.barPositions,
-                    color = viewModel.noteLabelTextColor.toJetpackComposeColor()
+                    color = viewData.noteLabelTextColor.toJetpackComposeColor()
                 )
 
                 DrawNoteText(
-                    showFingerNumbers = viewModel.showFingerNumbers,
+                    showFingerNumbers = viewData.showFingerNumbers,
                     notePositions = constraints.notePositions,
-                    color = viewModel.noteLabelTextColor.toJetpackComposeColor()
+                    color = viewData.noteLabelTextColor.toJetpackComposeColor()
                 )
             }
         }

@@ -27,7 +27,7 @@ fun MainLayout() {
                     .align(Alignment.Center),
                 chord = chord,
                 chart = chordChart,
-                viewModel = chordViewData
+                viewData = chordViewData
             )
         }
     }

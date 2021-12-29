@@ -10,6 +10,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.style.TextAlign
 import com.chrynan.chords.model.ChordChart
 
@@ -20,7 +21,9 @@ internal fun ComposableDrawScope.drawFrets(
     fretPositions.forEach {
         drawLine(
             start = Offset(x = it.left, y = it.top),
-            end = Offset(x = it.right, y = it.bottom),
+            end = Offset(x = it.right, y = it.top),
+            strokeWidth = it.height,
+            cap = StrokeCap.Round,
             color = color
         )
     }
@@ -33,7 +36,9 @@ internal fun ComposableDrawScope.drawStrings(
     stringPositions.forEach {
         drawLine(
             start = Offset(x = it.left, y = it.top),
-            end = Offset(x = it.right, y = it.bottom),
+            end = Offset(x = it.left, y = it.bottom),
+            strokeWidth = it.width,
+            cap = StrokeCap.Round,
             color = color
         )
     }
