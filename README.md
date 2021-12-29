@@ -5,8 +5,8 @@ use and beautifully designed.
 
 **Current Version:** ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/chrynan/chords)
 
-<img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-180759.png" width="300"></img>
-<img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample/screenshots/device-2020-01-18-183742.png" width="300"></img>
+<img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample-android/screenshots/device-2020-01-18-180759.png" width="300"></img>
+<img alt="Sample Screenshot" src="https://github.com/chRyNaN/chords/blob/master/sample-android/screenshots/device-2020-01-18-183742.png" width="300"></img>
 
 This library has been updated significantly from its original version and the process is detailed in
 this [blog post](https://chrynan.codes/converting-an-old-java-library-to-kotlin/) which was featured in Android Weekly
