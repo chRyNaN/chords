@@ -19,15 +19,20 @@ kotlin {
         all {
             languageSettings {
                 languageSettings.enableLanguageFeature("InlineClasses")
+                languageSettings.optIn("kotlin.RequiresOptIn")
             }
         }
         commonMain {
             dependencies {
-                api(project(":chords-compose"))
+                implementation(project(":chords-compose"))
 
                 implementation(compose.runtime)
                 implementation(compose.ui)
                 implementation(compose.material)
+
+                implementation("com.chrynan.colors:colors-compose:0.7.0")
+                implementation("com.chrynan.presentation:presentation-compose:0.6.0")
+                implementation("com.chrynan.navigation:navigation-compose:0.2.2")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
             }
@@ -40,7 +45,7 @@ android {
 
     defaultConfig {
         applicationId = "com.chrynan.chords.sample.compose"
-        minSdk = LibraryConstants.Android.minSdkVersion
+        minSdk = 25
         targetSdk = LibraryConstants.Android.targetSdkVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
