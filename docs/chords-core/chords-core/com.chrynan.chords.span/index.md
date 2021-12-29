@@ -1,0 +1,21 @@
+//[chords-core](../../index.md)/[com.chrynan.chords.span](index.md)
+
+# Package com.chrynan.chords.span
+
+## Types
+
+| Name | Summary |
+|---|---|
+| [ChordSpan](-chord-span/index.md) | [android]<br>class [ChordSpan](-chord-span/index.md)(chord: [Chord](../../../chords-core/chords-core/com.chrynan.chords.model/-chord/index.md), listener: [ChordSpan.ChordSelectedListener](-chord-span/-chord-selected-listener/index.md), viewModel: [TouchableSpanViewModel](-touchable-span-view-model/index.md)) : [TouchableSpan](-touchable-span/index.md)<br>An implementation of [TouchableSpan](-touchable-span/index.md) that retains a [Chord](../../../chords-core/chords-core/com.chrynan.chords.model/-chord/index.md) and calls a [ChordSelectedListener](-chord-span/-chord-selected-listener/index.md) with the [chord](../../../chords-core/com.chrynan.chords.span/-chord-span/chord.md) when the touchable text is selected. This could be useful to use on the text in a [TextView](https://developer.android.com/reference/kotlin/android/widget/TextView.html) to highlight the name of a [Chord](../../../chords-core/chords-core/com.chrynan.chords.model/-chord/index.md). Then when the [Chord](../../../chords-core/chords-core/com.chrynan.chords.model/-chord/index.md) name is selected, the [ChordSelectedListener.onChordSpanSelected](-chord-span/-chord-selected-listener/on-chord-span-selected.md) function will be called and that can open up the [Chord](../../../chords-core/chords-core/com.chrynan.chords.model/-chord/index.md) diagram. |
+| [LinkTouchMovementMethod](-link-touch-movement-method/index.md) | [android]<br>class [LinkTouchMovementMethod](-link-touch-movement-method/index.md) : [LinkMovementMethod](https://developer.android.com/reference/kotlin/android/text/method/LinkMovementMethod.html)<br>References: http://stackoverflow.com/a/7292485/1478764, http://stackoverflow.com/a/20905824/1478764 |
+| [RaisedTextSpan](-raised-text-span/index.md) | [android]<br>class [RaisedTextSpan](-raised-text-span/index.md) : [ReplacementSpan](https://developer.android.com/reference/kotlin/android/text/style/ReplacementSpan.html)<br>Raises the spanned text and removes the width so that the following text can be drawn underneath it. |
+| [SpannableStringBuilderDsl](-spannable-string-builder-dsl/index.md) | [android]<br>class [SpannableStringBuilderDsl](-spannable-string-builder-dsl/index.md) |
+| [TouchableSpan](-touchable-span/index.md) | [android]<br>abstract class [TouchableSpan](-touchable-span/index.md) : [CharacterStyle](https://developer.android.com/reference/kotlin/android/text/style/CharacterStyle.html), [UpdateAppearance](https://developer.android.com/reference/kotlin/android/text/style/UpdateAppearance.html), [TouchableSpanView](-touchable-span-view/index.md)<br>References: http://stackoverflow.com/a/7292485/1478764, http://stackoverflow.com/a/20905824/1478764 |
+| [TouchableSpanView](-touchable-span-view/index.md) | [android]<br>interface [TouchableSpanView](-touchable-span-view/index.md)<br>An interface defining the display properties of text that can be touchable. |
+| [TouchableSpanViewModel](-touchable-span-view-model/index.md) | [android]<br>data class [TouchableSpanViewModel](-touchable-span-view-model/index.md)(backgroundColor: ColorInt, selectedBackgroundColor: ColorInt, textColor: ColorInt, selectedTextColor: ColorInt, isUnderlined: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), isUnderlinedWhenSelected: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html), textTypeface: [Typeface](https://developer.android.com/reference/kotlin/android/graphics/Typeface.html), selectedTextTypeface: [Typeface](https://developer.android.com/reference/kotlin/android/graphics/Typeface.html)) |
+
+## Functions
+
+| Name | Summary |
+|---|---|
+| [buildSpannableString](build-spannable-string.md) | [android]<br>fun [buildSpannableString](build-spannable-string.md)(builderAction: [SpannableStringBuilderDsl](-spannable-string-builder-dsl/index.md).() -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)): [SpannableStringBuilder](https://developer.android.com/reference/kotlin/android/text/SpannableStringBuilder.html) |

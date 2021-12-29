@@ -1,24 +1,12 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.graphics](../index.md)/[Point](index.md)/[inset](inset.md)
 
+# inset
 
-
-# inset  
-[js]  
-Content  
-fun [inset](inset.md)(dx: [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html), dy: [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)): [Point](index.md)  
-More info  
-
+[js]\
+fun [inset](inset.md)(dx: [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html), dy: [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)): [Point](index.md)
 
 Retrieves a new [Point](index.md) by insetting this [Point](index.md)'s values by subtracting [dx](inset.md) and [dy](inset.md).
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
-
-  
-
-
-

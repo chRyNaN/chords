@@ -1,0 +1,6 @@
+//[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[ChordViewData](index.md)/[ChordViewData](-chord-view-data.md)
+
+# ChordViewData
+
+[common]\
+fun [ChordViewData](-chord-view-data.md)(fitToHeight: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = ChordView.DEFAULT_FIT_TO_HEIGHT, showFretNumbers: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = ChordView.DEFAULT_SHOW_FRET_NUMBERS, showFingerNumbers: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = ChordView.DEFAULT_SHOW_FINGER_NUMBERS, stringLabelState: [StringLabelState](../-string-label-state/index.md) = ChordView.DEFAULT_STRING_LABEL_STATE, mutedStringText: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = ChordView.DEFAULT_MUTED_TEXT, openStringText: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = ChordView.DEFAULT_OPEN_TEXT, fretColor: Color = Color.Black, fretLabelTextColor: Color = Color.Black, stringColor: Color = Color.Black, stringLabelTextColor: Color = Color.Black, noteColor: Color = Color.Black, noteLabelTextColor: Color = Color.White)

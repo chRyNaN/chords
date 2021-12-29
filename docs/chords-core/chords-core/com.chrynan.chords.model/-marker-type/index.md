@@ -1,44 +1,35 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[MarkerType](index.md)
 
+# MarkerType
 
-
-# MarkerType  
- [common] enum [MarkerType](index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)<[MarkerType](index.md)> 
+[common]\
+enum [MarkerType](index.md) : [Enum](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html)&lt;[MarkerType](index.md)&gt; 
 
 An enum containing the different types of a [ChordMarker](../-chord-marker/index.md). This is useful for defining the finite [ChordMarker](../-chord-marker/index.md)s and for serializing and de-serializing a [ChordMarker](../-chord-marker/index.md) from different formats, such as JSON.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Entries
 
-
-## Entries  
-  
 | | |
 |---|---|
-| <a name="com.chrynan.chords.model/MarkerType.NOTE///PointingToDeclaration/"></a>[NOTE](-n-o-t-e/index.md)| <a name="com.chrynan.chords.model/MarkerType.NOTE///PointingToDeclaration/"></a> [common] [NOTE](-n-o-t-e/index.md)(typeName, "note")  <br>   <br>|
-| <a name="com.chrynan.chords.model/MarkerType.BAR///PointingToDeclaration/"></a>[BAR](-b-a-r/index.md)| <a name="com.chrynan.chords.model/MarkerType.BAR///PointingToDeclaration/"></a> [common] [BAR](-b-a-r/index.md)(typeName, "bar")  <br>   <br>|
-| <a name="com.chrynan.chords.model/MarkerType.OPEN///PointingToDeclaration/"></a>[OPEN](-o-p-e-n/index.md)| <a name="com.chrynan.chords.model/MarkerType.OPEN///PointingToDeclaration/"></a> [common] [OPEN](-o-p-e-n/index.md)(typeName, "open")  <br>   <br>|
-| <a name="com.chrynan.chords.model/MarkerType.MUTED///PointingToDeclaration/"></a>[MUTED](-m-u-t-e-d/index.md)| <a name="com.chrynan.chords.model/MarkerType.MUTED///PointingToDeclaration/"></a> [common] [MUTED](-m-u-t-e-d/index.md)(typeName, "muted")  <br>   <br>|
+| [MUTED](-m-u-t-e-d/index.md) | [common]<br>[MUTED](-m-u-t-e-d/index.md)(typeName, "muted") |
+| [OPEN](-o-p-e-n/index.md) | [common]<br>[OPEN](-o-p-e-n/index.md)(typeName, "open") |
+| [BAR](-b-a-r/index.md) | [common]<br>[BAR](-b-a-r/index.md)(typeName, "bar") |
+| [NOTE](-n-o-t-e/index.md) | [common]<br>[NOTE](-n-o-t-e/index.md)(typeName, "note") |
 
+## Types
 
-## Types  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/MarkerType.Companion///PointingToDeclaration/"></a>[Companion](-companion/index.md)| <a name="com.chrynan.chords.model/MarkerType.Companion///PointingToDeclaration/"></a>[common]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>|
+| [Companion](-companion/index.md) | [common]<br>object [Companion](-companion/index.md) |
 
+## Properties
 
-## Properties  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/MarkerType/name/#/PointingToDeclaration/"></a>[name](index.md#%5Bcom.chrynan.chords.model%2FMarkerType%2Fname%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F2144227643)| <a name="com.chrynan.chords.model/MarkerType/name/#/PointingToDeclaration/"></a> [common] val [name](index.md#%5Bcom.chrynan.chords.model%2FMarkerType%2Fname%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F2144227643): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)   <br>|
-| <a name="com.chrynan.chords.model/MarkerType/ordinal/#/PointingToDeclaration/"></a>[ordinal](index.md#%5Bcom.chrynan.chords.model%2FMarkerType%2Fordinal%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F2144227643)| <a name="com.chrynan.chords.model/MarkerType/ordinal/#/PointingToDeclaration/"></a> [common] val [ordinal](index.md#%5Bcom.chrynan.chords.model%2FMarkerType%2Fordinal%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F2144227643): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>|
-| <a name="com.chrynan.chords.model/MarkerType/typeName/#/PointingToDeclaration/"></a>[typeName](type-name.md)| <a name="com.chrynan.chords.model/MarkerType/typeName/#/PointingToDeclaration/"></a> [common] val [typeName](type-name.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)The name of this [MarkerType](index.md).   <br>|
-
+| [name](../-string-label-state/-s-h-o-w_-n-u-m-b-e-r/index.md#-372974862%2FProperties%2F1723987581) | [common]<br>val [name](../-string-label-state/-s-h-o-w_-n-u-m-b-e-r/index.md#-372974862%2FProperties%2F1723987581): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [ordinal](../-string-label-state/-s-h-o-w_-n-u-m-b-e-r/index.md#-739389684%2FProperties%2F1723987581) | [common]<br>val [ordinal](../-string-label-state/-s-h-o-w_-n-u-m-b-e-r/index.md#-739389684%2FProperties%2F1723987581): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
+| [typeName](type-name.md) | [common]<br>val [typeName](type-name.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>The name of this [MarkerType](index.md). |

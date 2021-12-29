@@ -1,41 +1,32 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[FretMarker](index.md)
 
+# FretMarker
 
-
-# FretMarker  
- [common] interface [FretMarker](index.md)
+[common]\
+interface [FretMarker](index.md)
 
 An interface for a [ChordMarker](../-chord-marker/index.md) that contains information about a [FretNumber](../-fret-number/index.md) that is used to play a note.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Types
 
-
-## Types  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FretMarker.Companion///PointingToDeclaration/"></a>[Companion](-companion/index.md)| <a name="com.chrynan.chords.model/FretMarker.Companion///PointingToDeclaration/"></a>[common]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>|
+| [Companion](-companion/index.md) | [common]<br>object [Companion](-companion/index.md) |
 
+## Properties
 
-## Properties  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FretMarker/fret/#/PointingToDeclaration/"></a>[fret](fret.md)| <a name="com.chrynan.chords.model/FretMarker/fret/#/PointingToDeclaration/"></a> [common] abstract val [fret](fret.md): [FretNumber](../-fret-number/index.md)The [FretNumber](../-fret-number/index.md) that this [ChordMarker](../-chord-marker/index.md) is on.   <br>|
+| [fret](fret.md) | [common]<br>abstract val [fret](fret.md): [FretNumber](../-fret-number/index.md)<br>The [FretNumber](../-fret-number/index.md) that this [ChordMarker](../-chord-marker/index.md) is on. |
 
+## Inheritors
 
-## Inheritors  
-  
-|  Name | 
+| Name |
 |---|
-| <a name="com.chrynan.chords.model/ChordMarker.Note///PointingToDeclaration/"></a>[ChordMarker](../-chord-marker/-note/index.md)|
-| <a name="com.chrynan.chords.model/ChordMarker.Bar///PointingToDeclaration/"></a>[ChordMarker](../-chord-marker/-bar/index.md)|
-| <a name="com.chrynan.chords.model/ChordMarker.Open///PointingToDeclaration/"></a>[ChordMarker](../-chord-marker/-open/index.md)|
-
+| [ChordMarker](../-chord-marker/-note/index.md) |
+| [ChordMarker](../-chord-marker/-bar/index.md) |
+| [ChordMarker](../-chord-marker/-open/index.md) |

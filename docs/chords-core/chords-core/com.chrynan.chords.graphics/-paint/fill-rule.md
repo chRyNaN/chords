@@ -1,11 +1,6 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.graphics](../index.md)/[Paint](index.md)/[fillRule](fill-rule.md)
 
+# fillRule
 
-
-# fillRule  
-[js]  
-Content  
-var [fillRule](fill-rule.md): [Paint.FillRule](-fill-rule/index.md)  
-
-
-
+[js]\
+var [fillRule](fill-rule.md): [Paint.FillRule](-fill-rule/index.md)

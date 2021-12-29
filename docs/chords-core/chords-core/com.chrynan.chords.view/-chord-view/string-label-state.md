@@ -1,11 +1,6 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.view](../index.md)/[ChordView](index.md)/[stringLabelState](string-label-state.md)
 
+# stringLabelState
 
-
-# stringLabelState  
-[common]  
-Content  
-abstract var [stringLabelState](string-label-state.md): [StringLabelState](../../com.chrynan.chords.model/-string-label-state/index.md)  
-
-
-
+[common]\
+abstract var [stringLabelState](string-label-state.md): [StringLabelState](../../com.chrynan.chords.model/-string-label-state/index.md)

@@ -1,40 +1,31 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[FingerMarker](index.md)
 
+# FingerMarker
 
-
-# FingerMarker  
- [common] interface [FingerMarker](index.md)
+[common]\
+interface [FingerMarker](index.md)
 
 An interface for a [ChordMarker](../-chord-marker/index.md) that contains information about a [Finger](../-finger/index.md) that plays a note.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Types
 
-
-## Types  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FingerMarker.Companion///PointingToDeclaration/"></a>[Companion](-companion/index.md)| <a name="com.chrynan.chords.model/FingerMarker.Companion///PointingToDeclaration/"></a>[common]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>|
+| [Companion](-companion/index.md) | [common]<br>object [Companion](-companion/index.md) |
 
+## Properties
 
-## Properties  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FingerMarker/finger/#/PointingToDeclaration/"></a>[finger](finger.md)| <a name="com.chrynan.chords.model/FingerMarker/finger/#/PointingToDeclaration/"></a> [common] abstract val [finger](finger.md): [Finger](../-finger/index.md)The [Finger](../-finger/index.md) used to play a note.   <br>|
+| [finger](finger.md) | [common]<br>abstract val [finger](finger.md): [Finger](../-finger/index.md)<br>The [Finger](../-finger/index.md) used to play a note. |
 
+## Inheritors
 
-## Inheritors  
-  
-|  Name | 
+| Name |
 |---|
-| <a name="com.chrynan.chords.model/ChordMarker.Note///PointingToDeclaration/"></a>[ChordMarker](../-chord-marker/-note/index.md)|
-| <a name="com.chrynan.chords.model/ChordMarker.Bar///PointingToDeclaration/"></a>[ChordMarker](../-chord-marker/-bar/index.md)|
-
+| [ChordMarker](../-chord-marker/-note/index.md) |
+| [ChordMarker](../-chord-marker/-bar/index.md) |

@@ -1,46 +1,38 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[FretNumber](index.md)
 
+# FretNumber
 
+[common]\
+@[JvmInline](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html)
 
-# FretNumber  
- [common] inline class [FretNumber](index.md)(**number**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))
+value class [FretNumber](index.md)(number: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))
 
 An inline class wrapping an [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) that indicates the number of a fret played.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Constructors
 
-
-## Constructors  
-  
 | | |
 |---|---|
-| <a name="com.chrynan.chords.model/FretNumber/FretNumber/#kotlin.Int/PointingToDeclaration/"></a>[FretNumber](-fret-number.md)| <a name="com.chrynan.chords.model/FretNumber/FretNumber/#kotlin.Int/PointingToDeclaration/"></a> [common] fun [FretNumber](-fret-number.md)(number: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))   <br>|
+| [FretNumber](-fret-number.md) | [common]<br>fun [FretNumber](-fret-number.md)(number: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)) |
 
+## Types
 
-## Types  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FretNumber.Companion///PointingToDeclaration/"></a>[Companion](-companion/index.md)| <a name="com.chrynan.chords.model/FretNumber.Companion///PointingToDeclaration/"></a>[common]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>|
+| [Companion](-companion/index.md) | [common]<br>object [Companion](-companion/index.md) |
 
+## Functions
 
-## Functions  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FretNumber/toString/#/PointingToDeclaration/"></a>[toString](to-string.md)| <a name="com.chrynan.chords.model/FretNumber/toString/#/PointingToDeclaration/"></a>[common]  <br>Content  <br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>|
+| [toString](to-string.md) | [common]<br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
+## Properties
 
-## Properties  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/FretNumber/number/#/PointingToDeclaration/"></a>[number](number.md)| <a name="com.chrynan.chords.model/FretNumber/number/#/PointingToDeclaration/"></a> [common] val [number](number.md): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>|
-
+| [number](number.md) | [common]<br>val [number](number.md): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |

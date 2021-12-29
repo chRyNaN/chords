@@ -1,35 +1,27 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.parser](../index.md)/[ChordParser](index.md)
 
+# ChordParser
 
-
-# ChordParser  
- [common] interface [ChordParser](index.md)<[T](index.md)> : [Parser](../-parser/index.md)<[T](index.md), [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md)> 
+[common]\
+interface [ChordParser](index.md)&lt;[T](index.md)&gt; : [Parser](../-parser/index.md)&lt;[T](index.md), [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md)&gt; 
 
 An interface that parses an input into a [Chord](../../com.chrynan.chords.model/-chord/index.md) wrapped in a [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md).
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Functions
 
-
-## Functions  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.parser/Parser/parse/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[parse](../-parser/parse.md)| <a name="com.chrynan.chords.parser/Parser/parse/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[common]  <br>Content  <br>abstract suspend fun [parse](../-parser/parse.md)(input: [T](index.md)): [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md)  <br>More info  <br>Parses the provided input [IN](../-parser/index.md) and returns the output [OUT](../-parser/index.md).  <br><br><br>|
-| <a name="com.chrynan.chords.parser/Parser/parseOrNull/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[parseOrNull](../-parser/parse-or-null.md)| <a name="com.chrynan.chords.parser/Parser/parseOrNull/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[common]  <br>Content  <br>open suspend fun [parseOrNull](../-parser/parse-or-null.md)(input: [T](index.md)): [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md)?  <br>More info  <br>Parses the provided input [IN](../-parser/index.md) and returns the output [OUT](../-parser/index.md).  <br><br><br>|
+| [parse](../-parser/parse.md) | [common]<br>abstract suspend fun [parse](../-parser/parse.md)(input: [T](index.md)): [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md)<br>Parses the provided input [IN](../-parser/index.md) and returns the output [OUT](../-parser/index.md). If an exception is encountered during the parsing process, then that exception will be thrown. If you would rather catch the exception and have null return, use the [parseOrNull](../-parser/parse-or-null.md) function instead. |
+| [parseOrNull](../-parser/parse-or-null.md) | [common]<br>open suspend fun [parseOrNull](../-parser/parse-or-null.md)(input: [T](index.md)): [ChordParseResult](../../com.chrynan.chords.model/-chord-parse-result/index.md)?<br>Parses the provided input [IN](../-parser/index.md) and returns the output [OUT](../-parser/index.md). If an exception is encountered during the parsing process, then that exception will be caught and null will be returned. If you would rather handle the exception, then use the [parse](../-parser/parse.md) function instead. |
 
+## Inheritors
 
-## Inheritors  
-  
-|  Name | 
+| Name |
 |---|
-| <a name="com.chrynan.chords.parser/AsciiChordParser///PointingToDeclaration/"></a>[AsciiChordParser](../-ascii-chord-parser/index.md)|
-| <a name="com.chrynan.chords.parser/ChordProParser///PointingToDeclaration/"></a>[ChordProParser](../-chord-pro-parser/index.md)|
-| <a name="com.chrynan.chords.parser/JsonStringChordParser///PointingToDeclaration/"></a>[JsonStringChordParser](../-json-string-chord-parser/index.md)|
-
+| [AsciiChordParser](../-ascii-chord-parser/index.md) |
+| [ChordProParser](../-chord-pro-parser/index.md) |
+| [JsonStringChordParser](../-json-string-chord-parser/index.md) |

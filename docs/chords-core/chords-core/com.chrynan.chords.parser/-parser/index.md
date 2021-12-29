@@ -1,33 +1,25 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.parser](../index.md)/[Parser](index.md)
 
+# Parser
 
-
-# Parser  
- [common] interface [Parser](index.md)<[IN](index.md), [OUT](index.md)>
+[common]\
+interface [Parser](index.md)&lt;[IN](index.md), [OUT](index.md)&gt;
 
 A generic interface to parse an input into an output.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Functions
 
-
-## Functions  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.parser/Parser/parse/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[parse](parse.md)| <a name="com.chrynan.chords.parser/Parser/parse/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[common]  <br>Content  <br>abstract suspend fun [parse](parse.md)(input: [IN](index.md)): [OUT](index.md)  <br>More info  <br>Parses the provided input [IN](index.md) and returns the output [OUT](index.md).  <br><br><br>|
-| <a name="com.chrynan.chords.parser/Parser/parseOrNull/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[parseOrNull](parse-or-null.md)| <a name="com.chrynan.chords.parser/Parser/parseOrNull/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/"></a>[common]  <br>Content  <br>open suspend fun [parseOrNull](parse-or-null.md)(input: [IN](index.md)): [OUT](index.md)?  <br>More info  <br>Parses the provided input [IN](index.md) and returns the output [OUT](index.md).  <br><br><br>|
+| [parse](parse.md) | [common]<br>abstract suspend fun [parse](parse.md)(input: [IN](index.md)): [OUT](index.md)<br>Parses the provided input [IN](index.md) and returns the output [OUT](index.md). If an exception is encountered during the parsing process, then that exception will be thrown. If you would rather catch the exception and have null return, use the [parseOrNull](parse-or-null.md) function instead. |
+| [parseOrNull](parse-or-null.md) | [common]<br>open suspend fun [parseOrNull](parse-or-null.md)(input: [IN](index.md)): [OUT](index.md)?<br>Parses the provided input [IN](index.md) and returns the output [OUT](index.md). If an exception is encountered during the parsing process, then that exception will be caught and null will be returned. If you would rather handle the exception, then use the [parse](parse.md) function instead. |
 
+## Inheritors
 
-## Inheritors  
-  
-|  Name | 
+| Name |
 |---|
-| <a name="com.chrynan.chords.parser/ChordParser///PointingToDeclaration/"></a>[ChordParser](../-chord-parser/index.md)|
-
+| [ChordParser](../-chord-parser/index.md) |

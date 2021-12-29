@@ -1,35 +1,21 @@
 //[chords-core](../../index.md)/[com.chrynan.chords.model](index.md)/[chord](chord.md)
 
+# chord
 
-
-# chord  
-[common]  
-Content  
-fun [chord](chord.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null, builder: [ChordBuilder](-chord-builder/index.md).() -> [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)): [Chord](-chord/index.md)  
-More info  
-
+[common]\
+fun [chord](chord.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null, builder: [ChordBuilder](-chord-builder/index.md).() -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)): [Chord](-chord/index.md)
 
 The entry point into the [Chord](-chord/index.md) Kotlin DSL. This function creates a [Chord](-chord/index.md) using the [ChordBuilder](-chord-builder/index.md) class.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
+## Parameters
 
+common
 
-## Parameters  
-  
-common  
-  
 | | |
 |---|---|
-| <a name="com.chrynan.chords.model//chord/#kotlin.String?#kotlin.Function1[com.chrynan.chords.model.ChordBuilder,kotlin.Unit]/PointingToDeclaration/"></a>name| <a name="com.chrynan.chords.model//chord/#kotlin.String?#kotlin.Function1[com.chrynan.chords.model.ChordBuilder,kotlin.Unit]/PointingToDeclaration/"></a><br><br>The name of the [Chord](-chord/index.md) being created.<br><br>|
-| <a name="com.chrynan.chords.model//chord/#kotlin.String?#kotlin.Function1[com.chrynan.chords.model.ChordBuilder,kotlin.Unit]/PointingToDeclaration/"></a>builder| <a name="com.chrynan.chords.model//chord/#kotlin.String?#kotlin.Function1[com.chrynan.chords.model.ChordBuilder,kotlin.Unit]/PointingToDeclaration/"></a><br><br>The scoped Kotlin DSL builder used to create the [Chord](-chord/index.md).<br><br>|
-  
-  
-
-
-
+| name | The name of the [Chord](-chord/index.md) being created. |
+| builder | The scoped Kotlin DSL builder used to create the [Chord](-chord/index.md). |

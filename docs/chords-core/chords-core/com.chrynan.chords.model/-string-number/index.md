@@ -1,46 +1,38 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[StringNumber](index.md)
 
+# StringNumber
 
+[common]\
+@[JvmInline](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html)
 
-# StringNumber  
- [common] inline class [StringNumber](index.md)(**number**: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))
+value class [StringNumber](index.md)(number: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))
 
 An inline class wrapping an [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) that indicates the number of a string that a note is to be played on.
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
 
-   
+## Constructors
 
-
-## Constructors  
-  
 | | |
 |---|---|
-| <a name="com.chrynan.chords.model/StringNumber/StringNumber/#kotlin.Int/PointingToDeclaration/"></a>[StringNumber](-string-number.md)| <a name="com.chrynan.chords.model/StringNumber/StringNumber/#kotlin.Int/PointingToDeclaration/"></a> [common] fun [StringNumber](-string-number.md)(number: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html))   <br>|
+| [StringNumber](-string-number.md) | [common]<br>fun [StringNumber](-string-number.md)(number: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)) |
 
+## Types
 
-## Types  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/StringNumber.Companion///PointingToDeclaration/"></a>[Companion](-companion/index.md)| <a name="com.chrynan.chords.model/StringNumber.Companion///PointingToDeclaration/"></a>[common]  <br>Content  <br>object [Companion](-companion/index.md)  <br><br><br>|
+| [Companion](-companion/index.md) | [common]<br>object [Companion](-companion/index.md) |
 
+## Functions
 
-## Functions  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/StringNumber/toString/#/PointingToDeclaration/"></a>[toString](to-string.md)| <a name="com.chrynan.chords.model/StringNumber/toString/#/PointingToDeclaration/"></a>[common]  <br>Content  <br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)  <br><br><br>|
+| [toString](to-string.md) | [common]<br>open override fun [toString](to-string.md)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
+## Properties
 
-## Properties  
-  
-|  Name |  Summary | 
+| Name | Summary |
 |---|---|
-| <a name="com.chrynan.chords.model/StringNumber/number/#/PointingToDeclaration/"></a>[number](number.md)| <a name="com.chrynan.chords.model/StringNumber/number/#/PointingToDeclaration/"></a> [common] val [number](number.md): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)   <br>|
-
+| [number](number.md) | [common]<br>val [number](number.md): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |

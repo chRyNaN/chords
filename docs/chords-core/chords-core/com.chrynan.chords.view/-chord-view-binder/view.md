@@ -1,11 +1,6 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.view](../index.md)/[ChordViewBinder](index.md)/[view](view.md)
 
+# view
 
-
-# view  
-[common]  
-Content  
-val [view](view.md): [ChordView](../-chord-view/index.md)  
-
-
-
+[common]\
+val [view](view.md): [ChordView](../-chord-view/index.md)

@@ -1,0 +1,13 @@
+//[chords-core](../../../../index.md)/[com.chrynan.chords.widget](../../index.md)/[[android]ChordWidget](../index.md)/[Companion](index.md)
+
+# Companion
+
+[android]\
+object [Companion](index.md)
+
+## Properties
+
+| Name | Summary |
+|---|---|
+| [DEFAULT_COLOR](-d-e-f-a-u-l-t_-c-o-l-o-r.md) | [android]<br>val [DEFAULT_COLOR](-d-e-f-a-u-l-t_-c-o-l-o-r.md): Color |
+| [DEFAULT_TEXT_COLOR](-d-e-f-a-u-l-t_-t-e-x-t_-c-o-l-o-r.md) | [android]<br>val [DEFAULT_TEXT_COLOR](-d-e-f-a-u-l-t_-t-e-x-t_-c-o-l-o-r.md): Color |

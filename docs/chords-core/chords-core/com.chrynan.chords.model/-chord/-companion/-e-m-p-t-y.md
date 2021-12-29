@@ -1,24 +1,12 @@
 //[chords-core](../../../../index.md)/[com.chrynan.chords.model](../../index.md)/[Chord](../index.md)/[Companion](index.md)/[EMPTY](-e-m-p-t-y.md)
 
+# EMPTY
 
-
-# EMPTY  
-[common]  
-Content  
-val [EMPTY](-e-m-p-t-y.md): [Chord](../index.md)  
-More info  
-
+[common]\
+val [EMPTY](-e-m-p-t-y.md): [Chord](../index.md)
 
 A [Chord](../index.md) that has no [markers](../markers.md) and a null [name](../name.md).
 
-
-
-#### Author  
-
+#### Author
 
 chRyNaN
-
-  
-
-
-

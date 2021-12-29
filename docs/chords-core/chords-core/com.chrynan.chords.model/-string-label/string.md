@@ -1,11 +1,6 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.model](../index.md)/[StringLabel](index.md)/[string](string.md)
 
+# string
 
-
-# string  
-[common]  
-Content  
-val [string](string.md): [StringNumber](../-string-number/index.md)  
-
-
-
+[common]\
+val [string](string.md): [StringNumber](../-string-number/index.md)

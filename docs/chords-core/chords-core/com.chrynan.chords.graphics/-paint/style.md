@@ -1,11 +1,6 @@
 //[chords-core](../../../index.md)/[com.chrynan.chords.graphics](../index.md)/[Paint](index.md)/[style](style.md)
 
+# style
 
-
-# style  
-[js]  
-Content  
-var [style](style.md): [Paint.Style](-style/index.md)  
-
-
-
+[js]\
+var [style](style.md): [Paint.Style](-style/index.md)
