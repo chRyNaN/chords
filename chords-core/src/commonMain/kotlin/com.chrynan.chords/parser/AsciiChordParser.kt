@@ -2,7 +2,6 @@ package com.chrynan.chords.parser
 
 import com.chrynan.chords.exception.AsciiChordParseException
 import com.chrynan.chords.model.*
-import com.chrynan.chords.util.isDigit
 
 /**
  * Parses a simple ASCII Chord Diagram String into a [Chord]. This [ChordParser] handles String
